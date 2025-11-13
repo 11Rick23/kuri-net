@@ -1,3 +1,4 @@
+# CSpell: disable
 # Created by https://www.toptal.com/developers/gitignore/api/nextjs,macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=nextjs,macos
 
@@ -70,3 +71,6 @@ yarn-error.log*
 next-env.d.ts
 
 # End of https://www.toptal.com/developers/gitignore/api/nextjs,macos
+
+# VSCode
+.vscode/
