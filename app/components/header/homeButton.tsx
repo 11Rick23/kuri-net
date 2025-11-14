@@ -16,9 +16,9 @@ export default function HomeButton() {
 			className={`
                 w-7 h-7
 				flex items-center justify-center
-				rounded-full
+				rounded-full cursor-pointer
 				${isActive ? "bg-gray-300 dark:bg-gray-700" : "bg-transparent"}
-				hover:opacity-80 transition
+				hover:bg-gray-300 hover:dark:bg-gray-700
             `}
 		>
 			<FaHome size={15} />
