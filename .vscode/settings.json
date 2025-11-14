@@ -1,8 +1,9 @@
 {
-  "debug.javascript.defaultRuntimeExecutable": {
-    "pwa-node": "/Users/11rick23/.local/share/mise/shims/node"
-  },
-  "python.defaultInterpreterPath": "/Users/11rick23/.local/share/mise/installs/python/3.14.0/bin/python",
-  "biome.lsp.bin": "/Users/11rick23/.local/share/mise/shims/biome",
-  "bun.runtime": "/Users/11rick23/.local/share/mise/shims/bun"
+	"debug.javascript.defaultRuntimeExecutable": {
+		"pwa-node": "/Users/11rick23/.local/share/mise/shims/node"
+	},
+	"python.defaultInterpreterPath": "/Users/11rick23/.local/share/mise/installs/python/3.14.0/bin/python",
+	"biome.lsp.bin": "/Users/11rick23/.local/share/mise/shims/biome",
+	"bun.runtime": "/Users/11rick23/.local/share/mise/shims/bun",
+	"cSpell.words": ["kuri"]
 }
