@@ -1,14 +1,61 @@
 "use client";
 
-import { Group, Text } from "@mantine/core";
-import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import { PDFDocument } from "pdf-lib";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { MdOutlineFileUpload } from "react-icons/md";
 import Header from "@/app/components/header/wrapper";
+import DropOverlay from "./dropOverlay";
 
 export default function PdfMerge() {
 	const [files, setFiles] = useState<File[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
+
+	const [isDragging, setIsDragging] = useState(false);
+
+	useEffect(() => {
+		const preventDefault = (e: DragEvent) => {
+			e.preventDefault();
+			e.stopPropagation();
+		};
+
+		const handleDragOver = (e: DragEvent) => {
+			preventDefault(e);
+			setIsDragging(true);
+		};
+
+		const handleDragLeave = (e: DragEvent) => {
+			preventDefault(e);
+			setIsDragging(false);
+		};
+
+		const handleDrop = (e: DragEvent) => {
+			preventDefault(e);
+			setIsDragging(false);
+
+			if (!e.dataTransfer) return;
+			const files = Array.from(e.dataTransfer.files);
+			// ここで PDF フィルタして state に追加など
+			console.log(files);
+		};
+
+		window.addEventListener("dragover", handleDragOver);
+		window.addEventListener("dragenter", handleDragOver);
+		window.addEventListener("dragleave", handleDragLeave);
+		window.addEventListener("drop", handleDrop);
+
+		// ページ内のデフォルト動作無効化
+		window.addEventListener("dragover", preventDefault);
+		window.addEventListener("drop", preventDefault);
+
+		return () => {
+			window.removeEventListener("dragover", handleDragOver);
+			window.removeEventListener("dragenter", handleDragOver);
+			window.removeEventListener("dragleave", handleDragLeave);
+			window.removeEventListener("drop", handleDrop);
+			window.removeEventListener("dragover", preventDefault);
+			window.removeEventListener("drop", preventDefault);
+		};
+	}, []);
 
 	const fileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (e.target.files) {
@@ -73,37 +120,36 @@ export default function PdfMerge() {
 	return (
 		<main className="min-h-screen">
 			<Header />
+			{isDragging && <DropOverlay />}
 			<div className="h-16" />
 			<div className="max-w-4xl mx-auto p-6">
 				<h1 className="text-3xl font-bold mb-8 text-center">PDF統合ツール</h1>
 
 				<div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6">
-					<div className="mb-6">
-						<label
-							htmlFor="pdf-upload"
-							className="block pb-2 text-sm font-medium text-gray-900 dark:text-white"
-						>
-							PDFファイルを選択
-						</label>
-
+					<label
+						htmlFor="pdf-upload"
+						className="
+                            flex flex-col justify-center items-center
+							mx-auto p-4
+                            w-3/4 h-32 rounded-md
+                            bg-gray-200 dark:bg-gray-700
+                        "
+					>
 						<input
 							id="pdf-upload"
 							type="file"
 							accept="application/pdf"
 							multiple
 							onChange={fileChange}
-							className="
-                                block w-full text-sm rounded-lg cursor-pointer
-                                text-gray-900 dark:text-gray-400
-                                border border-gray-300 dark:border-gray-600
-                                bg-gray-50 dark:bg-gray-700
-                            "
+							className="hidden"
 						/>
-
-						<p className="text-sm pt-2 text-gray-500 dark:text-gray-400">
-							複数のPDFファイルを選択できます
+						<MdOutlineFileUpload size={48} />
+						<p>
+							{isDragging
+								? "ファイルをドロップ"
+								: "ファイルをドラッグ＆ドロップするか、クリックして選択してください"}
 						</p>
-					</div>
+					</label>
 
 					{files.length > 0 && (
 						<div className="mb-6">
