@@ -1,11 +1,10 @@
 import { MdOutlineFileUpload } from "react-icons/md";
 
 type Props = {
-	isDragging: boolean;
 	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-export function UploadArea({ isDragging, onChange }: Props) {
+export function UploadArea({ onChange }: Props) {
 	return (
 		<label
 			htmlFor="pdf-upload"
@@ -25,10 +24,10 @@ export function UploadArea({ isDragging, onChange }: Props) {
 				className="hidden"
 			/>
 			<MdOutlineFileUpload size={48} />
-			<p>
-				{isDragging
-					? "ファイルをドロップ"
-					: "ファイルをドラッグ＆ドロップするか、クリックして選択してください"}
+			<p className="text-center">
+				ファイルをドラッグ＆ドロップするか、
+				<br />
+				クリックして選択してください
 			</p>
 		</label>
 	);
