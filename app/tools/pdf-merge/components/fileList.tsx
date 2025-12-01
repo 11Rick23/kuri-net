@@ -7,7 +7,7 @@ export function FileList({ files, onRemove }: Props) {
 	if (files.length === 0) return null;
 
 	return (
-		<div className="mb-6">
+		<div>
 			<h2 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">
 				選択されたファイル ({files.length}件)
 			</h2>
@@ -15,7 +15,7 @@ export function FileList({ files, onRemove }: Props) {
 				{files.map((file, index) => (
 					<li
 						key={`${file.name}-${index}`}
-						className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+						className="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-700 rounded-lg"
 					>
 						<div className="flex items-center space-x-3">
 							<span className="text-sm font-medium text-gray-700 dark:text-gray-300">

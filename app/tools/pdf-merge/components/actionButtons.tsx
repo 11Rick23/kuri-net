@@ -18,11 +18,11 @@ export default function ActionButtons({
 				disabled={files.length < 2 || isLoading}
 				className="
 				flex-1
-				bg-blue-600 hover:bg-blue-700
-				disabled:bg-blue-300 dark:disabled:bg-gray-700 disabled:cursor-not-allowed
+				rounded-lg
+				bg-blue-600 disabled:bg-blue-300 dark:disabled:bg-gray-700
+				hover:bg-blue-700 hover:cursor-pointer disabled:cursor-not-allowed
 				text-white font-semibold
 				py-3 px-6
-				rounded-lg transition-colors
 				"
 			>
 				{isLoading ? "統合中..." : "PDFを統合してダウンロード"}
@@ -34,10 +34,11 @@ export default function ActionButtons({
 					onClick={clearFiles}
 					disabled={isLoading}
 					className="
-					bg-gray-500 hover:bg-gray-600 disabled:bg-gray-400 disabled:cursor-not-allowed
+					rounded-lg
+					bg-gray-500 disabled:bg-gray-400
+					hover:cursor-pointer hover:bg-gray-600 disabled:cursor-not-allowed
 					text-white font-semibold
 					py-3 px-6
-					rounded-lg transition-colors
 					"
 				>
 					クリア

@@ -11,7 +11,7 @@ export function UploadArea({ onChange }: Props) {
 			className="
                 flex flex-col justify-center items-center
 				mx-auto p-4
-                w-3/4 h-32 rounded-md
+                w-3/4 h-42 rounded-md
                 bg-gray-200 dark:bg-gray-700
             "
 		>
@@ -23,11 +23,14 @@ export function UploadArea({ onChange }: Props) {
 				onChange={onChange}
 				className="hidden"
 			/>
-			<MdOutlineFileUpload size={48} />
+			<MdOutlineFileUpload size={48} className="mb-4" />
 			<p className="text-center">
-				ファイルをドラッグ＆ドロップするか、
-				<br />
-				クリックして選択してください
+				<span className="block sm:hidden">タップしてPDFを選択</span>
+				<span className="hidden sm:block">
+					PDFをドラッグ＆ドロップするか、
+					<br />
+					クリックして選択してください
+				</span>
 			</p>
 		</label>
 	);
