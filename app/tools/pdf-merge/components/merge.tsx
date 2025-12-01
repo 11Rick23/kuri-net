@@ -78,5 +78,6 @@ export function usePdfMerge() {
 		removeFile,
 		clearFiles,
 		mergePdfs,
+		setFiles,
 	};
 }

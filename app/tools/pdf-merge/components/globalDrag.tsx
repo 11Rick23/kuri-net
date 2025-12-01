@@ -6,24 +6,50 @@ type UseGlobalDragOptions = {
 
 export function useGlobalDrag({ onDropFiles }: UseGlobalDragOptions = {}) {
 	const [isDragging, setIsDragging] = useState(false);
+	const [isDraggingPDF, setIsDraggingPDF] = useState(false);
 
 	useEffect(() => {
+		const isDraggingFile = (e: DragEvent) => {
+			return (
+				!!e.dataTransfer && Array.from(e.dataTransfer.types).includes("Files")
+			);
+		};
+
+		const isDraggingPDF = (e: DragEvent) => {
+			if (
+				!e.dataTransfer ||
+				!Array.from(e.dataTransfer.types).includes("Files")
+			) {
+				return false;
+			}
+
+			const files = Array.from(e.dataTransfer.items);
+			if (files.length === 0) return false;
+
+			return files.some((file) => file.type === "application/pdf");
+		};
+
 		const preventDefault = (e: DragEvent) => {
+			if (!isDraggingFile(e)) return;
 			e.preventDefault();
 			e.stopPropagation();
 		};
 
 		const handleDragOver = (e: DragEvent) => {
+			if (!isDraggingFile(e)) return;
 			preventDefault(e);
 			setIsDragging(true);
+			setIsDraggingPDF(isDraggingPDF(e));
 		};
 
 		const handleDragLeave = (e: DragEvent) => {
+			if (!isDraggingFile(e)) return;
 			preventDefault(e);
 			setIsDragging(false);
 		};
 
 		const handleDrop = (e: DragEvent) => {
+			if (!isDraggingFile(e)) return;
 			preventDefault(e);
 			setIsDragging(false);
 
@@ -51,5 +77,5 @@ export function useGlobalDrag({ onDropFiles }: UseGlobalDragOptions = {}) {
 		};
 	}, [onDropFiles]);
 
-	return { isDragging };
+	return { isDragging, isDraggingPDF };
 }

@@ -1,10 +1,35 @@
 type Props = {
 	files: File[];
 	onRemove: (index: number) => void;
+	onReorder: (files: File[]) => void;
 };
 
-export function FileList({ files, onRemove }: Props) {
+export function FileList({ files, onRemove, onReorder }: Props) {
 	if (files.length === 0) return null;
+
+	const handleDragStart = (
+		e: React.DragEvent<HTMLLIElement>,
+		index: number,
+	) => {
+		e.dataTransfer.effectAllowed = "move";
+		e.dataTransfer.setData("text/plain", index.toString());
+	};
+
+	const handleDragOver = (e: React.DragEvent<HTMLLIElement>) => {
+		e.preventDefault();
+		e.dataTransfer.dropEffect = "move";
+	};
+
+	const handleDrop = (e: React.DragEvent<HTMLLIElement>, dropIndex: number) => {
+		e.preventDefault();
+		const dragIndex = Number(e.dataTransfer.getData("text/plain"));
+		if (Number.isNaN(dragIndex) || dragIndex === dropIndex) return;
+
+		const updated = [...files];
+		const [moved] = updated.splice(dragIndex, 1);
+		updated.splice(dropIndex, 0, moved);
+		onReorder(updated);
+	};
 
 	return (
 		<div>
@@ -15,6 +40,10 @@ export function FileList({ files, onRemove }: Props) {
 				{files.map((file, index) => (
 					<li
 						key={`${file.name}-${index}`}
+						draggable
+						onDragStart={(e) => handleDragStart(e, index)}
+						onDragOver={handleDragOver}
+						onDrop={(e) => handleDrop(e, index)}
 						className="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-700 rounded-lg"
 					>
 						<div className="flex items-center space-x-3">

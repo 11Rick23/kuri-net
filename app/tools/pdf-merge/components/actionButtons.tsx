@@ -25,7 +25,7 @@ export default function ActionButtons({
 				py-3 px-6
 				"
 			>
-				{isLoading ? "統合中..." : "PDFを統合してダウンロード"}
+				{isLoading ? "統合中..." : "PDFを統合して保存"}
 			</button>
 
 			{files.length > 0 && (
