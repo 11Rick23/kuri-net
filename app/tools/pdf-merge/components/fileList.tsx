@@ -58,9 +58,6 @@ export function FileList({ files, onRemove, onReorder }: Props) {
 								size={20}
 								className="text-gray-500 dark:text-gray-400 hidden sm:inline-block"
 							/>
-							{/* <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-								{index + 1}.
-							</span> */}
 							<span
 								className="
 							text-sm text-gray-900 dark:text-white truncate
