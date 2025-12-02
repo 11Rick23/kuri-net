@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { MdComputer } from "react-icons/md";
+import { MdLaptopMac } from "react-icons/md";
 
 export default function Badges() {
 	const [open, setOpen] = useState(false);
 
 	return (
 		<div className="relative text-center">
-			<MdComputer
+			<MdLaptopMac
 				size={36}
 				className="inline-block rounded-full bg-orange-200 dark:bg-orange-900 p-2 mb-4 hover:cursor-help"
 				onMouseEnter={() => setOpen(true)}

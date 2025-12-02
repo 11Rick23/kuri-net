@@ -56,7 +56,7 @@ export function FileList({ files, onRemove, onReorder }: Props) {
 						<div className="flex items-center space-x-3">
 							<MdOutlineDragIndicator
 								size={20}
-								className="text-gray-500 dark:text-gray-400"
+								className="text-gray-500 dark:text-gray-400 hidden sm:inline-block"
 							/>
 							{/* <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
 								{index + 1}.
@@ -64,7 +64,7 @@ export function FileList({ files, onRemove, onReorder }: Props) {
 							<span
 								className="
 							text-sm text-gray-900 dark:text-white truncate
-							max-w-[150px] sm:max-w-[300px] md:max-w-[450px] lg:max-w-[600px]
+							max-w-[130px] sm:max-w-[300px] md:max-w-[450px] lg:max-w-[600px]
 							"
 								title={file.name}
 							>

@@ -35,9 +35,9 @@ export default function ActionButtons({
 					disabled={isLoading}
 					className="
 					rounded-lg
-					bg-gray-500 disabled:bg-gray-400
-					hover:cursor-pointer hover:bg-gray-600 disabled:cursor-not-allowed
-					text-white font-semibold
+					bg-gray-300 dark:bg-gray-600 disabled:bg-gray-400
+					hover:cursor-pointer hover:bg-gray-400 dark:hover:bg-gray-700 disabled:cursor-not-allowed
+					text-black dark:text-white font-semibold
 					py-3 px-6
 					"
 				>
