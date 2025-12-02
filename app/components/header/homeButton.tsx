@@ -18,7 +18,7 @@ export default function HomeButton() {
 				flex items-center justify-center
 				rounded-full cursor-pointer
 				${isActive ? "bg-gray-300 dark:bg-gray-700" : "bg-transparent"}
-				hover:bg-gray-300 hover:dark:bg-gray-700
+				hover:bg-gray-300 dark:hover:bg-gray-700
             `}
 		>
 			<FaHome size={15} />
