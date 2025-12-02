@@ -64,14 +64,16 @@ export function FileList({ files, onRemove, onReorder }: Props) {
 							<span
 								className="
 							text-sm text-gray-900 dark:text-white truncate
-							max-w-[180px] sm:max-w-[300px] md:max-w-[420px] lg:max-w-[540px]
+							max-w-[150px] sm:max-w-[300px] md:max-w-[450px] lg:max-w-[600px]
 							"
 								title={file.name}
 							>
 								{file.name}
 							</span>
 							<span className="text-xs text-gray-500 dark:text-gray-400">
-								({(file.size / 1024).toFixed(2)} KB)
+								{file.size > 1024 * 1024
+									? `${(file.size / 1024 / 1024).toFixed(2)} MB`
+									: `${(file.size / 1024).toFixed(2)} KB`}
 							</span>
 						</div>
 						<button

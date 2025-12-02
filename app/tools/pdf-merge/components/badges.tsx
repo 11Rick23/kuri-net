@@ -26,7 +26,7 @@ export default function Badges() {
 					このツールは端末内で動作し、
 					<br />
 					ファイルがサーバーへアップロード
-					<br />
+					<br className="sm:hidden" />
 					されることはありません
 				</div>
 			)}
