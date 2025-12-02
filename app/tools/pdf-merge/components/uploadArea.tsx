@@ -13,6 +13,7 @@ export function UploadArea({ onChange }: Props) {
 				mx-auto p-4
                 w-3/4 h-42 rounded-md
                 bg-gray-200 dark:bg-gray-700
+				hover:cursor-pointer
             "
 		>
 			<input
