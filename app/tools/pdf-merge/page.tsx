@@ -34,7 +34,7 @@ export default function PdfMerge() {
 			<div className="max-w-4xl mx-auto p-6">
 				<h1 className="text-3xl font-bold mb-8 text-center">PDF統合ツール</h1>
 
-				<div className="relative bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6 flex flex-col gap-6">
+				<div className="relative bg-white dark:bg-gray-800 rounded-lg border border-black p-6 mb-6 flex flex-col gap-6">
 					<InfoModal />
 					<UploadArea onChange={handleFileInputChange} />
 					<FileList

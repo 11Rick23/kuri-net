@@ -66,6 +66,7 @@ export function FileList({ files, onRemove, onReorder }: Props) {
 							text-sm text-gray-900 dark:text-white truncate
 							max-w-[180px] sm:max-w-[300px] md:max-w-[420px] lg:max-w-[540px]
 							"
+								title={file.name}
 							>
 								{file.name}
 							</span>
@@ -78,7 +79,7 @@ export function FileList({ files, onRemove, onReorder }: Props) {
 							onClick={() => onRemove(index)}
 							className="
 							text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300
-							hover:bg-gray-300 dark:hover:bg-gray-400
+							hover:bg-gray-300 dark:hover:bg-gray-600
 							text-sm font-medium px-2 py-1
 							rounded-md hover:cursor-pointer
 							"
