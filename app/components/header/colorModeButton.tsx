@@ -24,7 +24,7 @@ export default function ColorModeButton() {
 			className="
 				w-7 h-7 rounded-full cursor-pointer
 				flex items-center justify-center
-				hover:bg-gray-300 hover:dark:bg-gray-700
+				hover:bg-gray-300 dark:hover:bg-gray-700
 				"
 		>
 			{theme === "dark" ? <MdSunny size={15} /> : <MdDarkMode size={15} />}
