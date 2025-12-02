@@ -23,7 +23,7 @@ export default function PageButton({
 				rounded-full px-2 py-1 cursor-pointer
 				${isActive ? "bg-gray-300 dark:bg-gray-700" : "bg-transparent"}
                 text-xs font-bold
-				hover:bg-gray-300 hover:dark:bg-gray-700
+				hover:bg-gray-300 dark:hover:bg-gray-700
             `}
 		>
 			{display}
