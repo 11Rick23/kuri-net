@@ -48,7 +48,8 @@ export function usePdfMerge() {
 			}
 
 			const mergedPdfBytes = await mergedPdf.save();
-			const blob = new Blob([mergedPdfBytes], {
+			// 型エラー回避のためにbufferをArrayBufferに変換
+			const blob = new Blob([mergedPdfBytes.buffer as ArrayBuffer], {
 				type: "application/pdf",
 			});
 			const url = URL.createObjectURL(blob);
