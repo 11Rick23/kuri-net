@@ -45,7 +45,6 @@ export function useGlobalDrag({ onDropFiles }: UseGlobalDragOptions = {}) {
 		const handleDragLeave = (e: DragEvent) => {
 			if (!isDraggingFile(e)) return;
 			preventDefault(e);
-			// Only set isDragging to false if the drag has left the window
 			if ((e as DragEvent).relatedTarget === null) {
 				setIsDragging(false);
 			}
