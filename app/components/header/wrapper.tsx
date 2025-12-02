@@ -18,8 +18,6 @@ export default function Header() {
 				<div className="h-4 w-0 border-l border-gray-400 dark:border-gray-600" />
 				<PageButton url="/about" display="About" />
 				<PageButton url="/tools/pdf-merge" display="Tools" />
-				<PageButton url="/random" display="Random" />
-				<PageButton url="/nothing" display="Nothing" />
 				<div className="h-4 w-0 border-l border-gray-400 dark:border-gray-600" />
 				<ColorModeButton />
 			</div>
