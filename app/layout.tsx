@@ -21,7 +21,9 @@ export default function RootLayout({
 	return (
 		<html lang="ja" suppressHydrationWarning>
 			<head />
-			<body className={`${mPlus1.className} antialiased`}>
+			<body
+				className={`${mPlus1.className} antialiased transition-colors duration-150`}
+			>
 				<ThemeProvider attribute="class">{children}</ThemeProvider>
 			</body>
 		</html>

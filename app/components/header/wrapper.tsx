@@ -4,7 +4,7 @@ import PageButton from "./pageButton";
 
 export default function Header() {
 	return (
-		<div className="fixed top-0 left-0 w-full flex items-center justify-center">
+		<div className="fixed top-0 left-0 w-full flex items-center justify-center z-90">
 			<div
 				className="
 			inline-flex items-center justify-center
@@ -17,9 +17,7 @@ export default function Header() {
 				<HomeButton />
 				<div className="h-4 w-0 border-l border-gray-400 dark:border-gray-600" />
 				<PageButton url="/about" display="About" />
-				<PageButton url="/tools" display="Tools" />
-				<PageButton url="/random" display="Random" />
-				<PageButton url="/nothing" display="Nothing" />
+				<PageButton url="/tools/pdf-merge" display="Tools" />
 				<div className="h-4 w-0 border-l border-gray-400 dark:border-gray-600" />
 				<ColorModeButton />
 			</div>
