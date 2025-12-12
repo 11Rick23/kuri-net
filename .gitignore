@@ -74,3 +74,6 @@ next-env.d.ts
 
 # VSCode
 .vscode/
+
+# Mise
+mise.local.toml
