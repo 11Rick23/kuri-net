@@ -61,7 +61,7 @@ export function FileList({ files, onRemove, onReorder }: Props) {
 							<span
 								className="
 							text-sm text-gray-900 dark:text-white truncate
-							max-w-[130px] sm:max-w-[300px] md:max-w-[450px] lg:max-w-[600px]
+							max-w-32 sm:max-w-75 md:max-w-md lg:max-w-150
 							"
 								title={file.name}
 							>
