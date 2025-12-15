@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Header from "./components/header/wrapper";
+import Header from "@/components/header/wrapper";
 
 export const metadata: Metadata = {
 	title: "ホームページ",

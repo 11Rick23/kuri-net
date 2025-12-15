@@ -1,6 +1,6 @@
 "use client";
 
-import Header from "@/app/components/header/wrapper";
+import Header from "@/components/header/wrapper";
 import ActionButtons from "./components/actionButtons";
 import Badges from "./components/badges";
 import DropOverlay from "./components/dropOverlay";
