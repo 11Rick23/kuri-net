@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { M_PLUS_1 } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
+import Header from "@/components/header/wrapper";
 
 const mPlus1 = M_PLUS_1({
 	subsets: ["latin"],
@@ -24,7 +25,10 @@ export default function RootLayout({
 			<body
 				className={`${mPlus1.className} antialiased transition-colors duration-150`}
 			>
-				<ThemeProvider attribute="class">{children}</ThemeProvider>
+				<ThemeProvider attribute="class">
+					<Header />
+					{children}
+				</ThemeProvider>
 			</body>
 		</html>
 	);

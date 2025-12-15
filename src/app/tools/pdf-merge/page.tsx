@@ -1,6 +1,5 @@
 "use client";
 
-import Header from "@/components/header/wrapper";
 import ActionButtons from "./components/actionButtons";
 import Badges from "./components/badges";
 import DropOverlay from "./components/dropOverlay";
@@ -28,7 +27,6 @@ export default function PdfMerge() {
 
 	return (
 		<main className="min-h-screen">
-			<Header />
 			{isDragging && <DropOverlay isDraggingPDF={isDraggingPDF} />}
 			<div className="h-16" />
 			<div className="max-w-4xl mx-auto p-6">

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Header from "@/components/header/wrapper";
 
 export const metadata: Metadata = {
 	title: "ホームページ",
@@ -8,7 +7,6 @@ export const metadata: Metadata = {
 export default function Home() {
 	return (
 		<main>
-			<Header />
 			<div className="flex items-center justify-center w-screen h-screen flex-col gap-10">
 				<h1
 					className="
