@@ -1,6 +1,15 @@
 import ColorModeButton from "./colorModeButton";
 import HomeButton from "./homeButton";
+import LogInButton from "./loginButton";
 import PageButton from "./pageButton";
+
+function Border() {
+	return (
+		<div className="h-4 w-4 px-2">
+			<div className="mx-auto h-full w-px bg-gray-400 dark:bg-gray-600" />
+		</div>
+	);
+}
 
 export default function Header() {
 	return (
@@ -8,18 +17,19 @@ export default function Header() {
 			<div
 				className="
 			inline-flex items-center justify-center
-			m-2 px-2 py-1 gap-4 rounded-full
+			m-2 px-2 py-1 gap-1 rounded-full
 			bg-white/60 dark:bg-black/60
 			border border-gray-400 dark:border-gray-600
 			backdrop-blur-md shadow-light dark:shadow-dark
 			"
 			>
 				<HomeButton />
-				<div className="h-4 w-0 border-l border-gray-400 dark:border-gray-600" />
+				<Border />
 				<PageButton url="/about" display="About" />
 				<PageButton url="/tools/pdf-merge" display="Tools" />
-				<div className="h-4 w-0 border-l border-gray-400 dark:border-gray-600" />
+				<Border />
 				<ColorModeButton />
+				<LogInButton />
 			</div>
 		</div>
 	);
