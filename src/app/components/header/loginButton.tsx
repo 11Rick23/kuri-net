@@ -14,22 +14,22 @@ export default function LogInButton() {
 				toast("ログイン機能はまだ実装されていません", {
 					id: "sign-up-notice",
 					type: "info",
-					durationMs: 0,
+					durationMs: 20000,
 				});
 				toast("ログイン機能はまだ実装されていません", {
 					id: "sign-up-notice2",
 					type: "success",
-					durationMs: 0,
+					durationMs: 13000,
 				});
 				toast("ログイン機能はまだ実装されていません", {
 					id: "sign-up-notice3",
 					type: "warning",
-					durationMs: 0,
+					durationMs: 5000,
 				});
 				toast("ログイン機能はまだ実装されていません", {
 					id: "sign-up-notice4",
 					type: "error",
-					durationMs: 0,
+					durationMs: 8000,
 				});
 			}}
 			className="

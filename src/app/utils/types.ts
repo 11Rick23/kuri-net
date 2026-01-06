@@ -11,6 +11,7 @@ export type ToastItem = {
 	type: ToastType;
 	message: string;
 	durationMs: number;
+	count: number;
 };
 
 export type ToastOptions = {
@@ -22,4 +23,12 @@ export type ToastOptions = {
 export type ToastContextValue = {
 	toast: (message: string, options?: ToastOptions) => void;
 	dismiss: (id: string) => void;
+	pause: (id: string) => void;
+	resume: (id: string) => void;
+};
+
+export type TimerInfo = {
+	startAt: number;
+	remainingMs: number;
+	timeoutId: number;
 };

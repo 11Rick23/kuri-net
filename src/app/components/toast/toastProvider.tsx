@@ -2,8 +2,6 @@
 
 import { nanoid } from "nanoid";
 import type React from "react";
-import ToastCard from "./toastCard";
-
 import {
 	createContext,
 	useCallback,
@@ -12,13 +10,13 @@ import {
 	useRef,
 	useState,
 } from "react";
-
 import type {
+	TimerInfo,
 	ToastContextValue,
 	ToastItem,
 	ToastOptions,
-	ToastType,
 } from "@/utils/types";
+import ToastCard from "./toastCard";
 
 // トースト操作を共有するためのコンテキスト
 const ToastContext = createContext<ToastContextValue | null>(null);
@@ -34,15 +32,44 @@ export function useToast() {
 // トースト表示を行うプロバイダー
 export function ToastProvider({ children }: { children: React.ReactNode }) {
 	const [items, setItems] = useState<ToastItem[]>([]);
-	const timers = useRef(new Map<string, number>());
+	const timers = useRef(new Map<string, TimerInfo>());
 
-	// 指定したIDのトーストを閉じ、タイマーをクリアする
-	const dismiss = useCallback((id: string) => {
-		setItems((prev) => prev.filter((t) => t.id !== id));
+	const clearTimer = useCallback((id: string) => {
 		const timer = timers.current.get(id);
-		if (timer) window.clearTimeout(timer);
+		if (timer) window.clearTimeout(timer.timeoutId);
 		timers.current.delete(id);
 	}, []);
+
+	// 指定したIDのトーストを閉じ、タイマーをクリアする
+	const dismiss = useCallback(
+		(id: string) => {
+			setItems((prev) => prev.filter((t) => t.id !== id));
+			clearTimer(id);
+		},
+		[clearTimer],
+	);
+
+	const pause = useCallback((id: string) => {
+		const info = timers.current.get(id);
+		if (!info) return;
+
+		window.clearTimeout(info.timeoutId);
+
+		const elapsed = Date.now() - info.startAt;
+		info.remainingMs = Math.max(info.remainingMs - elapsed, 0);
+	}, []);
+
+	const resume = useCallback(
+		(id: string) => {
+			const info = timers.current.get(id);
+			if (!info || info.remainingMs <= 0) return;
+
+			window.clearTimeout(info.timeoutId); // 念のため既存のタイマーをクリア
+			info.startAt = Date.now();
+			info.timeoutId = window.setTimeout(() => dismiss(id), info.remainingMs);
+		},
+		[dismiss],
+	);
 
 	// トーストを作成
 	const toast = useCallback(
@@ -51,26 +78,44 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 			const type = options?.type ?? "info";
 			const durationMs = options?.durationMs ?? 5000;
 
-			const item: ToastItem = { id, type, message, durationMs };
-
 			// トーストを追加、同じIDがある場合は上書き
-			setItems((prev) => [...prev.filter((t) => t.id !== id), item]);
+			setItems((prev) => {
+				const prevItem = prev.find((t) => t.id === id);
+
+				const item: ToastItem = {
+					id,
+					type,
+					message,
+					durationMs,
+					count: prevItem ? prevItem.count + 1 : 1,
+				};
+
+				return [...prev.filter((t) => t.id !== id), item];
+			});
+
+			// 既存のタイマーがあればクリア
+			clearTimer(id);
 
 			// 負の値を指定された場合はタイマーをセットしない
 			if (durationMs <= 0) return;
 
-			// 既存のタイマーがあればクリア
-			const prevTimer = timers.current.get(id);
-			if (prevTimer) window.clearTimeout(prevTimer);
+			const startAt = Date.now();
+			const timeoutId = window.setTimeout(() => dismiss(id), durationMs);
 
 			// タイマーをセット
-			const timer = window.setTimeout(() => dismiss(id), durationMs);
-			timers.current.set(id, timer);
+			timers.current.set(id, {
+				startAt,
+				remainingMs: durationMs,
+				timeoutId,
+			});
 		},
-		[dismiss],
+		[dismiss, clearTimer],
 	);
 
-	const value = useMemo(() => ({ toast, dismiss }), [toast, dismiss]);
+	const value = useMemo(
+		() => ({ toast, dismiss, pause, resume }),
+		[toast, dismiss, pause, resume],
+	);
 
 	return (
 		<ToastContext.Provider value={value}>
@@ -81,7 +126,11 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 				aria-relevant="additions"
 			>
 				{items.map((t) => (
-					<ToastCard key={t.id} item={t} onClose={() => dismiss(t.id)} />
+					<ToastCard
+						key={t.id + String(t.count)}
+						item={t}
+						onClose={() => dismiss(t.id)}
+					/>
 				))}
 			</div>
 		</ToastContext.Provider>
