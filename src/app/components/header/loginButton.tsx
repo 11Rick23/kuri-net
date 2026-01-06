@@ -10,12 +10,28 @@ export default function LogInButton() {
 		<button
 			type="button"
 			aria-label="ログイン"
-			onClick={() =>
+			onClick={() => {
 				toast("ログイン機能はまだ実装されていません", {
+					id: "sign-up-notice",
 					type: "info",
-					durationMs: 3000,
-				})
-			}
+					durationMs: 0,
+				});
+				toast("ログイン機能はまだ実装されていません", {
+					id: "sign-up-notice2",
+					type: "success",
+					durationMs: 0,
+				});
+				toast("ログイン機能はまだ実装されていません", {
+					id: "sign-up-notice3",
+					type: "warning",
+					durationMs: 0,
+				});
+				toast("ログイン機能はまだ実装されていません", {
+					id: "sign-up-notice4",
+					type: "error",
+					durationMs: 0,
+				});
+			}}
 			className="
 				w-7 h-7 rounded-full cursor-pointer
 				flex items-center justify-center

@@ -14,6 +14,7 @@ export type ToastItem = {
 };
 
 export type ToastOptions = {
+	id?: string;
 	type?: ToastType;
 	durationMs?: number;
 };
