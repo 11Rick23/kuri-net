@@ -1,24 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { IoMdLogIn } from "react-icons/io";
+import { useToast } from "@/components/toast/toastProvider";
 
 export default function LogInButton() {
-	const [mounted, setMounted] = useState(false);
-
-	useEffect(() => {
-		setMounted(true);
-	}, []);
-
-	if (!mounted) {
-		return <div className="w-5 h-5 rounded-full bg-gray-800" />;
-	}
+	const { toast } = useToast();
 
 	return (
 		<button
 			type="button"
 			aria-label="ログイン"
-			onClick={() => {}}
+			onClick={() =>
+				toast("ログイン機能はまだ実装されていません", {
+					type: "info",
+					durationMs: 3000,
+				})
+			}
 			className="
 				w-7 h-7 rounded-full cursor-pointer
 				flex items-center justify-center
