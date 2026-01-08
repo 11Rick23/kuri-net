@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { FaCheck } from "react-icons/fa";
 import { IoMdLogIn } from "react-icons/io";
 import { useModal } from "@/components/modal/modalProvider";
 import { useToast } from "@/components/toast/toastProvider";
@@ -36,9 +37,19 @@ function SignUpModalContent() {
 				<label className="flex items-center gap-2 text-sm mb-4 cursor-pointer select-none">
 					<input
 						type="checkbox"
+						className="peer sr-only"
 						checked={agreed}
 						onChange={(e) => setAgreed(e.target.checked)}
 					/>
+					<span
+						className="
+						flex items-center justify-center
+						w-4 h-4 rounded-sm border
+						peer-checked:bg-blue-500
+						peer-checked:border-blue-500"
+					>
+						{agreed && <FaCheck className="text-white text-[10px]" />}
+					</span>
 					<span>上記注意事項を読み、同意します</span>
 				</label>
 
