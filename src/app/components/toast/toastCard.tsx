@@ -5,6 +5,7 @@ import {
 	FaExclamationTriangle,
 	FaInfo,
 } from "react-icons/fa";
+import { IoIosClose } from "react-icons/io";
 import type { ToastItem, ToastType } from "@/utils/types";
 import { useToast } from "./toastProvider";
 
@@ -93,10 +94,10 @@ export default function ToastCard({
 			<button
 				type="button"
 				onClick={onClose}
-				className="text-xs text-center px-2 py-1 rounded-md hover:bg-gray-300 dark:hover:bg-gray-800"
+				className="text-2xl text-center rounded-md hover:bg-black/15 dark:hover:bg-white/20 cursor-pointer"
 				aria-label="閉じる"
 			>
-				✕
+				<IoIosClose />
 			</button>
 		</div>
 	);
