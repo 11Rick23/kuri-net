@@ -83,12 +83,11 @@ export default function ToastCard({
 				/>
 			</div>
 
-			<div className="mt-0.5 text-lg shrink-0">
-				{iconByType[item.type]}
-			</div>
+			<div className="mt-0.5 text-lg shrink-0">{iconByType[item.type]}</div>
 
 			<div className="text-sm text-gray-900 dark:text-gray-100 flex-1">
-				{item.message + (item.count > 1 ? ` (${item.count})` : "")}
+				{item.message}
+				{item.count > 1 && <span> ({item.count})</span>}
 			</div>
 
 			<button

@@ -73,7 +73,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 
 	// トーストを作成
 	const toast = useCallback(
-		(message: string, options?: ToastOptions) => {
+		(message: React.ReactNode, options?: ToastOptions) => {
 			const id = options?.id ?? nanoid();
 			const type = options?.type ?? "info";
 			const durationMs = options?.durationMs ?? 5000;
@@ -121,7 +121,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 		<ToastContext.Provider value={value}>
 			{children}
 			<div
-				className="fixed bottom-4 right-4 z-100 w-[min(92vw,420px)] space-y-2"
+				className="fixed bottom-4 right-4 z-60 w-[min(92vw,420px)] space-y-2"
 				aria-live="polite"
 				aria-relevant="additions"
 			>
