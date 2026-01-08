@@ -13,7 +13,7 @@ function Border() {
 
 export default function Header() {
 	return (
-		<div className="fixed top-0 left-0 w-full flex items-center justify-center z-90">
+		<div className="fixed top-0 left-0 w-full flex items-center justify-center z-70">
 			<div
 				className="
 			inline-flex items-center justify-center
