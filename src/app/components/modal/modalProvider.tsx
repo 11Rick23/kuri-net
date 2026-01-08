@@ -9,6 +9,7 @@ import React, {
 	useMemo,
 	useState,
 } from "react";
+import { IoIosClose } from "react-icons/io";
 import type {
 	ModalContextValue,
 	ModalOpenOptions,
@@ -87,12 +88,27 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
 						{/* パネル */}
 						<div
 							className={`
-                        overflow-auto rounded-xl
-                        bg-white dark:bg-black
-                        border border-gray-300 dark:border-gray-700
-                        p-${state.options.paddingSize} shadow-lg`}
+                                relative overflow-auto rounded-xl
+                                bg-white dark:bg-black
+                                border border-gray-300 dark:border-gray-700
+                                p-${state.options.paddingSize} shadow-lg`}
 							onClick={(e) => e.stopPropagation()}
 						>
+							{/* 閉じるボタン */}
+							<button
+								type="button"
+								aria-label="Close modal"
+								onClick={closeModal}
+								className="
+                                absolute top-2 right-2
+                                rounded-lg
+                                text-gray-400
+                                hover:bg-black/20 dark:hover:bg-white/20
+                                text-3xl leading-none cursor-pointer"
+							>
+								<IoIosClose />
+							</button>
+
 							{state.content}
 						</div>
 					</div>
