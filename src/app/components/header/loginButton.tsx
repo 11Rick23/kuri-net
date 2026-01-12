@@ -6,9 +6,11 @@ import { FaCheck } from "react-icons/fa";
 import { IoMdLogIn } from "react-icons/io";
 import { useModal } from "@/components/modal/modalProvider";
 import { useToast } from "@/components/toast/toastProvider";
+import signUp from "@/functions/passkey/signup";
 
 function SignUpModalContent() {
 	const [agreed, setAgreed] = useState(false);
+	const [username, setUsername] = useState("");
 
 	return (
 		<>
@@ -34,7 +36,7 @@ function SignUpModalContent() {
 					いかなる責任も負いかねますのでご了承ください。
 				</p>
 
-				<label className="flex items-center gap-2 text-sm mb-4 cursor-pointer select-none">
+				<label className="flex items-center gap-2 text-sm cursor-pointer select-none">
 					<input
 						type="checkbox"
 						className="peer sr-only"
@@ -53,9 +55,27 @@ function SignUpModalContent() {
 					<span>上記注意事項を読み、同意します</span>
 				</label>
 
+				<input
+					id="username"
+					type="text"
+					value={username}
+					onChange={(e) => setUsername(e.target.value)}
+					placeholder="ユーザー名 (パスキーの名称)"
+					className="
+						w-full max-w-50 my-7 px-3 py-2
+						border rounded-md text-center
+						font-bold placeholder:font-medium
+						placeholder:text-xs
+						bg-white dark:bg-black
+						"
+				/>
+
 				<button
 					type="button"
 					disabled={!agreed}
+					onClick={async () => {
+						await signUp(username);
+					}}
 					className={`
 					rounded-md
 					px-5 py-2 font-medium

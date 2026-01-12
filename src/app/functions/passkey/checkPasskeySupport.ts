@@ -26,5 +26,3 @@ export async function checkPasskeySupport(): Promise<Result<null, string>> {
 		};
 	}
 }
-
-export default function SignUp() {}
