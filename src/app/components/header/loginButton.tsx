@@ -4,9 +4,9 @@ import Link from "next/link";
 import { useState } from "react";
 import { FaCheck } from "react-icons/fa";
 import { IoMdLogIn } from "react-icons/io";
-import { useModal } from "@/components/modal/modalProvider";
-import { useToast } from "@/components/toast/toastProvider";
-import signUp from "@/functions/passkey/signup";
+import { useModal } from "@/app/components/modal/modalProvider";
+import { useToast } from "@/app/components/toast/toastProvider";
+import signUp from "@/app/functions/passkey/signup";
 
 function SignUpModalContent() {
 	const [agreed, setAgreed] = useState(false);

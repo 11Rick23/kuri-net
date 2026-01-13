@@ -1,4 +1,4 @@
-import type { Result } from "@/utils/types";
+import type { Result } from "@/app/utils/types";
 
 export async function checkPasskeySupport(): Promise<Result<null, string>> {
 	try {
