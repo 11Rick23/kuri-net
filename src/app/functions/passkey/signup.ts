@@ -14,7 +14,8 @@ export default async function signUp(userName: string) {
 	console.log("パスキーはサポートされているようです。");
 
 	// チャレンジとユーザーIDを取得
-	const challenge = await generateChallenge();
+	const encodedChallenge = await generateChallenge();
+	const challenge = Buffer.from(encodedChallenge, "base64url");
 	const userId = await generateUserId();
 
 	// パスキーの作成を開始
