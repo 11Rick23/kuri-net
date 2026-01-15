@@ -1,6 +1,6 @@
 "use server";
 
-import crypto from "crypto";
+import crypto from "node:crypto";
 import { nanoid } from "nanoid";
 import { db } from "@/database";
 import { challenges } from "@/database/schema";
