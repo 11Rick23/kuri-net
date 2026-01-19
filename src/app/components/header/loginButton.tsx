@@ -3,8 +3,8 @@
 import Link from "next/link";
 
 import { IoMdLogIn } from "react-icons/io";
-import SignUpModalContent from "@/app/components/login/signupModal";
 import { useModal } from "@/app/components/modal/modalProvider";
+import RegistrationModalContent from "@/app/components/registration/registrationModal";
 import { useToast } from "@/app/components/toast/toastProvider";
 
 export default function LogInButton() {
@@ -19,7 +19,7 @@ export default function LogInButton() {
 				className="underline font-medium hover:text-blue-600 dark:hover:text-blue-400"
 				onClick={() => {
 					dismiss("sign-up-notice");
-					openModal(<SignUpModalContent />, { paddingSize: 6 });
+					openModal(<RegistrationModalContent />, { paddingSize: 6 });
 				}}
 			>
 				こちら

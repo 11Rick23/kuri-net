@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FaCheck } from "react-icons/fa";
 import signUp from "@/app/functions/passkey/signup";
 
-export default function SignUpModalContent() {
+export default function RegistrationModalContent() {
 	const [agreed, setAgreed] = useState(false);
 	const [username, setUsername] = useState("");
 
