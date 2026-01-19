@@ -12,6 +12,7 @@ export default function LogInButton() {
 	const { openModal } = useModal();
 
 	function onLoginButtonPress() {
+		// パスキー認証がブラウザでサポートされているか確認
 		if (!browserSupportsWebAuthn()) {
 			const message = (
 				<>
@@ -24,6 +25,7 @@ export default function LogInButton() {
 			return;
 		}
 
+		// 登録を促すトーストのメッセージ
 		const message = (
 			<>
 				{"新規アカウント登録は "}
@@ -39,6 +41,8 @@ export default function LogInButton() {
 				</Link>
 			</>
 		);
+
+		// トーストを送信
 		toast(message, {
 			id: "sign-up-notice",
 			type: "info",
