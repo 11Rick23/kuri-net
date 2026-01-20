@@ -1,4 +1,9 @@
-import { integer, pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core";
+import {
+	integer,
+	pgTable,
+	text,
+	timestamp,
+} from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
 	id: text("id").notNull().primaryKey(),
@@ -25,11 +30,11 @@ export const credentials = pgTable("credentials", {
 	updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 });
 
-export const challenges = pgTable("challenges", {
-	challenge: varchar("challenge", {length: 43}).notNull().unique(),
+export const webAuthnChallenges = pgTable("webauthn_challenges", {
+	userId: text("user_id").notNull().primaryKey().unique(),
+	challenge: text("challenge").notNull(),
 	createdAt: timestamp("created_at", { withTimezone: true })
 		.notNull()
 		.defaultNow(),
 	expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
-	userId: text("user_id").notNull().primaryKey(),
 });

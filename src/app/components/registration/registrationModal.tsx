@@ -1,6 +1,8 @@
+"use client";
+
 import { useState } from "react";
 import { FaCheck } from "react-icons/fa";
-import signUp from "@/app/functions/passkey/signup";
+import register from "@/app/functions/passkey/registration";
 
 export default function RegistrationModalContent() {
 	const [agreed, setAgreed] = useState(false);
@@ -68,7 +70,7 @@ export default function RegistrationModalContent() {
 					type="button"
 					disabled={!agreed}
 					onClick={async () => {
-						await signUp(username);
+						await register(username);
 					}}
 					className={`
 					rounded-md
