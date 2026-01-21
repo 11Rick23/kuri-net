@@ -1,15 +1,28 @@
 "use server";
 
-import { generateRegistrationOptions } from "@simplewebauthn/server";
-import { cookies, headers } from "next/headers";
-import { createSession, createUser, saveChallenge } from "./databaseFunctions";
+import type { RegistrationResponseJSON } from "@simplewebauthn/server";
+import {
+	generateRegistrationOptions,
+	verifyRegistrationResponse,
+} from "@simplewebauthn/server";
+import { cookies } from "next/headers";
+
+import {
+	createSession,
+	createUser,
+	getChallenge,
+	saveChallenge,
+} from "./databaseFunctions";
+import { verifySession } from "./verifySession";
 
 export async function generateRegistrationData(userName: string) {
-	const host = (await headers()).get("host") ?? "";
+	// 開発環境と本番環境でrpIDを切り替え
+	const rpID =
+		process.env.NODE_ENV === "production" ? "kuri-kuri.net" : "localhost";
 
 	const options = await generateRegistrationOptions({
 		rpName: "kuri-net",
-		rpID: host.includes("localhost") ? "localhost" : "kuri-kuri.net",
+		rpID: rpID,
 		userName: userName,
 	});
 
@@ -22,7 +35,7 @@ export async function generateRegistrationData(userName: string) {
 
 	// セッションIDをクッキーに保存
 	const cookieStore = await cookies();
-	cookieStore.set("sessionId", sessionId, {
+	cookieStore.set("sessionID", sessionId, {
 		httpOnly: true,
 		secure: process.env.NODE_ENV === "production",
 		sameSite: "lax",
@@ -35,4 +48,47 @@ export async function generateRegistrationData(userName: string) {
 
 	// オプションを返す
 	return options;
+}
+
+export async function verifyRegistrationData(
+	response: RegistrationResponseJSON,
+) {
+	// セッションを検証
+	const session = await verifySession();
+
+	// セッションが存在しない場合は失敗
+	if (!session) {
+		return null;
+	}
+
+	// 該当セッションで生成されたチャレンジを取得
+	const expectedChallenge = await getChallenge(session.id);
+
+	// チャレンジが存在しない場合は失敗
+	if (!expectedChallenge) {
+		return null;
+	}
+
+	// 開発環境と本番環境でoriginとrpIDを切り替え
+	const expectedOrigin =
+		process.env.NODE_ENV === "production"
+			? "https://kuri-kuri.net"
+			: "http://localhost:3000";
+
+	const expectedRPID =
+		process.env.NODE_ENV === "production" ? "kuri-kuri.net" : "localhost";
+
+	// パスキーを検証
+	const verification = await verifyRegistrationResponse({
+		response,
+		expectedChallenge,
+		expectedOrigin,
+		expectedRPID,
+	});
+
+	if (!verification.verified) {
+		return null;
+	}
+
+	return verification;
 }

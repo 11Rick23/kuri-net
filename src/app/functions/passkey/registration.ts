@@ -1,5 +1,8 @@
 import { startRegistration } from "@simplewebauthn/browser";
-import { generateRegistrationData } from "./registrationServerFunctions";
+import {
+	generateRegistrationData,
+	verifyRegistrationData,
+} from "./registrationServerFunctions";
 
 export default async function register(userName: string) {
 	// チャレンジとユーザーIDを取得
@@ -8,5 +11,8 @@ export default async function register(userName: string) {
 	// パスキーの作成を開始
 	const response = await startRegistration({ optionsJSON: options });
 
-	alert("パスキーの登録が完了しました！");
+	// パスキーを検証
+	const result = await verifyRegistrationData(response);
+
+	alert(result?.verified ? "登録に成功しました！" : "登録に失敗しました。");
 }

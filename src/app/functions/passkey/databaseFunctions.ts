@@ -69,3 +69,17 @@ export async function saveChallenge(sessionId: string, challenge: string) {
 			set: { challenge, expiresAt },
 		});
 }
+
+export async function getChallenge(sessionId: string) {
+	const record = await db
+		.select()
+		.from(webAuthnChallenges)
+		.where(eq(webAuthnChallenges.sessionId, sessionId))
+		.limit(1)
+		.then((res) => res[0]);
+
+	if (record && record.expiresAt > new Date()) {
+		return record.challenge;
+	}
+	return null;
+}
