@@ -2,7 +2,7 @@
 
 import { generateRegistrationOptions } from "@simplewebauthn/server";
 import { headers } from "next/headers";
-import { saveChallenge } from "./saveChallenge";
+import { createSession, saveChallenge } from "./databaseFunctions";
 
 export async function generateRegistrationData(userName: string) {
 	const host = (await headers()).get("host") ?? "";
@@ -13,9 +13,12 @@ export async function generateRegistrationData(userName: string) {
 		userName: userName,
 	});
 
+	// セッションを生成
+	const sessionId = await createSession(options.user.id);
+
 	// チャレンジをDBへ保存
-	await saveChallenge(options.user.id, options.challenge);
+	await saveChallenge(sessionId, options.challenge);
 
 	// オプションを返す
-	return options;
+	return {options, sessionId};
 }
