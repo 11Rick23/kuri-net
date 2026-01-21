@@ -1,7 +1,27 @@
 import { eq } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import { db } from "@/database";
-import { sessions, webAuthnChallenges } from "@/database/schema";
+import { sessions, users, webAuthnChallenges } from "@/database/schema";
+
+export async function createUser(userId: string, temporaryUntil?: Date) {
+	await db.insert(users).values({
+		id: userId,
+		temporaryUntil: temporaryUntil,
+	});
+
+	return await getUser(userId);
+}
+
+export async function getUser(userId: string) {
+	const user = await db
+		.select()
+		.from(users)
+		.where(eq(users.id, userId))
+		.limit(1)
+		.then((res) => res[0]);
+
+	return user;
+}
 
 export async function createSession(
 	userId: string,
@@ -36,10 +56,7 @@ export async function getSession(sessionId: string) {
 	return session;
 }
 
-export async function saveChallenge(
-	sessionId: string,
-	challenge: string,
-) {
+export async function saveChallenge(sessionId: string, challenge: string) {
 	// チャレンジの有効期限は5分
 	const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
 

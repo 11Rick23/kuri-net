@@ -2,8 +2,7 @@ import { integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
 	id: text("id").notNull().primaryKey(),
-	email: text("email").notNull().unique(),
-	displayName: text("display_name").notNull(),
+	temporaryUntil: timestamp("temporary_until", { withTimezone: true }),
 	createdAt: timestamp("created_at", { withTimezone: true })
 		.notNull()
 		.defaultNow(),
