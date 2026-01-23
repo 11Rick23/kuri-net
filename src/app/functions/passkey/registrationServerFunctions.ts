@@ -12,6 +12,7 @@ import {
 	createUser,
 	getChallenge,
 	saveChallenge,
+	saveCredential,
 } from "./databaseFunctions";
 import { verifySession } from "./verifySession";
 
@@ -89,6 +90,11 @@ export async function verifyRegistrationData(
 	if (!verification.verified) {
 		return null;
 	}
+
+	await saveCredential(
+		session.userID,
+		verification.registrationInfo.credential,
+	);
 
 	return verification;
 }

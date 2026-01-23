@@ -1,4 +1,5 @@
 import { integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { bytea } from "@/app/utils/customDrizzleType";
 
 export const users = pgTable("users", {
 	id: text("id").notNull().primaryKey(),
@@ -13,9 +14,8 @@ export const users = pgTable("users", {
 
 export const credentials = pgTable("credentials", {
 	id: text("id").notNull().primaryKey(),
-	aaguid: text("aaguid"),
-	publicKey: text("public_key").notNull(),
-	userId: text("user_id")
+	publicKey: bytea("public_key").notNull(),
+	userID: text("user_id")
 		.notNull()
 		.references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
 	counter: integer("counter").notNull().default(0),
@@ -25,7 +25,7 @@ export const credentials = pgTable("credentials", {
 });
 
 export const webAuthnChallenges = pgTable("webauthn_challenges", {
-	sessionId: text("session_id")
+	sessionID: text("session_id")
 		.notNull()
 		.primaryKey()
 		.references(() => sessions.id, {
@@ -41,7 +41,7 @@ export const webAuthnChallenges = pgTable("webauthn_challenges", {
 
 export const sessions = pgTable("sessions", {
 	id: text("id").notNull().primaryKey(),
-	userId: text("user_id")
+	userID: text("user_id")
 		.notNull()
 		.references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
 	createdAt: timestamp("created_at", { withTimezone: true })
