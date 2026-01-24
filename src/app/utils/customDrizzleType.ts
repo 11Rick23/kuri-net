@@ -2,7 +2,7 @@ import { customType } from "drizzle-orm/pg-core";
 
 // PostgreSQLのbytea型を扱うための定義
 export const bytea = (name: string) =>
-	customType<{ data: Uint8Array; driverData: Buffer }>({
+	customType<{ data: Uint8Array<ArrayBuffer>; driverData: Buffer }>({
 		dataType() {
 			return "bytea";
 		},
@@ -12,10 +12,10 @@ export const bytea = (name: string) =>
 			return Buffer.from(value);
 		},
 
-		// DBドライバ → アプリ（BufferをUint8Arrayに戻す）
-		fromDriver(value: unknown) {
-			if (Buffer.isBuffer(value)) return new Uint8Array(value);
-			if (value instanceof Uint8Array) return value;
+		// DBドライバ → アプリ（必ず ArrayBuffer ベースの Uint8Array に正規化）
+		fromDriver(value: unknown): Uint8Array<ArrayBuffer> {
+			if (Buffer.isBuffer(value)) return new Uint8Array(value); // copy -> ArrayBuffer
+			if (value instanceof Uint8Array) return new Uint8Array(value); // copy -> ArrayBuffer
 			return new Uint8Array(value as any);
 		},
 	})(name);

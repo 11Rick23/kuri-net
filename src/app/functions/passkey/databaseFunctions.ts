@@ -101,3 +101,14 @@ export async function saveCredential(
 		counter: credential.counter,
 	});
 }
+
+export async function getCredential(credentialID: string) {
+	const credential = await db
+		.select()
+		.from(credentials)
+		.where(eq(credentials.id, credentialID))
+		.limit(1)
+		.then((res) => res[0]);
+
+	return credential;
+}

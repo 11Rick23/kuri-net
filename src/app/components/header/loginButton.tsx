@@ -6,12 +6,13 @@ import { IoMdLogIn } from "react-icons/io";
 import { useModal } from "@/app/components/modal/modalProvider";
 import RegistrationModalContent from "@/app/components/registration/registrationModal";
 import { useToast } from "@/app/components/toast/toastProvider";
+import login from "@/app/functions/passkey/login";
 
 export default function LogInButton() {
 	const { toast, dismiss } = useToast();
 	const { openModal } = useModal();
 
-	function onLoginButtonPress() {
+	async function onLoginButtonPress() {
 		// パスキー認証がブラウザでサポートされているか確認
 		if (!browserSupportsWebAuthn()) {
 			const message = (
@@ -48,6 +49,8 @@ export default function LogInButton() {
 			type: "info",
 			durationMs: 20000,
 		});
+
+		await login();
 	}
 
 	return (
