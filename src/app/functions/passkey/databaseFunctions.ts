@@ -30,20 +30,20 @@ export async function getUser(userID: string) {
 }
 
 export async function createSession(
-	userID: string,
+	userID: string | null = null,
 	expiresAt: number = 1000 * 60 * 60 * 24 * 30, // デフォルトで30日間有効
 ) {
 	const expiresAtDate = new Date(Date.now() + expiresAt);
 
-	const sessionId = nanoid();
+	const sessionID = nanoid();
 
 	await db.insert(sessions).values({
-		id: sessionId,
+		id: sessionID,
 		userID,
 		expiresAt: expiresAtDate,
 	});
 
-	return sessionId;
+	return sessionID;
 }
 
 export async function getSession(sessionID: string) {

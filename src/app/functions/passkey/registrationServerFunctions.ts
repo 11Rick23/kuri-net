@@ -58,7 +58,7 @@ export async function verifyRegistrationData(
 	const session = await verifySession();
 
 	// セッションが存在しない場合は失敗
-	if (!session) {
+	if (!session || !session?.userID) {
 		return null;
 	}
 
