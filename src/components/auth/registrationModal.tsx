@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { FaCheck } from "react-icons/fa";
-import register from "@/app/functions/passkey/registration";
+import register from "@/functions/passkey/registration";
 
 export default function RegistrationModalContent() {
 	const [agreed, setAgreed] = useState(false);
