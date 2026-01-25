@@ -5,7 +5,7 @@ import Link from "next/link";
 import { IoMdLogIn } from "react-icons/io";
 import login from "@/app/functions/passkey/login";
 import { useModal } from "@/components/modal/modalProvider";
-import RegistrationModalContent from "@/components/registration/registrationModal";
+import RegistrationModalContent from "@/components/auth/registrationModal";
 import { useToast } from "@/components/toast/toastProvider";
 
 export default function LogInButton() {
