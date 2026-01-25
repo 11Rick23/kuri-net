@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { M_PLUS_1 } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
-import Header from "@/app/components/header/wrapper";
-import { ModalProvider } from "@/app/components/modal/modalProvider";
-import { ToastProvider } from "@/app/components/toast/toastProvider";
+import Header from "@/components/header/wrapper";
+import { ModalProvider } from "@/components/modal/modalProvider";
+import { ToastProvider } from "@/components/toast/toastProvider";
 
 const mPlus1 = M_PLUS_1({
 	subsets: ["latin"],

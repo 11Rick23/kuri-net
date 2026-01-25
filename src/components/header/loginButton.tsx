@@ -3,10 +3,10 @@
 import { browserSupportsWebAuthn } from "@simplewebauthn/browser";
 import Link from "next/link";
 import { IoMdLogIn } from "react-icons/io";
-import { useModal } from "@/app/components/modal/modalProvider";
-import RegistrationModalContent from "@/app/components/registration/registrationModal";
-import { useToast } from "@/app/components/toast/toastProvider";
 import login from "@/app/functions/passkey/login";
+import { useModal } from "@/components/modal/modalProvider";
+import RegistrationModalContent from "@/components/registration/registrationModal";
+import { useToast } from "@/components/toast/toastProvider";
 
 export default function LogInButton() {
 	const { toast, dismiss } = useToast();

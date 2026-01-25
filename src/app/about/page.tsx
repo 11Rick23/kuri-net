@@ -1,4 +1,4 @@
-import ProfileCard from "@/app/components/profileCard";
+import ProfileCard from "@/components/profileCard";
 
 export default function About() {
 	return (
