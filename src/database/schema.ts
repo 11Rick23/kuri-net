@@ -1,5 +1,5 @@
 import { integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
-import { bytea } from "@/app/utils/customDrizzleType";
+import { bytea } from "@/utils/customDrizzleType";
 
 export const users = pgTable("users", {
 	id: text("id").notNull().primaryKey(),
@@ -41,8 +41,10 @@ export const webAuthnChallenges = pgTable("webauthn_challenges", {
 
 export const sessions = pgTable("sessions", {
 	id: text("id").notNull().primaryKey(),
-	userID: text("user_id")
-		.references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
+	userID: text("user_id").references(() => users.id, {
+		onDelete: "cascade",
+		onUpdate: "cascade",
+	}),
 	createdAt: timestamp("created_at", { withTimezone: true })
 		.notNull()
 		.defaultNow(),
