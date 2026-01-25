@@ -14,7 +14,7 @@ import type {
 	ModalContextValue,
 	ModalOpenOptions,
 	ModalState,
-} from "@/utils/types";
+} from "@/types/modal";
 
 const ModalContext = createContext<ModalContextValue | null>(null);
 

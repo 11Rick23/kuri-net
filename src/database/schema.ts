@@ -1,5 +1,5 @@
 import { integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
-import { bytea } from "@/utils/customDrizzleType";
+import { bytea } from "@/types/drizzle";
 
 export const users = pgTable("users", {
 	id: text("id").notNull().primaryKey(),

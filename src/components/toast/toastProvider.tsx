@@ -15,7 +15,7 @@ import type {
 	ToastContextValue,
 	ToastItem,
 	ToastOptions,
-} from "@/utils/types";
+} from "@/types/toast";
 import ToastCard from "./toastCard";
 
 // トースト操作を共有するためのコンテキスト

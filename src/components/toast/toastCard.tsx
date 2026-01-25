@@ -6,7 +6,7 @@ import {
 	FaInfo,
 } from "react-icons/fa";
 import { IoIosClose } from "react-icons/io";
-import type { ToastItem, ToastType } from "@/utils/types";
+import type { ToastItem, ToastType } from "@/types/toast";
 import { useToast } from "./toastProvider";
 
 export default function ToastCard({
