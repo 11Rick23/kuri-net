@@ -1,6 +1,10 @@
+"use server";
+
+import { verifySession } from "@/functions/passkey/verifySession";
 import ColorModeButton from "./colorModeButton";
 import HomeButton from "./homeButton";
 import LogInButton from "./loginButton";
+import LogOutButton from "./logoutButton";
 import PageButton from "./pageButton";
 
 function Border() {
@@ -11,7 +15,9 @@ function Border() {
 	);
 }
 
-export default function Header() {
+export default async function Header() {
+	const session = await verifySession();
+
 	return (
 		<div className="fixed top-0 left-0 w-full flex items-center justify-center z-70">
 			<div
@@ -29,7 +35,7 @@ export default function Header() {
 				<PageButton url="/tools/pdf-merge" display="Tools" />
 				<Border />
 				<ColorModeButton />
-				<LogInButton />
+				{session?.userID ? <LogOutButton /> : <LogInButton />}
 			</div>
 		</div>
 	);

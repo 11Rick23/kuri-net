@@ -138,10 +138,6 @@ export async function getSession(sessionID: string) {
 }
 
 export async function deleteSession(sessionID: string) {
-	if (!sessionID || sessionID.trim() === "") {
-		throw new InvalidInputError("指定されたセッションIDが無効です。");
-	}
-
 	try {
 		await db.delete(sessions).where(eq(sessions.id, sessionID));
 	} catch (error) {

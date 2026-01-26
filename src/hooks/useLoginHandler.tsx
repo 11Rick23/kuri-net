@@ -54,6 +54,7 @@ export default function useLoginHandler() {
 				toast("ログインに成功しました。", {
 					type: "success",
 					durationMs: 10000,
+					id: "login-success",
 				});
 			} else {
 				console.log(res.error);
