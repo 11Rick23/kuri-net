@@ -1,57 +1,10 @@
 "use client";
 
-import { browserSupportsWebAuthn } from "@simplewebauthn/browser";
-import Link from "next/link";
 import { IoMdLogIn } from "react-icons/io";
-import RegistrationModalContent from "@/components/auth/registrationModal";
-import { useModal } from "@/components/modal/modalProvider";
-import { useToast } from "@/components/toast/toastProvider";
-import login from "@/functions/passkey/login";
+import useLoginHandler from "@/hooks/useLoginHandler";
 
 export default function LogInButton() {
-	const { toast, dismiss } = useToast();
-	const { openModal } = useModal();
-
-	async function onLoginButtonPress() {
-		// パスキー認証がブラウザでサポートされているか確認
-		if (!browserSupportsWebAuthn()) {
-			const message = (
-				<>
-					{
-						"ご利用中のブラウザはパスキー認証（WebAuthn）に対応していません。別のブラウザをご利用ください。"
-					}
-				</>
-			);
-			toast(message, { type: "error", durationMs: 5000 });
-			return;
-		}
-
-		// 登録を促すトーストのメッセージ
-		const message = (
-			<>
-				{"新規アカウント登録は "}
-				<Link
-					href=""
-					className="underline font-medium hover:text-blue-600 dark:hover:text-blue-400"
-					onClick={() => {
-						dismiss("sign-up-notice");
-						openModal(<RegistrationModalContent />, { paddingSize: 6 });
-					}}
-				>
-					こちら
-				</Link>
-			</>
-		);
-
-		// トーストを送信
-		toast(message, {
-			id: "sign-up-notice",
-			type: "info",
-			durationMs: 20000,
-		});
-
-		await login();
-	}
+	const { onLoginButtonPress } = useLoginHandler();
 
 	return (
 		<button
