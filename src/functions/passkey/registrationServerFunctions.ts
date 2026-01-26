@@ -10,9 +10,10 @@ import { cookies } from "next/headers";
 import {
 	createSession,
 	createUser,
-	getChallenge,
+	getChallengeData,
 	saveChallenge,
 	saveCredential,
+	updateUserStatus,
 } from "./databaseFunctions";
 import { verifySession } from "./verifySession";
 
@@ -28,15 +29,14 @@ export async function generateRegistrationData(userName: string) {
 	});
 
 	// 一時的なユーザーを作成
-	const temporaryUntil = new Date(Date.now() + 1000 * 60 * 15); // 15分間有効
-	const user = await createUser(options.user.id, temporaryUntil);
+	await createUser(options.user.id);
 
 	// セッションを生成
-	const sessionId = await createSession(user.id);
+	const sessionID = await createSession();
 
 	// セッションIDをクッキーに保存
 	const cookieStore = await cookies();
-	cookieStore.set("sessionID", sessionId, {
+	cookieStore.set("sessionID", sessionID, {
 		httpOnly: true,
 		secure: process.env.NODE_ENV === "production",
 		sameSite: "lax",
@@ -45,7 +45,7 @@ export async function generateRegistrationData(userName: string) {
 	});
 
 	// チャレンジをDBへ保存
-	await saveChallenge(sessionId, options.challenge);
+	await saveChallenge(sessionID, options.challenge, options.user.id);
 
 	// オプションを返す
 	return options;
@@ -58,15 +58,14 @@ export async function verifyRegistrationData(
 	const session = await verifySession();
 
 	// セッションが存在しない場合は失敗
-	if (!session || !session?.userID) {
+	if (!session || !session?.id) {
 		return null;
 	}
 
 	// 該当セッションで生成されたチャレンジを取得
-	const expectedChallenge = await getChallenge(session.id);
+	const { userID, challenge } = await getChallengeData(session.id);
 
-	// チャレンジが存在しない場合は失敗
-	if (!expectedChallenge) {
+	if (!challenge || !userID) {
 		return null;
 	}
 
@@ -82,19 +81,32 @@ export async function verifyRegistrationData(
 	// パスキーを検証
 	const verification = await verifyRegistrationResponse({
 		response,
-		expectedChallenge,
+		expectedChallenge: challenge,
 		expectedOrigin,
 		expectedRPID,
 	});
 
+	// 検証に失敗した場合はnullを返す
 	if (!verification.verified) {
 		return null;
 	}
 
-	await saveCredential(
-		session.userID,
-		verification.registrationInfo.credential,
-	);
+	// 認証情報を保存
+	await saveCredential(userID, verification.registrationInfo.credential);
+
+	// ユーザーのステータスを更新
+	await updateUserStatus(userID, "ACTIVE");
+
+	// セッションを再生成・保存
+	await createSession(userID);
+	const cookieStore = await cookies();
+	cookieStore.set("sessionID", session.id, {
+		httpOnly: true,
+		secure: process.env.NODE_ENV === "production",
+		sameSite: "lax",
+		path: "/",
+		maxAge: 60 * 60 * 24 * 30, // 最大30日間有効
+	});
 
 	return verification;
 }

@@ -12,11 +12,11 @@ import { ExpiredChallengeError } from "@/errors/auth";
 import { InvalidInputError } from "@/errors/base";
 import { DatabaseError, QueryNotFoundError } from "@/errors/database";
 
-export async function createUser(userID: string, temporaryUntil?: Date) {
+export async function createUser(userID: string) {
 	try {
 		await db.insert(users).values({
 			id: userID,
-			temporaryUntil: temporaryUntil,
+			status: "REGISTERING",
 		});
 
 		return await getUser(userID);
@@ -52,6 +52,27 @@ export async function getUser(userID: string) {
 		}
 		throw new DatabaseError(
 			"ユーザーの取得中にデータベースでエラーが発生しました。",
+			{ cause: error },
+		);
+	}
+}
+
+export async function updateUserStatus(
+	userID: string,
+	status: "REGISTERING" | "ACTIVE" | "SUSPENDED",
+) {
+	if (!userID || userID.trim() === "") {
+		throw new InvalidInputError("指定されたユーザーIDが無効です。");
+	}
+
+	try {
+		await db
+			.update(users)
+			.set({ status: status, updatedAt: new Date() })
+			.where(eq(users.id, userID));
+	} catch (error) {
+		throw new DatabaseError(
+			"ユーザーステータスの更新中にデータベースでエラーが発生しました。",
 			{ cause: error },
 		);
 	}
@@ -116,7 +137,11 @@ export async function getSession(sessionID: string) {
 	}
 }
 
-export async function saveChallenge(sessionID: string, challenge: string) {
+export async function saveChallenge(
+	sessionID: string,
+	challenge: string,
+	userID?: string | null,
+) {
 	if (!sessionID || sessionID.trim() === "") {
 		throw new InvalidInputError("指定されたセッションIDが無効です。");
 	}
@@ -132,7 +157,7 @@ export async function saveChallenge(sessionID: string, challenge: string) {
 		// 既存のチャレンジがあれば更新、なければ挿入
 		await db
 			.insert(webAuthnChallenges)
-			.values({ sessionID, challenge, expiresAt })
+			.values({ sessionID, userID, challenge, expiresAt })
 			.onConflictDoUpdate({
 				target: webAuthnChallenges.sessionID,
 				set: { challenge, expiresAt },
@@ -149,7 +174,7 @@ export async function saveChallenge(sessionID: string, challenge: string) {
 	}
 }
 
-export async function getChallenge(sessionID: string) {
+export async function getChallengeData(sessionID: string) {
 	if (!sessionID || sessionID.trim() === "") {
 		throw new InvalidInputError("指定されたセッションIDが無効です。");
 	}
@@ -171,7 +196,7 @@ export async function getChallenge(sessionID: string) {
 			throw new ExpiredChallengeError("チャレンジの有効期限が切れています。");
 		}
 
-		return record.challenge;
+		return record;
 	} catch (error) {
 		if (
 			error instanceof QueryNotFoundError ||

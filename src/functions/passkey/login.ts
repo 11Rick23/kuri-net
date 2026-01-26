@@ -1,17 +1,28 @@
 "use client";
 
 import { startAuthentication } from "@simplewebauthn/browser";
-import type { AuthenticationResponseJSON } from "@simplewebauthn/server";
 import type { Result } from "@/types/result";
 import { generateLoginOptions, verifyLoginData } from "./loginServerFunctions";
 
 export default async function login(): Promise<Result<string, string>> {
 	const optionsJSON = await generateLoginOptions();
 
-	let result: AuthenticationResponseJSON;
-
 	try {
-		result = await startAuthentication({ optionsJSON });
+		const authRes = await startAuthentication({ optionsJSON });
+
+		const veriRes = await verifyLoginData(authRes);
+
+		if (!veriRes) {
+			return {
+				ok: false,
+				error: "認証に失敗しました。",
+			};
+		} else {
+			return {
+				ok: true,
+				value: "認証に成功しました。",
+			};
+		}
 	} catch (error) {
 		const name = error instanceof Error ? error.name : "";
 		if (name === "NotAllowedError") {
@@ -25,8 +36,4 @@ export default async function login(): Promise<Result<string, string>> {
 			error: "認証中に予期しないエラーが発生しました。",
 		};
 	}
-
-	await verifyLoginData(result);
-
-	return { ok: true, value: "ログインに成功しました。" };
 }

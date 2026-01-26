@@ -1,9 +1,15 @@
-import { integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { integer, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { bytea } from "@/types/drizzle";
+
+export const userStatus = pgEnum("user_status", [
+	"REGISTERING",
+	"ACTIVE",
+	"SUSPENDED",
+]);
 
 export const users = pgTable("users", {
 	id: text("id").notNull().primaryKey(),
-	temporaryUntil: timestamp("temporary_until", { withTimezone: true }),
+	status: userStatus("status").notNull().default("REGISTERING"),
 	createdAt: timestamp("created_at", { withTimezone: true })
 		.notNull()
 		.defaultNow(),
@@ -26,12 +32,13 @@ export const credentials = pgTable("credentials", {
 
 export const webAuthnChallenges = pgTable("webauthn_challenges", {
 	sessionID: text("session_id")
-		.notNull()
 		.primaryKey()
 		.references(() => sessions.id, {
 			onDelete: "cascade",
 			onUpdate: "cascade",
 		}),
+	userID: text("user_id")
+		.references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
 	challenge: text("challenge").notNull(),
 	createdAt: timestamp("created_at", { withTimezone: true })
 		.notNull()
@@ -40,7 +47,7 @@ export const webAuthnChallenges = pgTable("webauthn_challenges", {
 });
 
 export const sessions = pgTable("sessions", {
-	id: text("id").notNull().primaryKey(),
+	id: text("id").primaryKey(),
 	userID: text("user_id").references(() => users.id, {
 		onDelete: "cascade",
 		onUpdate: "cascade",

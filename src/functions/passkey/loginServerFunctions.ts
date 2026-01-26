@@ -8,7 +8,7 @@ import {
 import { cookies } from "next/headers";
 import {
 	createSession,
-	getChallenge,
+	getChallengeData,
 	getCredential,
 	saveChallenge,
 } from "./databaseFunctions";
@@ -43,19 +43,19 @@ export async function verifyLoginData(response: AuthenticationResponseJSON) {
 	// クレデンシャルを取得
 	const credential = await getCredential(response.id);
 	if (!credential) {
-		throw new Error("Credential not found");
+		return null;
 	}
 
 	// セッションを検証・取得
 	const session = await verifySession();
 	if (!session) {
-		throw new Error("Invalid session");
+		return null;
 	}
 
 	// チャレンジを取得
-	const challenge = await getChallenge(session.id);
+	const { challenge } = await getChallengeData(session.id);
 	if (!challenge) {
-		throw new Error("Challenge not found or expired");
+		return null;
 	}
 
 	// 開発環境と本番環境でoriginとrpIDを切り替え
@@ -67,7 +67,7 @@ export async function verifyLoginData(response: AuthenticationResponseJSON) {
 	const expectedRPID =
 		process.env.NODE_ENV === "production" ? "kuri-kuri.net" : "localhost";
 
-    // 認証を検証
+	// 認証を検証
 	const result = await verifyAuthenticationResponse({
 		response,
 		expectedChallenge: challenge,
@@ -76,20 +76,20 @@ export async function verifyLoginData(response: AuthenticationResponseJSON) {
 		credential,
 	});
 
-    if (!result.verified) {
-        throw new Error("Authentication verification failed");
-    }
+	if (!result.verified) {
+		return null;
+	}
 
-    // 成功した場合はセッションを再生成する
-    const newSessionID = await createSession(credential.userID);
+	// 成功した場合はセッションを再生成する
+	const newSessionID = await createSession(credential.userID);
 
-    // 新しいセッションIDをクッキーに保存
-    const cookieStore = await cookies();
-    cookieStore.set("sessionID", newSessionID, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-    });
+	// 新しいセッションIDをクッキーに保存
+	const cookieStore = await cookies();
+	cookieStore.set("sessionID", newSessionID, {
+		httpOnly: true,
+		secure: process.env.NODE_ENV === "production",
+		sameSite: "lax",
+	});
 
-    return true;
+	return true;
 }
