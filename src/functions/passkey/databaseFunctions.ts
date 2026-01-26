@@ -8,6 +8,8 @@ import {
 	users,
 	webAuthnChallenges,
 } from "@/database/schema";
+import { InvalidInputError } from "@/errors/base";
+import { DatabaseError, QueryNotFoundError } from "@/errors/database";
 
 export async function createUser(userID: string, temporaryUntil?: Date) {
 	await db.insert(users).values({
@@ -19,14 +21,32 @@ export async function createUser(userID: string, temporaryUntil?: Date) {
 }
 
 export async function getUser(userID: string) {
-	const user = await db
-		.select()
-		.from(users)
-		.where(eq(users.id, userID))
-		.limit(1)
-		.then((res) => res[0]);
+	if (!userID || userID.trim() === "") {
+		throw new InvalidInputError("指定されたユーザーIDが無効です。");
+	}
 
-	return user;
+	try {
+		const user = await db
+			.select()
+			.from(users)
+			.where(eq(users.id, userID))
+			.limit(1)
+			.then((res) => res[0]);
+
+		if (!user) {
+			throw new QueryNotFoundError("ユーザーが見つかりませんでした。");
+		}
+
+		return user;
+	} catch (error) {
+		if (error instanceof QueryNotFoundError) {
+			throw error;
+		}
+		throw new DatabaseError(
+			"ユーザーの取得中にデータベースでエラーが発生しました。",
+			{ cause: error },
+		);
+	}
 }
 
 export async function createSession(
