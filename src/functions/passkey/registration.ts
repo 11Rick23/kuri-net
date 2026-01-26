@@ -1,18 +1,30 @@
+"use client";
+
 import { startRegistration } from "@simplewebauthn/browser";
+import type { Result } from "@/types/result";
 import {
 	generateRegistrationData,
 	verifyRegistrationData,
 } from "./registrationServerFunctions";
 
-export default async function register(userName: string) {
-	// チャレンジとユーザーIDを取得
-	const options = await generateRegistrationData(userName);
+export default async function register(
+	userName: string,
+): Promise<Result<string, string>> {
+	try {
+		// チャレンジとユーザーIDを取得
+		const options = await generateRegistrationData(userName);
 
-	// パスキーの作成を開始
-	const response = await startRegistration({ optionsJSON: options });
+		// パスキーの作成を開始
+		const response = await startRegistration({ optionsJSON: options });
 
-	// パスキーを検証
-	const result = await verifyRegistrationData(response);
+		// パスキーを検証
+		await verifyRegistrationData(response);
 
-	alert(result?.verified ? "登録に成功しました！" : "登録に失敗しました。");
+		return { ok: true, value: "登録に成功しました。" };
+	} catch (error) {
+		if (error instanceof Error && error.name === "NotAllowedError") {
+			return { ok: false, error: "登録がキャンセルされました" };
+		}
+		return { ok: false, error: "登録中にエラーが発生しました" };
+	}
 }

@@ -2,11 +2,26 @@
 
 import { useState } from "react";
 import { FaCheck } from "react-icons/fa";
+import { useModal } from "@/components/modal/modalProvider";
 import register from "@/functions/passkey/registration";
 
 export default function RegistrationModalContent() {
 	const [agreed, setAgreed] = useState(false);
 	const [username, setUsername] = useState("");
+	const [errorMessage, setErrorMessage] = useState("");
+	const { closeModal } = useModal();
+
+	async function onRegisterButtonPress() {
+		setErrorMessage("");
+
+		const res = await register(username);
+
+		if (res.ok) {
+			closeModal();
+		} else {
+			setErrorMessage(res.error);
+		}
+	}
 
 	return (
 		<>
@@ -70,19 +85,31 @@ export default function RegistrationModalContent() {
 					type="button"
 					disabled={!agreed}
 					onClick={async () => {
-						await register(username);
+						await onRegisterButtonPress();
 					}}
 					className={`
-					rounded-md
-					px-5 py-2 font-medium
-					${
-						agreed
-							? "bg-black dark:bg-white text-white dark:text-black hover:opacity-75 cursor-pointer"
-							: "bg-black/30 dark:bg-white/30 text-gray-200 dark:text-black cursor-not-allowed"
-					}`}
+						rounded-md
+						px-5 py-2 font-medium
+						${
+							agreed
+								? "bg-black dark:bg-white text-white dark:text-black hover:opacity-75 cursor-pointer"
+								: "bg-black/30 dark:bg-white/30 text-gray-200 dark:text-black cursor-not-allowed"
+						}`}
 				>
 					登録
 				</button>
+
+				{errorMessage && (
+					<p
+						className="
+						text-sm mt-4
+						font-semibold
+						text-red-500 dark:text-red-700"
+						role="alert"
+					>
+						{errorMessage}
+					</p>
+				)}
 			</div>
 		</>
 	);
