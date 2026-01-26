@@ -56,7 +56,7 @@ export default function useLoginHandler() {
 					durationMs: 10000,
 				});
 			} else {
-				toast(res.error, { type: "error", durationMs: 10000 });
+				console.log(res.error);
 			}
 		} catch (error) {
 			console.error("Login failed:", error);
