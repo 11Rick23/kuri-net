@@ -1,8 +1,8 @@
 export class KuriNetError extends Error {
-	constructor(message?: string) {
-		super(message);
+	constructor(message?: string, options?: { cause?: unknown }) {
+		super(message, options);
 		this.name = "KuriNetError";
 
-        Error.captureStackTrace?.(this, this.constructor);
+		Error.captureStackTrace?.(this, this.constructor);
 	}
 }
