@@ -137,6 +137,21 @@ export async function getSession(sessionID: string) {
 	}
 }
 
+export async function deleteSession(sessionID: string) {
+	if (!sessionID || sessionID.trim() === "") {
+		throw new InvalidInputError("指定されたセッションIDが無効です。");
+	}
+
+	try {
+		await db.delete(sessions).where(eq(sessions.id, sessionID));
+	} catch (error) {
+		throw new DatabaseError(
+			"セッションの削除中にデータベースでエラーが発生しました。",
+			{ cause: error },
+		);
+	}
+}
+
 export async function saveChallenge(
 	sessionID: string,
 	challenge: string,
@@ -207,6 +222,23 @@ export async function getChallengeData(sessionID: string) {
 
 		throw new DatabaseError(
 			"チャレンジの取得中にデータベースでエラーが発生しました。",
+			{ cause: error },
+		);
+	}
+}
+
+export async function deleteChallenge(sessionID: string) {
+	if (!sessionID || sessionID.trim() === "") {
+		throw new InvalidInputError("指定されたセッションIDが無効です。");
+	}
+
+	try {
+		await db
+			.delete(webAuthnChallenges)
+			.where(eq(webAuthnChallenges.sessionID, sessionID));
+	} catch (error) {
+		throw new DatabaseError(
+			"チャレンジの削除中にデータベースでエラーが発生しました。",
 			{ cause: error },
 		);
 	}

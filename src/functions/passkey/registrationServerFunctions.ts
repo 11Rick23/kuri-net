@@ -10,6 +10,8 @@ import { cookies } from "next/headers";
 import {
 	createSession,
 	createUser,
+	deleteChallenge,
+	deleteSession,
 	getChallengeData,
 	saveChallenge,
 	saveCredential,
@@ -78,6 +80,9 @@ export async function verifyRegistrationData(
 	const expectedRPID =
 		process.env.NODE_ENV === "production" ? "kuri-kuri.net" : "localhost";
 
+	// 情報を取得したらtチャレンジは削除してしまう
+	await deleteChallenge(session.id);
+
 	// パスキーを検証
 	const verification = await verifyRegistrationResponse({
 		response,
@@ -107,6 +112,9 @@ export async function verifyRegistrationData(
 		path: "/",
 		maxAge: 60 * 60 * 24 * 30, // 最大30日間有効
 	});
+
+	// 古いセッションは削除する
+	await deleteSession(session.id);
 
 	return verification;
 }

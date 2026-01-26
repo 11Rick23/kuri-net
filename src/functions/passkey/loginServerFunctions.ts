@@ -8,6 +8,8 @@ import {
 import { cookies } from "next/headers";
 import {
 	createSession,
+	deleteChallenge,
+	deleteSession,
 	getChallengeData,
 	getCredential,
 	saveChallenge,
@@ -67,6 +69,9 @@ export async function verifyLoginData(response: AuthenticationResponseJSON) {
 	const expectedRPID =
 		process.env.NODE_ENV === "production" ? "kuri-kuri.net" : "localhost";
 
+	// 情報を取得したらチャレンジは削除してしまう
+	await deleteChallenge(session.id);
+
 	// 認証を検証
 	const result = await verifyAuthenticationResponse({
 		response,
@@ -90,6 +95,9 @@ export async function verifyLoginData(response: AuthenticationResponseJSON) {
 		secure: process.env.NODE_ENV === "production",
 		sameSite: "lax",
 	});
+
+	// 古いセッションは削除する
+	await deleteSession(session.id);
 
 	return true;
 }
