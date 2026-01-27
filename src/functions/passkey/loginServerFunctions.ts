@@ -33,6 +33,8 @@ export async function generateLoginOptions() {
 		httpOnly: true,
 		secure: process.env.NODE_ENV === "production",
 		sameSite: "lax",
+		path: "/",
+		maxAge: 60 * 60 * 24 * 30, // 最大30日間有効
 	});
 
 	// チャレンジをDBへ保存
@@ -94,6 +96,8 @@ export async function verifyLoginData(response: AuthenticationResponseJSON) {
 		httpOnly: true,
 		secure: process.env.NODE_ENV === "production",
 		sameSite: "lax",
+		path: "/",
+		maxAge: 60 * 60 * 24 * 30, // 最大30日間有効
 	});
 
 	// 古いセッションは削除する
