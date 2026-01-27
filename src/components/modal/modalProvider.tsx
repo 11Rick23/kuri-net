@@ -97,7 +97,7 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
 							{/* 閉じるボタン */}
 							<button
 								type="button"
-								aria-label="Close modal"
+								aria-label="閉じる"
 								onClick={closeModal}
 								className="
                                 absolute top-2 right-2
