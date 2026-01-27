@@ -37,8 +37,10 @@ export const webAuthnChallenges = pgTable("webauthn_challenges", {
 			onDelete: "cascade",
 			onUpdate: "cascade",
 		}),
-	userID: text("user_id")
-		.references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
+	userID: text("user_id").references(() => users.id, {
+		onDelete: "cascade",
+		onUpdate: "cascade",
+	}),
 	challenge: text("challenge").notNull(),
 	createdAt: timestamp("created_at", { withTimezone: true })
 		.notNull()

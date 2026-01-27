@@ -19,11 +19,11 @@ export default function PageButton({
 			type="button"
 			aria-label={`${display}ページへ`}
 			className={`
-				flex items-center justify-center
-				rounded-full px-2 py-1 cursor-pointer
-				${isActive ? "bg-gray-300 dark:bg-gray-700" : "bg-transparent"}
+                flex items-center justify-center
+                rounded-full px-2 py-1 cursor-pointer
+                ${isActive ? "bg-gray-300 dark:bg-gray-700" : "bg-transparent"}
                 text-xs font-bold
-				hover:bg-gray-300 dark:hover:bg-gray-700
+                hover:bg-gray-300 dark:hover:bg-gray-700
             `}
 		>
 			{display}

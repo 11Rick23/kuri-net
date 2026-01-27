@@ -32,9 +32,9 @@ export default function RegistrationModalContent() {
 			<div className="flex flex-col items-center text-center">
 				<p
 					className="
-				text-sm my-4 p-4 rounded-md
-				bg-yellow-400/20 dark:bg-yellow-700/20
-				border-2 border-yellow-400 dark:border-yellow-700"
+                text-sm my-4 p-4 rounded-md
+                bg-yellow-400/20 dark:bg-yellow-700/20
+                border-2 border-yellow-400 dark:border-yellow-700"
 				>
 					本サービスではパスキーによる認証のみを提供しております。
 					<br />
@@ -56,10 +56,10 @@ export default function RegistrationModalContent() {
 					/>
 					<span
 						className="
-						flex items-center justify-center
-						w-4 h-4 rounded-sm border
-						peer-checked:bg-blue-500
-						peer-checked:border-blue-500"
+                        flex items-center justify-center
+                        w-4 h-4 rounded-sm border
+                        peer-checked:bg-blue-500
+                        peer-checked:border-blue-500"
 					>
 						{agreed && <FaCheck className="text-white text-[10px]" />}
 					</span>
@@ -73,12 +73,12 @@ export default function RegistrationModalContent() {
 					onChange={(e) => setUsername(e.target.value)}
 					placeholder="パスキーの名称"
 					className="
-						w-full max-w-50 my-7 px-3 py-2
-						border rounded-md text-center
-						font-bold placeholder:font-medium
-						placeholder:text-xs
-						bg-white dark:bg-black
-						"
+                        w-full max-w-50 my-7 px-3 py-2
+                        border rounded-md text-center
+                        font-bold placeholder:font-medium
+                        placeholder:text-xs
+                        bg-white dark:bg-black
+                        "
 				/>
 
 				<button
@@ -88,13 +88,13 @@ export default function RegistrationModalContent() {
 						await onRegisterButtonPress();
 					}}
 					className={`
-						rounded-md
-						px-5 py-2 font-medium
-						${
-							agreed
-								? "bg-black dark:bg-white text-white dark:text-black hover:opacity-75 cursor-pointer"
-								: "bg-black/30 dark:bg-white/30 text-gray-200 dark:text-black cursor-not-allowed"
-						}`}
+                        rounded-md
+                        px-5 py-2 font-medium
+                        ${
+													agreed
+														? "bg-black dark:bg-white text-white dark:text-black hover:opacity-75 cursor-pointer"
+														: "bg-black/30 dark:bg-white/30 text-gray-200 dark:text-black cursor-not-allowed"
+												}`}
 				>
 					登録
 				</button>
@@ -102,9 +102,9 @@ export default function RegistrationModalContent() {
 				{errorMessage && (
 					<p
 						className="
-						text-sm mt-4
-						font-semibold
-						text-red-500 dark:text-red-700"
+                        text-sm mt-4
+                        font-semibold
+                        text-red-500 dark:text-red-700"
 						role="alert"
 					>
 						{errorMessage}

@@ -28,12 +28,12 @@ export default function InfoModal() {
 				type="button"
 				onClick={() => setOpen(true)}
 				className="
-				absolute top-4 right-4 p-1
-				rounded-full
-				text-gray-500
-				hover:bg-gray-200 dark:hover:bg-gray-700
-				hover:cursor-pointer
-				"
+                absolute top-4 right-4 p-1
+                rounded-full
+                text-gray-500
+                hover:bg-gray-200 dark:hover:bg-gray-700
+                hover:cursor-pointer
+                "
 			>
 				<MdOutlineInfo size={24} />
 			</button>
@@ -50,12 +50,12 @@ export default function InfoModal() {
 							type="button"
 							onClick={() => setOpen(false)}
 							className="
-							absolute top-2 right-2 p-1
-							rounded-full
-							text-gray-500
-							hover:bg-gray-200 dark:hover:bg-gray-700
-							hover:cursor-pointer
-							"
+                            absolute top-2 right-2 p-1
+                            rounded-full
+                            text-gray-500
+                            hover:bg-gray-200 dark:hover:bg-gray-700
+                            hover:cursor-pointer
+                            "
 						>
 							<MdClose size={24} />
 						</button>

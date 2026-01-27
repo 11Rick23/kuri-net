@@ -47,11 +47,11 @@ export function FileList({ files, onRemove, onReorder }: Props) {
 						onDragOver={handleDragOver}
 						onDrop={(e) => handleDrop(e, index)}
 						className="
-						flex items-center justify-between
-						my-2 p-2
-						bg-gray-100 dark:bg-gray-700
-						rounded-lg cursor-move
-						"
+                        flex items-center justify-between
+                        my-2 p-2
+                        bg-gray-100 dark:bg-gray-700
+                        rounded-lg cursor-move
+                        "
 					>
 						<div className="flex items-center space-x-3">
 							<MdOutlineDragIndicator
@@ -60,9 +60,9 @@ export function FileList({ files, onRemove, onReorder }: Props) {
 							/>
 							<span
 								className="
-							text-sm text-gray-900 dark:text-white truncate
-							max-w-32 sm:max-w-75 md:max-w-md lg:max-w-150
-							"
+                            text-sm text-gray-900 dark:text-white truncate
+                            max-w-32 sm:max-w-75 md:max-w-md lg:max-w-150
+                            "
 								title={file.name}
 							>
 								{file.name}
@@ -77,11 +77,11 @@ export function FileList({ files, onRemove, onReorder }: Props) {
 							type="button"
 							onClick={() => onRemove(index)}
 							className="
-							text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300
-							hover:bg-gray-300 dark:hover:bg-gray-600
-							text-sm font-medium px-2 py-1
-							rounded-md hover:cursor-pointer
-							"
+                            text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300
+                            hover:bg-gray-300 dark:hover:bg-gray-600
+                            text-sm font-medium px-2 py-1
+                            rounded-md hover:cursor-pointer
+                            "
 						>
 							削除
 						</button>

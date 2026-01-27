@@ -12,10 +12,10 @@ export default function LogInButton() {
 			aria-label="ログイン"
 			onClick={onLoginButtonPress}
 			className="
-				w-7 h-7 rounded-full cursor-pointer
-				flex items-center justify-center
-				hover:bg-gray-300 dark:hover:bg-gray-700
-				"
+                w-7 h-7 rounded-full cursor-pointer
+                flex items-center justify-center
+                hover:bg-gray-300 dark:hover:bg-gray-700
+                "
 		>
 			<IoMdLogIn size={15} />
 		</button>

@@ -8,8 +8,8 @@ export class DatabaseError extends KuriNetError {
 }
 
 export class QueryNotFoundError extends DatabaseError {
-		constructor(message?: string, options?: { cause?: unknown }) {
-			super(message, options);
-			this.name = "QueryNotFoundError";
-		}
+	constructor(message?: string, options?: { cause?: unknown }) {
+		super(message, options);
+		this.name = "QueryNotFoundError";
 	}
+}

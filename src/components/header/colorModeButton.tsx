@@ -22,10 +22,10 @@ export default function ColorModeButton() {
 			aria-label="ダークモード切り替え"
 			onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
 			className="
-				w-7 h-7 rounded-full cursor-pointer
-				flex items-center justify-center
-				hover:bg-gray-300 dark:hover:bg-gray-700
-				"
+                w-7 h-7 rounded-full cursor-pointer
+                flex items-center justify-center
+                hover:bg-gray-300 dark:hover:bg-gray-700
+                "
 		>
 			{theme === "dark" ? <MdSunny size={15} /> : <MdDarkMode size={15} />}
 		</button>

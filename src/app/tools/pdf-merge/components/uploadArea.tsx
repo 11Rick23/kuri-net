@@ -10,10 +10,10 @@ export function UploadArea({ onChange }: Props) {
 			htmlFor="pdf-upload"
 			className="
                 flex flex-col justify-center items-center
-				mx-auto p-4
+                mx-auto p-4
                 w-3/4 h-42 rounded-md
                 bg-gray-200 dark:bg-gray-700
-				hover:cursor-pointer
+                hover:cursor-pointer
             "
 		>
 			<input

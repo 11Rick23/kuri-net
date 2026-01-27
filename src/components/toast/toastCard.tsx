@@ -56,10 +56,10 @@ export default function ToastCard({
 		// biome-ignore lint/a11y/noStaticElementInteractions: ホバー時に自動的に消えるのを一時停止するため
 		<div
 			className={`
-				relative overflow-hidden
+                relative overflow-hidden
                 rounded-sm border
                 px-3 py-3 flex items-start gap-3
-				bg-white dark:bg-gray-900
+                bg-white dark:bg-gray-900
                 ${borderColorByType[item.type]} border-2
                 `}
 			onMouseEnter={() => {

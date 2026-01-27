@@ -22,12 +22,12 @@ export default async function Header() {
 		<div className="fixed top-0 left-0 w-full flex items-center justify-center z-70">
 			<div
 				className="
-			inline-flex items-center justify-center
-			m-2 px-2 py-1 gap-1 rounded-full
-			bg-white/60 dark:bg-black/60
-			border border-gray-400 dark:border-gray-600
-			backdrop-blur-md shadow-light dark:shadow-dark
-			"
+            inline-flex items-center justify-center
+            m-2 px-2 py-1 gap-1 rounded-full
+            bg-white/60 dark:bg-black/60
+            border border-gray-400 dark:border-gray-600
+            backdrop-blur-md shadow-light dark:shadow-dark
+            "
 			>
 				<HomeButton />
 				<Border />
