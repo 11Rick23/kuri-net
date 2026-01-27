@@ -1,7 +1,6 @@
 "use client";
 
 import { browserSupportsWebAuthn } from "@simplewebauthn/browser";
-import Link from "next/link";
 
 import RegistrationModalContent from "@/components/auth/registrationModal";
 import { useModal } from "@/components/modal/modalProvider";
@@ -26,16 +25,16 @@ export default function useLoginHandler() {
 		const message = (
 			<>
 				{"新規アカウント登録は "}
-				<Link
-					href=""
-					className="underline font-medium hover:text-blue-600 dark:hover:text-blue-400"
+				<button
+					type="button"
+					className="underline font-medium hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer"
 					onClick={() => {
 						dismiss("sign-up-notice");
 						openModal(<RegistrationModalContent />, { paddingSize: 6 });
 					}}
 				>
 					こちら
-				</Link>
+				</button>
 			</>
 		);
 
