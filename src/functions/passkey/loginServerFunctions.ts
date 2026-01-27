@@ -25,7 +25,7 @@ export async function generateLoginOptions() {
 	const options = await generateAuthenticationOptions({ rpID: rpID });
 
 	// セッションを生成
-	const sessionID = await createSession(null);
+	const sessionID = await createSession(null, 1000 * 60 * 60 * 24); // 1日間有効
 
 	// セッションIDをクッキーに保存
 	const cookieStore = await cookies();
