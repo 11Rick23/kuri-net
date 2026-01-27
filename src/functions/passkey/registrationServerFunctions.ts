@@ -80,7 +80,7 @@ export async function verifyRegistrationData(
 	const expectedRPID =
 		process.env.NODE_ENV === "production" ? "kuri-kuri.net" : "localhost";
 
-	// 情報を取得したらtチャレンジは削除してしまう
+	// 情報を取得したらチャレンジは削除してしまう
 	await deleteChallenge(session.id);
 
 	// パスキーを検証
