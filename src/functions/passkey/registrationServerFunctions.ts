@@ -103,9 +103,9 @@ export async function verifyRegistrationData(
 	await updateUserStatus(userID, "ACTIVE");
 
 	// セッションを再生成・保存
-	await createSession(userID);
+	const sessionID = await createSession(userID);
 	const cookieStore = await cookies();
-	cookieStore.set("sessionID", session.id, {
+	cookieStore.set("sessionID", sessionID, {
 		httpOnly: true,
 		secure: process.env.NODE_ENV === "production",
 		sameSite: "lax",
