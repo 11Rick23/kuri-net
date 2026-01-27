@@ -8,7 +8,7 @@ export default function useLogoutHandler() {
 
 	async function onLogoutButtonPress() {
 		try {
-			logout();
+			await logout();
 			toast("ログアウトしました。", {
 				type: "success",
 				durationMs: 10000,
