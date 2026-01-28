@@ -15,7 +15,7 @@ export default async function Home() {
 			<>
 				kuri-kuri.net へようこそ。
 				<br />
-				ヘッダーの一番右にあるログインボタンから
+				ヘッダー右端にあるログインボタンから
 				<br />
 				アカウントの登録やログインができます。
 			</>
