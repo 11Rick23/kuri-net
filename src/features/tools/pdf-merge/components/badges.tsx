@@ -7,8 +7,7 @@ export default function Badges() {
 			<ToolBadge
 				icon={<MdLaptopMac size={24} />}
 				ariaLabel="ローカル動作について表示"
-				triggerToneClassName="bg-orange-200 dark:bg-orange-900"
-				contentToneClassName="bg-orange-100 dark:bg-orange-900 text-black dark:text-white"
+				triggerToneClassName="bg-ctp-peach/20 text-ctp-peach ring-1 ring-ctp-peach/40"
 			>
 				このツールは端末内で動作し、
 				<br />

@@ -12,7 +12,9 @@ export function UploadArea({ onChange }: Props) {
                 flex flex-col justify-center items-center
                 mx-auto p-4
                 w-3/4 h-42 rounded-md
-                bg-gray-200 dark:bg-gray-700
+                border border-dashed border-ctp-surface1
+                bg-ctp-surface0 text-ctp-subtext1
+                hover:bg-ctp-overlay0/50
                 hover:cursor-pointer
             "
 		>

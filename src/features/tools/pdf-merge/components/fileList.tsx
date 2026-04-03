@@ -1,9 +1,10 @@
 import { MdOutlineDragIndicator } from "react-icons/md";
+import type { FileEntry } from "@/features/tools/pdf-merge/types";
 
 type Props = {
-	files: File[];
-	onRemove: (index: number) => void;
-	onReorder: (files: File[]) => void;
+	files: FileEntry[];
+	onRemove: (id: string) => void;
+	onReorder: (files: FileEntry[]) => void;
 };
 
 export function FileList({ files, onRemove, onReorder }: Props) {
@@ -35,13 +36,13 @@ export function FileList({ files, onRemove, onReorder }: Props) {
 
 	return (
 		<div>
-			<h2 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">
+			<h2 className="mb-3 text-lg font-semibold text-ctp-text">
 				選択されたファイル ({files.length}件)
 			</h2>
 			<ul>
-				{files.map((file, index) => (
+				{files.map(({ id, file }, index) => (
 					<li
-						key={`${file.name}-${index}`}
+						key={id}
 						draggable
 						onDragStart={(e) => handleDragStart(e, index)}
 						onDragOver={handleDragOver}
@@ -49,25 +50,25 @@ export function FileList({ files, onRemove, onReorder }: Props) {
 						className="
                         flex items-center justify-between
                         my-2 p-2
-                        bg-gray-100 dark:bg-gray-700
-                        rounded-lg cursor-move
+                        rounded-lg border border-ctp-overlay0
+                        bg-ctp-surface0/30 cursor-move
                         "
 					>
 						<div className="flex items-center space-x-3">
 							<MdOutlineDragIndicator
 								size={20}
-								className="text-gray-500 dark:text-gray-400 hidden sm:inline-block"
+								className="hidden text-ctp-overlay0 sm:inline-block"
 							/>
 							<span
 								className="
-                            text-sm text-gray-900 dark:text-white truncate
+                            text-sm text-ctp-text truncate
                             max-w-32 sm:max-w-75 md:max-w-md lg:max-w-150
                             "
 								title={file.name}
 							>
 								{file.name}
 							</span>
-							<span className="text-xs text-gray-500 dark:text-gray-400">
+							<span className="text-xs text-ctp-subtext0">
 								{file.size > 1024 * 1024
 									? `${(file.size / 1024 / 1024).toFixed(2)} MB`
 									: `${(file.size / 1024).toFixed(2)} KB`}
@@ -75,10 +76,10 @@ export function FileList({ files, onRemove, onReorder }: Props) {
 						</div>
 						<button
 							type="button"
-							onClick={() => onRemove(index)}
+							onClick={() => onRemove(id)}
 							className="
-                            text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300
-                            hover:bg-gray-300 dark:hover:bg-gray-600
+                            text-ctp-red hover:text-ctp-maroon
+                            hover:bg-ctp-surface0
                             text-sm font-medium px-2 py-1
                             rounded-md hover:cursor-pointer
                             "

@@ -24,15 +24,14 @@ export default function ToolBadge({
 	return (
 		<div
 			className={[
-				"relative inline-flex flex-col items-center",
+				"group relative inline-flex flex-col items-center",
 				wrapperClassName,
 			].join(" ")}
-			onMouseEnter={() => setOpen(true)}
-			onMouseLeave={() => setOpen(false)}
 		>
 			<button
 				type="button"
 				aria-label={ariaLabel}
+				aria-expanded={open}
 				onClick={() => setOpen((prev) => !prev)}
 				className={[
 					"inline-block rounded-full p-2 mb-4 cursor-help",
@@ -42,18 +41,19 @@ export default function ToolBadge({
 				{icon}
 			</button>
 
-			{open && (
-				<div
-					className={[
-						`absolute left-1/2 -translate-x-1/2 top-full -mt-2
-						px-3 py-2 rounded-md
-						text-sm whitespace-nowrap shadow-sm z-50`,
-						contentToneClassName,
-					].join(" ")}
-				>
-					{children}
-				</div>
-			)}
+			<div
+				className={[
+					`absolute left-1/2 top-full z-50 -mt-2 -translate-x-1/2
+					px-3 py-2 rounded-md
+					bg-ctp-base text-center text-ctp-text
+					border border-ctp-overlay0
+					text-sm whitespace-nowrap shadow-sm`,
+					open ? "block" : "hidden group-hover:block group-focus-within:block",
+					contentToneClassName,
+				].join(" ")}
+			>
+				{children}
+			</div>
 		</div>
 	);
 }

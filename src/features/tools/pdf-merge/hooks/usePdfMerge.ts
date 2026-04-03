@@ -1,15 +1,23 @@
+import { nanoid } from "nanoid";
 import { PDFDocument } from "pdf-lib";
 import { useState } from "react";
+import type { FileEntry } from "@/features/tools/pdf-merge/types";
 
 export function usePdfMerge() {
-	const [files, setFiles] = useState<File[]>([]);
+	const [files, setFiles] = useState<FileEntry[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 
 	const addFiles = (newFiles: File[]) => {
 		const pdfFiles = newFiles.filter((file) => file.type === "application/pdf");
 		if (pdfFiles.length === 0) return;
 
-		setFiles((prev) => [...prev, ...pdfFiles]);
+		setFiles((prev) => [
+			...prev,
+			...pdfFiles.map((file) => ({
+				id: nanoid(),
+				file,
+			})),
+		]);
 	};
 
 	const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -17,11 +25,15 @@ export function usePdfMerge() {
 		addFiles(Array.from(e.target.files));
 	};
 
-	const removeFile = (index: number) => {
-		setFiles((prev) => prev.filter((_, i) => i !== index));
+	const removeFile = (id: string) => {
+		setFiles((prev) => prev.filter((entry) => entry.id !== id));
 	};
 
 	const clearFiles = () => setFiles([]);
+
+	const reorderFiles = (newFiles: FileEntry[]) => {
+		setFiles(newFiles);
+	};
 
 	const mergePdfs = async () => {
 		if (files.length < 2) {
@@ -34,7 +46,7 @@ export function usePdfMerge() {
 		try {
 			const mergedPdf = await PDFDocument.create();
 
-			for (const file of files) {
+			for (const { file } of files) {
 				const arrayBuffer = await file.arrayBuffer();
 				const pdf = await PDFDocument.load(arrayBuffer);
 				const copiedPages = await mergedPdf.copyPages(
@@ -78,7 +90,7 @@ export function usePdfMerge() {
 		handleFileInputChange,
 		removeFile,
 		clearFiles,
+		reorderFiles,
 		mergePdfs,
-		setFiles,
 	};
 }

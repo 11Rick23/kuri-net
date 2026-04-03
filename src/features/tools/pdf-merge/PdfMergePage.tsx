@@ -17,8 +17,8 @@ export default function PdfMergePage() {
 		handleFileInputChange,
 		removeFile,
 		clearFiles,
+		reorderFiles,
 		mergePdfs,
-		setFiles,
 	} = usePdfMerge();
 
 	const { isDragging, isDraggingPDF } = useGlobalDrag({
@@ -33,13 +33,13 @@ export default function PdfMergePage() {
 				<h1 className="text-3xl font-bold mb-4 text-center">PDF統合ツール</h1>
 				<Badges />
 
-				<div className="relative bg-white dark:bg-gray-800 rounded-lg border border-black p-6 mb-6 flex flex-col gap-6 z-20">
+				<div className="relative z-20 mb-6 flex flex-col gap-6 rounded-lg border border-ctp-overlay0 bg-ctp-base p-6 shadow-light dark:shadow-dark">
 					<InfoModal />
 					<UploadArea onChange={handleFileInputChange} />
 					<FileList
 						files={files}
 						onRemove={removeFile}
-						onReorder={(newFiles) => setFiles(newFiles)}
+						onReorder={reorderFiles}
 					/>
 					<ActionButtons
 						files={files}

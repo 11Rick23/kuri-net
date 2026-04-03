@@ -1,7 +1,10 @@
 "use client";
 
 import { startAuthentication } from "@simplewebauthn/browser";
-import { generateLoginOptions, verifyLoginData } from "@/features/auth/server/login";
+import {
+	generateLoginOptions,
+	verifyLoginData,
+} from "@/features/auth/server/login";
 import type { Result } from "@/shared/types/result";
 
 export default async function login(): Promise<Result<string, string>> {
