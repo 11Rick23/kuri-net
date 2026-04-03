@@ -6,7 +6,7 @@ import { MdDarkMode, MdSunny } from "react-icons/md";
 import IconButton from "@/shared/components/button/IconButton";
 
 export default function ColorModeButton() {
-	const { theme, setTheme } = useTheme();
+	const { resolvedTheme, setTheme } = useTheme();
 	const [mounted, setMounted] = useState(false);
 
 	useEffect(() => {
@@ -17,12 +17,14 @@ export default function ColorModeButton() {
 		return <div className="w-5 h-5 rounded-full bg-gray-800" />;
 	}
 
+	const isDark = resolvedTheme === "dark";
+
 	return (
 		<IconButton
 			ariaLabel="ダークモード切り替え"
-			onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+			onClick={() => setTheme(isDark ? "light" : "dark")}
 		>
-			{theme === "dark" ? <MdSunny size={15} /> : <MdDarkMode size={15} />}
+			{isDark ? <MdSunny size={15} /> : <MdDarkMode size={15} />}
 		</IconButton>
 	);
 }

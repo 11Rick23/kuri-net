@@ -3,11 +3,13 @@
 
 @layer base {
   :root {
+    color-scheme: light;
     --color-background: #ffffef;
     --color-foreground: #000000;
   }
 
   .dark {
+    color-scheme: dark;
     --color-background: #212121;
     --color-foreground: #ffffff;
   }
