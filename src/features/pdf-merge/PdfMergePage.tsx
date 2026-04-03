@@ -1,0 +1,54 @@
+"use client";
+
+import ActionButtons from "@/features/pdf-merge/components/actionButtons";
+import Badges from "@/features/pdf-merge/components/badges";
+import DropOverlay from "@/features/pdf-merge/components/dropOverlay";
+import { FileList } from "@/features/pdf-merge/components/fileList";
+import InfoModal from "@/features/pdf-merge/components/infoModal";
+import { UploadArea } from "@/features/pdf-merge/components/uploadArea";
+import { useGlobalDrag } from "@/features/pdf-merge/hooks/useGlobalDrag";
+import { usePdfMerge } from "@/features/pdf-merge/hooks/usePdfMerge";
+
+export default function PdfMergePage() {
+	const {
+		files,
+		isLoading,
+		addFiles,
+		handleFileInputChange,
+		removeFile,
+		clearFiles,
+		mergePdfs,
+		setFiles,
+	} = usePdfMerge();
+
+	const { isDragging, isDraggingPDF } = useGlobalDrag({
+		onDropFiles: addFiles,
+	});
+
+	return (
+		<main className="min-h-screen">
+			{isDragging && <DropOverlay isDraggingPDF={isDraggingPDF} />}
+			<div className="h-16" />
+			<div className="max-w-4xl mx-auto p-6">
+				<h1 className="text-3xl font-bold mb-4 text-center">PDF統合ツール</h1>
+				<Badges />
+
+				<div className="relative bg-white dark:bg-gray-800 rounded-lg border border-black p-6 mb-6 flex flex-col gap-6 z-20">
+					<InfoModal />
+					<UploadArea onChange={handleFileInputChange} />
+					<FileList
+						files={files}
+						onRemove={removeFile}
+						onReorder={(newFiles) => setFiles(newFiles)}
+					/>
+					<ActionButtons
+						files={files}
+						isLoading={isLoading}
+						clearFiles={clearFiles}
+						mergePdfs={mergePdfs}
+					/>
+				</div>
+			</div>
+		</main>
+	);
+}
