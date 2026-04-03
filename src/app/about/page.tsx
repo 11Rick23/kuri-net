@@ -1,9 +1,5 @@
-import ProfileCard from "@/app/about/components/profileCard";
+import AboutScreen from "@/features/about/AboutScreen";
 
 export default function About() {
-	return (
-		<main>
-			<ProfileCard />
-		</main>
-	);
+	return <AboutScreen />;
 }

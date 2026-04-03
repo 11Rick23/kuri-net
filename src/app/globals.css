@@ -1,46 +1,67 @@
 @import "tailwindcss";
-@custom-variant dark (&:where(.dark, .dark *));
+@import "@catppuccin/tailwindcss/macchiato.css";
+@custom-variant dark (&:where(.macchiato, .macchiato *));
 
 @layer base {
-  :root {
-    --color-background: #ffffef;
-    --color-foreground: #000000;
-  }
+	:root,
+	.latte {
+		color-scheme: light;
+	}
 
-  .dark {
-    --color-background: #212121;
-    --color-foreground: #ffffff;
-  }
+	.macchiato {
+		color-scheme: dark;
+	}
+
+	html {
+		background-color: var(--color-ctp-crust);
+	}
 }
 
 @theme {
-  --shadow-light: 0 4px 15px rgba(50, 50, 50, 0.3);
-  --shadow-dark: 0 4px 15px rgba(200, 200, 200, 0.12);
-  --animate-float: float-updown 3s ease-in-out infinite;
+	--shadow-light: 0 14px 32px rgba(136, 57, 239, 0.1);
+	--shadow-dark: 0 14px 32px rgba(198, 160, 246, 0.1);
+	--animate-float: float-updown 3s ease-in-out infinite;
+}
+
+@theme inline {
+	--color-app-accent: var(--color-ctp-blue);
+	--color-app-info: var(--color-ctp-sapphire);
+	--color-app-success: var(--color-ctp-green);
+	--color-app-warning: var(--color-ctp-yellow);
+	--color-app-error: var(--color-ctp-red);
 }
 
 @keyframes float-updown {
-  0% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-15px);
-  }
-  100% {
-    transform: translateY(0);
-  }
+	0% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-15px);
+	}
+	100% {
+		transform: translateY(0);
+	}
 }
 
 @keyframes progress-bar {
-  from {
-    transform: scaleX(1);
-  }
-  to {
-    transform: scaleX(0);
-  }
+	from {
+		transform: scaleX(1);
+	}
+	to {
+		transform: scaleX(0);
+	}
 }
 
 body {
-  background-color: var(--color-background);
-  color: var(--color-foreground);
+	min-height: 100vh;
+	background-color: var(--color-ctp-crust);
+	color: var(--color-ctp-text);
+}
+
+::selection {
+	background-color: color-mix(
+		in srgb,
+		var(--color-app-accent) 30%,
+		transparent
+	);
 }

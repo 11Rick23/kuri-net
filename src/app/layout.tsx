@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import { M_PLUS_1 } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "next-themes";
-import Header from "@/components/header/wrapper";
-import { ModalProvider } from "@/components/modal/modalProvider";
-import { ToastProvider } from "@/components/toast/toastProvider";
+import Header from "@/shared/components/header/wrapper";
+import Providers from "./providers";
 
 const mPlus1 = M_PLUS_1({
 	subsets: ["latin"],
@@ -27,14 +25,10 @@ export default function RootLayout({
 			<body
 				className={`${mPlus1.className} antialiased transition-colors duration-150`}
 			>
-				<ThemeProvider attribute="class">
-					<ToastProvider>
-						<ModalProvider>
-							<Header />
-							{children}
-						</ModalProvider>
-					</ToastProvider>
-				</ThemeProvider>
+				<Providers>
+					<Header />
+					{children}
+				</Providers>
 			</body>
 		</html>
 	);
