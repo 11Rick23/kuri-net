@@ -10,6 +10,7 @@ import React, {
 	useState,
 } from "react";
 import { IoIosClose } from "react-icons/io";
+import IconButton from "@/shared/components/button/IconButton";
 import type {
 	ModalContextValue,
 	ModalOpenOptions,
@@ -95,19 +96,18 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
 							onClick={(e) => e.stopPropagation()}
 						>
 							{/* 閉じるボタン */}
-							<button
-								type="button"
-								aria-label="閉じる"
+							<IconButton
+								ariaLabel="閉じる"
 								onClick={closeModal}
+								size="md"
 								className="
                                 absolute top-2 right-2
                                 rounded-lg
-                                text-gray-400
-                                hover:bg-black/20 dark:hover:bg-white/20
-                                text-3xl leading-none cursor-pointer"
+                                text-gray-400 text-3xl leading-none
+                                hover:bg-black/20 dark:hover:bg-white/20"
 							>
 								<IoIosClose />
-							</button>
+							</IconButton>
 
 							{state.content}
 						</div>

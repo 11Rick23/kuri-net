@@ -6,6 +6,7 @@ import {
 	FaInfo,
 } from "react-icons/fa";
 import { IoIosClose } from "react-icons/io";
+import IconButton from "@/shared/components/button/IconButton";
 import type { ToastItem, ToastType } from "@/shared/types/toast";
 import { useToast } from "./toastProvider";
 
@@ -91,14 +92,13 @@ export default function ToastCard({
 				{item.count > 1 && <span> ({item.count})</span>}
 			</div>
 
-			<button
-				type="button"
+			<IconButton
+				ariaLabel="閉じる"
 				onClick={onClose}
-				className="text-2xl text-center rounded-md hover:bg-black/15 dark:hover:bg-white/20 cursor-pointer"
-				aria-label="閉じる"
+				className="text-2xl text-center rounded-md hover:bg-black/15 dark:hover:bg-white/20"
 			>
 				<IoIosClose />
-			</button>
+			</IconButton>
 		</div>
 	);
 }
