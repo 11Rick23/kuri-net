@@ -11,7 +11,11 @@ function subscribe() {
 
 export default function ColorModeButton() {
 	const { resolvedTheme, setTheme } = useTheme();
-	const mounted = useSyncExternalStore(subscribe, () => true, () => false);
+	const mounted = useSyncExternalStore(
+		subscribe,
+		() => true,
+		() => false,
+	);
 
 	if (!mounted) {
 		return <div className="h-5 w-5 rounded-full bg-ctp-surface1" />;

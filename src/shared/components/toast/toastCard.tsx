@@ -37,12 +37,8 @@ export default function ToastCard({
 	const iconByType: Record<ToastType, React.ReactNode> = {
 		info: <FaInfo aria-hidden className="text-ctp-sky" />,
 		success: <FaCheck aria-hidden className="text-ctp-green" />,
-		warning: (
-			<FaExclamationTriangle aria-hidden className="text-ctp-yellow" />
-		),
-		error: (
-			<FaExclamationCircle aria-hidden className="text-ctp-red" />
-		),
+		warning: <FaExclamationTriangle aria-hidden className="text-ctp-yellow" />,
+		error: <FaExclamationCircle aria-hidden className="text-ctp-red" />,
 	};
 
 	return (

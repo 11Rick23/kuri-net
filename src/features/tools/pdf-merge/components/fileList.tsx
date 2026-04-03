@@ -9,6 +9,9 @@ type Props = {
 export function FileList({ files, onRemove, onReorder }: Props) {
 	if (files.length === 0) return null;
 
+	const getFileKey = (file: File) =>
+		[file.name, file.size, file.lastModified, file.type].join(":");
+
 	const handleDragStart = (
 		e: React.DragEvent<HTMLLIElement>,
 		index: number,
@@ -41,7 +44,7 @@ export function FileList({ files, onRemove, onReorder }: Props) {
 			<ul>
 				{files.map((file, index) => (
 					<li
-						key={`${file.name}-${index}`}
+						key={getFileKey(file)}
 						draggable
 						onDragStart={(e) => handleDragStart(e, index)}
 						onDragOver={handleDragOver}

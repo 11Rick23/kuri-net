@@ -10,10 +10,7 @@ import {
 } from "@/database/schema";
 import { ExpiredChallengeError } from "@/shared/errors/auth";
 import { InvalidInputError } from "@/shared/errors/base";
-import {
-	DatabaseError,
-	QueryNotFoundError,
-} from "@/shared/errors/database";
+import { DatabaseError, QueryNotFoundError } from "@/shared/errors/database";
 
 export async function createUser(userID: string) {
 	try {

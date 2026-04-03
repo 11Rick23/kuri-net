@@ -26,9 +26,9 @@
 @theme inline {
 	--color-app-accent: var(--color-ctp-blue);
 	--color-app-info: var(--color-ctp-sapphire);
-  --color-app-success: var(--color-ctp-green);
-  --color-app-warning: var(--color-ctp-yellow);
-  --color-app-error: var(--color-ctp-red);
+	--color-app-success: var(--color-ctp-green);
+	--color-app-warning: var(--color-ctp-yellow);
+	--color-app-error: var(--color-ctp-red);
 }
 
 @keyframes float-updown {

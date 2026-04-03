@@ -1,9 +1,8 @@
 "use client";
 
 import { browserSupportsWebAuthn } from "@simplewebauthn/browser";
-
-import RegistrationModalContent from "@/features/auth/components/registrationModal";
 import login from "@/features/auth/client/login";
+import RegistrationModalContent from "@/features/auth/components/registrationModal";
 import { useModal } from "@/shared/components/modal/modalProvider";
 import { useToast } from "@/shared/components/toast/toastProvider";
 
