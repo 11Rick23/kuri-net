@@ -30,9 +30,10 @@ export default function AuthRequired() {
 				type="button"
 				onClick={onLoginButtonPress}
 				className="rounded-md px-5 py-2 mt-10
-                            hover:bg-green-800/10 dark:hover:bg-green-800/30
-                            border-2 border-black dark:border-white
-                            font-semibold text-black dark:text-white
+							bg-black dark:bg-white
+                            hover:bg-black/80 dark:hover:bg-white/80
+                            border-2 border-white dark:border-black
+                            font-semibold text-white dark:text-black
                             cursor-pointer"
 			>
 				ログイン
