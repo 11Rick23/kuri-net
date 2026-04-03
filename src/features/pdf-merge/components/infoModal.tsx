@@ -1,4 +1,5 @@
 import { MdOutlineInfo } from "react-icons/md";
+import IconButton from "@/shared/components/button/IconButton";
 import { useModal } from "@/shared/components/modal/modalProvider";
 
 function InfoModalContent() {
@@ -19,18 +20,13 @@ export default function InfoModal() {
 	const { openModal } = useModal();
 
 	return (
-		<button
-			type="button"
+		<IconButton
+			ariaLabel="使い方を開く"
 			onClick={() => openModal(<InfoModalContent />, { paddingSize: 4 })}
-			className="
-                absolute top-4 right-4 p-1
-                rounded-full
-                text-gray-500
-                hover:bg-gray-200 dark:hover:bg-gray-700
-                hover:cursor-pointer
-                "
+			tone="subtle"
+			className="absolute top-4 right-4 p-1 text-gray-500"
 		>
 			<MdOutlineInfo size={24} />
-		</button>
+		</IconButton>
 	);
 }
