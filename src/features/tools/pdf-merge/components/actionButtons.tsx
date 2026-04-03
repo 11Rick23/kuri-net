@@ -1,5 +1,7 @@
+import type { FileEntry } from "@/features/tools/pdf-merge/types";
+
 type Props = {
-	files: File[];
+	files: FileEntry[];
 	isLoading: boolean;
 	clearFiles: () => void;
 	mergePdfs: () => Promise<void>;

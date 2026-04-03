@@ -1,16 +1,14 @@
 import { MdOutlineDragIndicator } from "react-icons/md";
+import type { FileEntry } from "@/features/tools/pdf-merge/types";
 
 type Props = {
-	files: File[];
-	onRemove: (index: number) => void;
-	onReorder: (files: File[]) => void;
+	files: FileEntry[];
+	onRemove: (id: string) => void;
+	onReorder: (files: FileEntry[]) => void;
 };
 
 export function FileList({ files, onRemove, onReorder }: Props) {
 	if (files.length === 0) return null;
-
-	const getFileKey = (file: File) =>
-		[file.name, file.size, file.lastModified, file.type].join(":");
 
 	const handleDragStart = (
 		e: React.DragEvent<HTMLLIElement>,
@@ -42,9 +40,9 @@ export function FileList({ files, onRemove, onReorder }: Props) {
 				選択されたファイル ({files.length}件)
 			</h2>
 			<ul>
-				{files.map((file, index) => (
+				{files.map(({ id, file }, index) => (
 					<li
-						key={getFileKey(file)}
+						key={id}
 						draggable
 						onDragStart={(e) => handleDragStart(e, index)}
 						onDragOver={handleDragOver}
@@ -78,7 +76,7 @@ export function FileList({ files, onRemove, onReorder }: Props) {
 						</div>
 						<button
 							type="button"
-							onClick={() => onRemove(index)}
+							onClick={() => onRemove(id)}
 							className="
                             text-ctp-red hover:text-ctp-maroon
                             hover:bg-ctp-surface0

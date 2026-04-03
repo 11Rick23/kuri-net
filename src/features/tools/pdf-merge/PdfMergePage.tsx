@@ -17,8 +17,8 @@ export default function PdfMergePage() {
 		handleFileInputChange,
 		removeFile,
 		clearFiles,
+		reorderFiles,
 		mergePdfs,
-		setFiles,
 	} = usePdfMerge();
 
 	const { isDragging, isDraggingPDF } = useGlobalDrag({
@@ -39,7 +39,7 @@ export default function PdfMergePage() {
 					<FileList
 						files={files}
 						onRemove={removeFile}
-						onReorder={(newFiles) => setFiles(newFiles)}
+						onReorder={reorderFiles}
 					/>
 					<ActionButtons
 						files={files}
