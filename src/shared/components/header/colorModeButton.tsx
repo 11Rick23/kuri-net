@@ -1,20 +1,20 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { MdDarkMode, MdSunny } from "react-icons/md";
 import IconButton from "@/shared/components/button/IconButton";
 
+function subscribe() {
+	return () => {};
+}
+
 export default function ColorModeButton() {
 	const { resolvedTheme, setTheme } = useTheme();
-	const [mounted, setMounted] = useState(false);
-
-	useEffect(() => {
-		setMounted(true);
-	}, []);
+	const mounted = useSyncExternalStore(subscribe, () => true, () => false);
 
 	if (!mounted) {
-		return <div className="w-5 h-5 rounded-full bg-gray-800" />;
+		return <div className="h-5 w-5 rounded-full bg-ctp-surface1" />;
 	}
 
 	const isDark = resolvedTheme === "dark";

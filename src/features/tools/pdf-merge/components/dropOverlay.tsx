@@ -7,10 +7,10 @@ export default function DropOverlay({ isDraggingPDF }: Props) {
 		<div
 			className={`
         fixed flex items-center justify-center w-screen h-screen z-100
-        ${isDraggingPDF ? "bg-blue-600/80" : "bg-red-600/80"}
+        ${isDraggingPDF ? "bg-ctp-blue/85" : "bg-ctp-red/85"}
         `}
 		>
-			<p className="text-white text-2xl font-bold">
+			<p className="text-2xl font-bold text-ctp-crust">
 				{isDraggingPDF
 					? "PDFファイルをドロップして追加"
 					: "PDF以外のファイルは追加できません"}

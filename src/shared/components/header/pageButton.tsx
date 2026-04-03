@@ -21,9 +21,9 @@ export default function PageButton({
 			className={`
                 flex items-center justify-center
                 rounded-full px-2 py-1 cursor-pointer
-                ${isActive ? "bg-gray-300 dark:bg-gray-700" : "bg-transparent"}
-                text-xs font-bold
-                hover:bg-gray-300 dark:hover:bg-gray-700
+                ${isActive ? "bg-ctp-surface0" : "bg-transparent"}
+                text-xs font-bold text-ctp-text
+                hover:bg-ctp-surface0
             `}
 		>
 			{display}

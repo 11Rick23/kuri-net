@@ -83,15 +83,15 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
 					onClick={state.options.closeOnBackdrop ? closeModal : undefined}
 				>
 					{/* 背景 */}
-					<div className="absolute inset-0 bg-black/70 dark:bg-black/30" />
+					<div className="absolute inset-0 bg-ctp-crust/80" />
 
 					<div className="absolute inset-0 flex items-center justify-center p-4">
 						{/* パネル */}
 						<div
 							className={`
                                 relative overflow-auto rounded-xl
-                                bg-white dark:bg-black
-                                border border-gray-300 dark:border-gray-700
+                                bg-ctp-surface0 text-ctp-text
+                                border border-ctp-overlay0
                                 p-${state.options.paddingSize} shadow-lg`}
 							onClick={(e) => e.stopPropagation()}
 						>
@@ -101,10 +101,8 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
 								onClick={closeModal}
 								size="md"
 								className="
-                                absolute top-2 right-2
-                                rounded-lg
-                                text-gray-400 text-3xl leading-none
-                                hover:bg-black/20 dark:hover:bg-white/20"
+                                absolute top-2 right-2 rounded-lg
+                                text-ctp-overlay1 text-3xl leading-none"
 							>
 								<IoIosClose />
 							</IconButton>

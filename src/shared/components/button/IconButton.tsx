@@ -17,8 +17,8 @@ const sizeClassName: Record<NonNullable<Props["size"]>, string> = {
 };
 
 const toneClassName: Record<NonNullable<Props["tone"]>, string> = {
-	default: "hover:bg-gray-300 dark:hover:bg-gray-700",
-	subtle: "hover:bg-gray-200 dark:hover:bg-gray-700",
+	default: "text-ctp-text hover:bg-ctp-text/10",
+	subtle: "text-ctp-subtext1 hover:bg-ctp-subtext1/10",
 };
 
 export default function IconButton({

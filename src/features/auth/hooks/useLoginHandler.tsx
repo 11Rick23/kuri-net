@@ -27,7 +27,7 @@ export default function useLoginHandler() {
 				{"新規アカウント登録は "}
 				<button
 					type="button"
-					className="underline font-medium hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer"
+					className="cursor-pointer font-medium underline hover:text-ctp-blue"
 					onClick={() => {
 						dismiss("sign-up-notice");
 						openModal(<RegistrationModalContent />, { paddingSize: 6 });

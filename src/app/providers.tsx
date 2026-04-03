@@ -14,6 +14,7 @@ export default function Providers({
 			defaultTheme="system"
 			enableSystem
 			disableTransitionOnChange
+			value={{ light: "latte", dark: "macchiato" }}
 		>
 			<ToastProvider>
 				<ModalProvider>{children}</ModalProvider>

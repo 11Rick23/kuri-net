@@ -10,7 +10,7 @@ import PageButton from "./pageButton";
 function Border() {
 	return (
 		<div className="h-4 w-4 px-2">
-			<div className="mx-auto h-full w-px bg-gray-400 dark:bg-gray-600" />
+			<div className="mx-auto h-full w-px bg-ctp-surface1" />
 		</div>
 	);
 }
@@ -24,8 +24,8 @@ export default async function Header() {
 				className="
             inline-flex items-center justify-center
             m-2 px-2 py-1 gap-1 rounded-full
-            bg-white/60 dark:bg-black/60
-            border border-gray-400 dark:border-gray-600
+            bg-ctp-base/75 text-ctp-text
+            border border-ctp-surface1
             backdrop-blur-md shadow-light dark:shadow-dark
             "
 			>

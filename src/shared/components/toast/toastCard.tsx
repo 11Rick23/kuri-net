@@ -21,35 +21,27 @@ export default function ToastCard({
 	const [hovered, setHovered] = React.useState(false);
 
 	const borderColorByType: Record<ToastType, string> = {
-		info: "border-gray-400 dark:border-gray-600",
-		success: "border-green-500 dark:border-green-800",
-		warning: "border-yellow-500 dark:border-yellow-800",
-		error: "border-red-500 dark:border-red-800",
+		info: "border-ctp-sky",
+		success: "border-ctp-green",
+		warning: "border-ctp-yellow",
+		error: "border-ctp-red",
 	};
 
 	const barColorByType: Record<ToastType, string> = {
-		info: "bg-gray-400/70 dark:bg-gray-600/70",
-		success: "bg-green-500 dark:bg-green-800",
-		warning: "bg-yellow-500 dark:bg-yellow-800",
-		error: "bg-red-500 dark:bg-red-800",
+		info: "bg-ctp-sky/80",
+		success: "bg-ctp-green",
+		warning: "bg-ctp-yellow",
+		error: "bg-ctp-red",
 	};
 
 	const iconByType: Record<ToastType, React.ReactNode> = {
-		info: <FaInfo aria-hidden className="text-gray-400 dark:text-gray-400" />,
-		success: (
-			<FaCheck aria-hidden className="text-green-600 dark:text-green-400" />
-		),
+		info: <FaInfo aria-hidden className="text-ctp-sky" />,
+		success: <FaCheck aria-hidden className="text-ctp-green" />,
 		warning: (
-			<FaExclamationTriangle
-				aria-hidden
-				className="text-yellow-600 dark:text-yellow-400"
-			/>
+			<FaExclamationTriangle aria-hidden className="text-ctp-yellow" />
 		),
 		error: (
-			<FaExclamationCircle
-				aria-hidden
-				className="text-red-600 dark:text-red-400"
-			/>
+			<FaExclamationCircle aria-hidden className="text-ctp-red" />
 		),
 	};
 
@@ -60,7 +52,7 @@ export default function ToastCard({
                 relative overflow-hidden
                 rounded-sm border
                 px-3 py-3 flex items-start gap-3
-                bg-white dark:bg-gray-900
+                bg-ctp-mantle
                 ${borderColorByType[item.type]} border-2
                 `}
 			onMouseEnter={() => {
@@ -87,7 +79,7 @@ export default function ToastCard({
 
 			<div className="mt-0.5 text-lg shrink-0">{iconByType[item.type]}</div>
 
-			<div className="text-sm text-gray-900 dark:text-gray-100 flex-1">
+			<div className="text-sm text-ctp-text flex-1">
 				{item.message}
 				{item.count > 1 && <span> ({item.count})</span>}
 			</div>
@@ -95,7 +87,7 @@ export default function ToastCard({
 			<IconButton
 				ariaLabel="閉じる"
 				onClick={onClose}
-				className="text-2xl text-center rounded-md hover:bg-black/15 dark:hover:bg-white/20"
+				className="rounded-md text-center text-2xl hover:bg-ctp-surface0"
 			>
 				<IoIosClose />
 			</IconButton>

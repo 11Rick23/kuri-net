@@ -5,8 +5,8 @@ export default function NotFound() {
 				className="
                 absolute
                 text-[clamp(0rem,40vw,40rem)]
-                font-bold blur-xs
-                text-black/5 dark:text-white/5
+                font-bold blur-sm
+                text-ctp-lavender/10
                 select-none pointer-events-none
                 "
 			>

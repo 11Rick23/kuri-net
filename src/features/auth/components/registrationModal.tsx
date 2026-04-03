@@ -33,8 +33,8 @@ export default function RegistrationModalContent() {
 				<p
 					className="
                 text-sm my-4 p-4 rounded-md
-                bg-yellow-400/20 dark:bg-yellow-700/20
-                border-2 border-yellow-400 dark:border-yellow-700"
+                bg-app-warning/15 text-ctp-subtext1
+                border-2 border-app-warning"
 				>
 					本サービスではパスキーによる認証のみを提供しております。
 					<br />
@@ -58,10 +58,11 @@ export default function RegistrationModalContent() {
 						className="
                         flex items-center justify-center
                         w-4 h-4 rounded-sm border
-                        peer-checked:bg-blue-500
-                        peer-checked:border-blue-500"
+                        border-ctp-overlay0
+                        peer-checked:bg-ctp-blue
+                        peer-checked:border-ctp-blue-300"
 					>
-						{agreed && <FaCheck className="text-white text-[10px]" />}
+						{agreed && <FaCheck className="text-[10px] text-ctp-crust" />}
 					</span>
 					<span>上記注意事項を読み、同意します</span>
 				</label>
@@ -74,11 +75,10 @@ export default function RegistrationModalContent() {
 					placeholder="パスキーの名称"
 					className="
                         w-full max-w-50 my-7 px-3 py-2
-                        border rounded-md text-center
+                        border border-ctp-overlay0 rounded-md text-center
                         font-bold placeholder:font-medium
-                        placeholder:text-xs
-                        bg-white dark:bg-black
-                        "
+                        placeholder:text-xs placeholder:text-ctp-text/80
+                        bg-ctp-base"
 				/>
 
 				<button
@@ -90,11 +90,11 @@ export default function RegistrationModalContent() {
 					className={`
                         rounded-md
                         px-5 py-2 font-medium
-                        ${
-													agreed
-														? "bg-black dark:bg-white text-white dark:text-black hover:opacity-75 cursor-pointer"
-														: "bg-black/30 dark:bg-white/30 text-gray-200 dark:text-black cursor-not-allowed"
-												}`}
+						${
+							agreed
+								? "cursor-pointer bg-ctp-blue text-ctp-crust hover:opacity-90"
+								: "cursor-not-allowed bg-ctp-surface1 text-ctp-text/50"
+						}`}
 				>
 					登録
 				</button>
@@ -104,7 +104,7 @@ export default function RegistrationModalContent() {
 						className="
                         text-sm mt-4
                         font-semibold
-                        text-red-500 dark:text-red-700"
+                        text-ctp-red"
 						role="alert"
 					>
 						{errorMessage}
