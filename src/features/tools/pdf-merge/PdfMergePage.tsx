@@ -1,13 +1,13 @@
 "use client";
 
-import ActionButtons from "@/features/pdf-merge/components/actionButtons";
-import Badges from "@/features/pdf-merge/components/badges";
-import DropOverlay from "@/features/pdf-merge/components/dropOverlay";
-import { FileList } from "@/features/pdf-merge/components/fileList";
-import InfoModal from "@/features/pdf-merge/components/infoModal";
-import { UploadArea } from "@/features/pdf-merge/components/uploadArea";
-import { useGlobalDrag } from "@/features/pdf-merge/hooks/useGlobalDrag";
-import { usePdfMerge } from "@/features/pdf-merge/hooks/usePdfMerge";
+import ActionButtons from "@/features/tools/pdf-merge/components/actionButtons";
+import Badges from "@/features/tools/pdf-merge/components/badges";
+import DropOverlay from "@/features/tools/pdf-merge/components/dropOverlay";
+import { FileList } from "@/features/tools/pdf-merge/components/fileList";
+import InfoModal from "@/features/tools/pdf-merge/components/infoModal";
+import { UploadArea } from "@/features/tools/pdf-merge/components/uploadArea";
+import { useGlobalDrag } from "@/features/tools/pdf-merge/hooks/useGlobalDrag";
+import { usePdfMerge } from "@/features/tools/pdf-merge/hooks/usePdfMerge";
 
 export default function PdfMergePage() {
 	const {
