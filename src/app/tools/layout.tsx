@@ -1,7 +1,7 @@
 "use server";
 
-import AuthRequired from "@/components/authRequired";
-import { verifySession } from "@/functions/passkey/verifySession";
+import AuthRequired from "@/features/auth/components/authRequired";
+import { verifySession } from "@/features/auth/server/verifySession";
 
 export default async function ToolsLayout({
 	children,
