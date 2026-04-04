@@ -1,6 +1,6 @@
 "use client";
 
-import { createElement, useEffect, useRef, useState } from "react";
+import { createElement, useCallback, useEffect, useRef, useState } from "react";
 import PasteConfirmModal from "@/features/tools/notepad/components/PasteConfirmModal";
 import { saveCurrentUserNotepad } from "@/features/tools/notepad/server/notepad";
 import { useModal } from "@/shared/components/modal/modalProvider";
@@ -29,14 +29,14 @@ export function useNotepadEditor({
 	const inFlightRef = useRef(false);
 	const debounceTimerRef = useRef<number | null>(null);
 
-	const clearDebounceTimer = () => {
+	const clearDebounceTimer = useCallback(() => {
 		if (debounceTimerRef.current !== null) {
 			window.clearTimeout(debounceTimerRef.current);
 			debounceTimerRef.current = null;
 		}
-	};
+	}, []);
 
-	const flushQueuedSave = async () => {
+	const flushQueuedSave = useCallback(async () => {
 		if (inFlightRef.current) {
 			return;
 		}
@@ -77,7 +77,7 @@ export function useNotepadEditor({
 		}
 
 		setSaveState("pending");
-	};
+	}, [toast]);
 
 	useEffect(() => {
 		contentRef.current = content;
@@ -98,13 +98,13 @@ export function useNotepadEditor({
 		}, 700);
 
 		return clearDebounceTimer;
-	}, [content]);
+	}, [content, clearDebounceTimer, flushQueuedSave]);
 
 	useEffect(() => {
 		return () => {
 			clearDebounceTimer();
 		};
-	}, []);
+	}, [clearDebounceTimer]);
 
 	const handleBlur = () => {
 		clearDebounceTimer();
@@ -159,10 +159,13 @@ export function useNotepadEditor({
 			return;
 		}
 
-		openModal(createElement(PasteConfirmModal, { onConfirm: pasteFromClipboard }), {
-			closeOnBackdrop: true,
-			paddingSize: 6,
-		});
+		openModal(
+			createElement(PasteConfirmModal, { onConfirm: pasteFromClipboard }),
+			{
+				closeOnBackdrop: true,
+				paddingSize: 6,
+			},
+		);
 	};
 
 	return {
