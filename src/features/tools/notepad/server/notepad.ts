@@ -11,15 +11,17 @@ export async function getCurrentUserNotepad(userID?: string): Promise<{
 	content: string;
 	updatedAt: string | null;
 }> {
-	const resolvedUserID =
-		userID ??
-		(await verifySession().then((session) => {
-			if (!session?.userID) {
-				throw new Error("Authentication required.");
-			}
+	let resolvedUserID = userID;
 
-			return session.userID;
-		}));
+	if (!resolvedUserID) {
+		const session = await verifySession();
+
+		if (!session?.userID) {
+			throw new Error("Authentication required.");
+		}
+
+		resolvedUserID = session.userID;
+	}
 
 	const notepad = await getNotepadByUserID(resolvedUserID);
 
