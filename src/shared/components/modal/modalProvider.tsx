@@ -25,6 +25,13 @@ const defaultOptions: Required<ModalOpenOptions> = {
 	paddingSize: 12,
 };
 
+const paddingClassName: Record<number, string> = {
+	0: "p-0",
+	4: "p-4",
+	6: "p-6",
+	12: "p-12",
+};
+
 export function ModalProvider({ children }: { children: React.ReactNode }) {
 	const [state, setState] = useState<ModalState>({
 		isOpen: false,
@@ -88,11 +95,10 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
 					<div className="absolute inset-0 flex items-center justify-center p-4">
 						{/* パネル */}
 						<div
-							className={`
-                                relative overflow-auto rounded-xl
-                                bg-ctp-surface0 text-ctp-text
-                                border border-ctp-overlay0
-                                p-${state.options.paddingSize} shadow-lg`}
+							className={[
+								"relative overflow-auto rounded-xl border border-ctp-overlay0 bg-ctp-surface0 text-ctp-text shadow-lg",
+								paddingClassName[state.options.paddingSize] ?? "p-12",
+							].join(" ")}
 							onClick={(e) => e.stopPropagation()}
 						>
 							{/* 閉じるボタン */}
