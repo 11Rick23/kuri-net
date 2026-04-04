@@ -23,8 +23,7 @@ export const toolDefinitions: ToolDefinition[] = [
 		badges: [
 			{
 				kind: "local",
-				description:
-					"このツールは端末内で動作し、ファイルがサーバーへアップロードされることはありません。",
+				description: "このツールは端末内で動作します。",
 			},
 		],
 	},
@@ -42,7 +41,7 @@ export const toolDefinitions: ToolDefinition[] = [
 				description: "このツールを使うにはログインが必要です。",
 			},
 			{
-				kind: "server",
+				kind: "database",
 				description: "このツールはサーバー上にデータを保存します。",
 			},
 		],
