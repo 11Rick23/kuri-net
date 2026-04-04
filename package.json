@@ -4,6 +4,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "next dev",
+		"db:migrate": "bun run src/database/migrate.ts",
 		"build": "next build",
 		"start": "next start",
 		"lint": "biome lint .",
