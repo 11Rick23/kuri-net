@@ -7,17 +7,21 @@ import {
 } from "@/features/tools/notepad/data/repository";
 import { InvalidInputError } from "@/shared/errors/base";
 
-export async function getCurrentUserNotepad(): Promise<{
+export async function getCurrentUserNotepad(userID?: string): Promise<{
 	content: string;
 	updatedAt: string | null;
 }> {
-	const session = await verifySession();
+	const resolvedUserID =
+		userID ??
+		(await verifySession().then((session) => {
+			if (!session?.userID) {
+				throw new Error("Authentication required.");
+			}
 
-	if (!session?.userID) {
-		throw new Error("Authentication required.");
-	}
+			return session.userID;
+		}));
 
-	const notepad = await getNotepadByUserID(session.userID);
+	const notepad = await getNotepadByUserID(resolvedUserID);
 
 	return {
 		content: notepad?.content ?? "",
