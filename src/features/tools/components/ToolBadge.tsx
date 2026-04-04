@@ -9,6 +9,7 @@ type Props = {
 	wrapperClassName?: string;
 	triggerToneClassName?: string;
 	contentToneClassName?: string;
+	triggerClassName?: string;
 };
 
 export default function ToolBadge({
@@ -18,24 +19,35 @@ export default function ToolBadge({
 	wrapperClassName = "",
 	triggerToneClassName = "",
 	contentToneClassName = "",
+	triggerClassName = "",
 }: Props) {
-	const [open, setOpen] = useState(false);
+	const [isOpen, setIsOpen] = useState(false);
 
 	return (
+		// biome-ignore lint/a11y/noStaticElementInteractions: tooltip hover state is managed on the wrapper to keep the popup open while moving between trigger and content
 		<div
 			className={[
-				"group relative inline-flex flex-col items-center",
+				"relative inline-flex flex-col items-center",
 				wrapperClassName,
 			].join(" ")}
+			onMouseEnter={() => {
+				setIsOpen(true);
+			}}
+			onMouseLeave={() => {
+				setIsOpen(false);
+			}}
 		>
 			<button
 				type="button"
 				aria-label={ariaLabel}
-				aria-expanded={open}
-				onClick={() => setOpen((prev) => !prev)}
+				aria-expanded={isOpen}
+				onClick={() => {
+					setIsOpen((prev) => !prev);
+				}}
 				className={[
-					"inline-block rounded-full p-2 mb-4 cursor-help",
+					"inline-flex items-center justify-center rounded-full p-2 cursor-help",
 					triggerToneClassName,
+					triggerClassName,
 				].join(" ")}
 			>
 				{icon}
@@ -43,12 +55,12 @@ export default function ToolBadge({
 
 			<div
 				className={[
-					`absolute left-1/2 top-full z-50 -mt-2 -translate-x-1/2
+					`absolute left-1/2 top-full z-50 mt-2 -translate-x-1/2
 					px-3 py-2 rounded-md
 					bg-ctp-base text-center text-ctp-text
 					border border-ctp-overlay0
 					text-sm whitespace-nowrap shadow-sm`,
-					open ? "block" : "hidden group-hover:block group-focus-within:block",
+					isOpen ? "block" : "hidden",
 					contentToneClassName,
 				].join(" ")}
 			>

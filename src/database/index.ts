@@ -8,7 +8,7 @@ if (!url) {
 	);
 }
 
-const pool = new Pool({
+export const pool = new Pool({
 	connectionString: url,
 });
 
