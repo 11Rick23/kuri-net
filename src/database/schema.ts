@@ -18,6 +18,20 @@ export const users = pgTable("users", {
 		.defaultNow(),
 });
 
+export const notepads = pgTable("notepads", {
+	userID: text("user_id")
+		.notNull()
+		.primaryKey()
+		.references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
+	content: text("content").notNull().default(""),
+	createdAt: timestamp("created_at", { withTimezone: true })
+		.notNull()
+		.defaultNow(),
+	updatedAt: timestamp("updated_at", { withTimezone: true })
+		.notNull()
+		.defaultNow(),
+});
+
 export const credentials = pgTable("credentials", {
 	id: text("id").notNull().primaryKey(),
 	publicKey: bytea("public_key").notNull(),

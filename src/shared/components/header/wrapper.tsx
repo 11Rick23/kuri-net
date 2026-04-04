@@ -32,7 +32,7 @@ export default async function Header() {
 				<HomeButton />
 				<Border />
 				<PageButton url="/about" display="About" />
-				<PageButton url="/tools/pdf-merge" display="Tools" />
+				<PageButton url="/tools" display="Tools" match="prefix" />
 				<Border />
 				<ColorModeButton />
 				{session?.userID ? <LogOutButton /> : <LogInButton />}

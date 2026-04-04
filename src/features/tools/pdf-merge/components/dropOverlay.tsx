@@ -6,7 +6,7 @@ export default function DropOverlay({ isDraggingPDF }: Props) {
 	return (
 		<div
 			className={`
-        fixed flex items-center justify-center w-screen h-screen z-100
+        fixed inset-0 flex items-center justify-center z-[90]
         ${isDraggingPDF ? "bg-ctp-blue/85" : "bg-ctp-red/85"}
         `}
 		>
