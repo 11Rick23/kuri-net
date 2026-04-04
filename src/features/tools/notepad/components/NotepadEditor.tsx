@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import CopyButton from "@/features/tools/notepad/components/CopyButton";
+import PasteButton from "@/features/tools/notepad/components/PasteButton";
 import { saveCurrentUserNotepad } from "@/features/tools/notepad/server/notepad";
 import { useToast } from "@/shared/components/toast/toastProvider";
 
@@ -30,7 +32,6 @@ function getStatusMessage(state: SaveState, lastSavedAt: string | null) {
 			return "未保存の変更があります";
 		case "error":
 			return "保存に失敗しました";
-		case "saved":
 		default:
 			return formatSavedAt(lastSavedAt);
 	}
@@ -46,7 +47,9 @@ export default function NotepadEditor({
 	const { toast } = useToast();
 	const [content, setContent] = useState(initialContent);
 	const [saveState, setSaveState] = useState<SaveState>("saved");
-	const [lastSavedAt, setLastSavedAt] = useState<string | null>(initialUpdatedAt);
+	const [lastSavedAt, setLastSavedAt] = useState<string | null>(
+		initialUpdatedAt,
+	);
 	const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 	const contentRef = useRef(initialContent);
 	const lastSavedContentRef = useRef(initialContent);
@@ -83,11 +86,14 @@ export default function NotepadEditor({
 				setLastSavedAt(result.updatedAt);
 			} catch {
 				setSaveState("error");
-				toast("メモの保存に失敗しました。しばらくしてから再度お試しください。", {
-					id: "notepad-save-error",
-					type: "error",
-					durationMs: 6000,
-				});
+				toast(
+					"メモの保存に失敗しました。しばらくしてから再度お試しください。",
+					{
+						id: "notepad-save-error",
+						type: "error",
+						durationMs: 6000,
+					},
+				);
 			} finally {
 				inFlightRef.current = false;
 			}
@@ -172,7 +178,7 @@ export default function NotepadEditor({
 	};
 
 	return (
-		<div className="flex flex-col gap-4 rounded-[2rem] border border-ctp-surface1 bg-ctp-base/95 p-5 shadow-light dark:shadow-dark sm:p-7">
+		<div className="flex flex-col gap-4 rounded-2xl border border-ctp-surface1 bg-ctp-base p-5 shadow-light dark:shadow-dark">
 			<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 				<p
 					className={`text-sm ${
@@ -188,20 +194,8 @@ export default function NotepadEditor({
 					{getStatusMessage(saveState, lastSavedAt)}
 				</p>
 				<div className="flex flex-wrap gap-2">
-					<button
-						type="button"
-						onClick={handleCopy}
-						className="inline-flex items-center justify-center gap-2 rounded-full border border-ctp-surface1 bg-ctp-mantle px-4 py-2 text-sm font-semibold text-ctp-text transition hover:border-ctp-blue hover:text-ctp-blue"
-					>
-						コピー
-					</button>
-					<button
-						type="button"
-						onClick={handlePaste}
-						className="inline-flex items-center justify-center gap-2 rounded-full border border-ctp-surface1 bg-ctp-mantle px-4 py-2 text-sm font-semibold text-ctp-text transition hover:border-ctp-green hover:text-ctp-green"
-					>
-						貼り付け
-					</button>
+					<CopyButton onClick={handleCopy} />
+					<PasteButton onClick={handlePaste} />
 				</div>
 			</div>
 
@@ -217,7 +211,13 @@ export default function NotepadEditor({
 				}}
 				onBlur={handleBlur}
 				placeholder="ここに自由にメモを書いてください。"
-				className="min-h-[60vh] w-full resize-y rounded-[1.5rem] border border-ctp-surface1 bg-ctp-mantle px-5 py-4 text-base leading-7 text-ctp-text outline-none transition placeholder:text-ctp-subtext0 focus:border-ctp-blue focus:ring-2 focus:ring-ctp-blue/30 sm:min-h-[65vh] sm:text-lg"
+				className="
+				min-h-[60vh] w-full resize-y rounded-2xl
+				border border-ctp-surface1
+				bg-ctp-mantle px-5 py-4
+				text-base leading-7 text-ctp-text transition
+				placeholder:text-ctp-subtext0
+				focus:border-ctp-blue focus:ring-2 focus:ring-ctp-blue/30"
 			/>
 		</div>
 	);
