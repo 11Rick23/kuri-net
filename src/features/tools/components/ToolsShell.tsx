@@ -63,7 +63,7 @@ export default function ToolsShell({
 				aria-expanded={open}
 				onClick={() => setOpen((prev) => !prev)}
 				className="
-				fixed top-4 left-4 z-[90] inline-flex h-11 w-11
+				fixed top-4 left-4 z-90 inline-flex h-11 w-11
 				items-center justify-center rounded-full
 				border border-ctp-surface1
 				bg-ctp-base/95
@@ -80,7 +80,7 @@ export default function ToolsShell({
 					type="button"
 					aria-label="サイドメニューを閉じる"
 					onClick={() => setOpen(false)}
-					className="fixed inset-0 z-[75] bg-ctp-crust/60 backdrop-blur-[1px]"
+					className="fixed inset-0 z-75 bg-ctp-crust/60 backdrop-blur-[1px]"
 				/>
 			)}
 
