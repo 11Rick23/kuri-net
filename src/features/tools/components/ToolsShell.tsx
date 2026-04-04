@@ -62,7 +62,15 @@ export default function ToolsShell({
 				aria-label={open ? "サイドメニューを閉じる" : "サイドメニューを開く"}
 				aria-expanded={open}
 				onClick={() => setOpen((prev) => !prev)}
-				className="fixed top-4 left-4 z-80 inline-flex h-11 w-11 items-center justify-center rounded-full border border-ctp-surface1 bg-ctp-base/95 text-ctp-text shadow-light backdrop-blur-md transition hover:bg-ctp-surface0 dark:shadow-dark"
+				className="
+				fixed top-4 left-4 z-[90] inline-flex h-11 w-11
+				items-center justify-center rounded-full
+				border border-ctp-surface1
+				bg-ctp-base/95
+				text-ctp-text
+				backdrop-blur-md transition
+				shadow-light dark:shadow-dark
+				hover:bg-ctp-surface0 hover:cursor-pointer"
 			>
 				{open ? <FaXmark size={18} /> : <FaBars size={18} />}
 			</button>
@@ -88,18 +96,19 @@ export default function ToolsShell({
 					</p>
 					<h2 className="text-2xl font-bold text-ctp-text">ツールメニュー</h2>
 					<p className="text-sm leading-6 text-ctp-subtext1">
-						ツール一覧や各ツールへここから移動できます。
+						ここから各ツールへ移動できます。
 					</p>
 				</div>
 
 				<nav className="space-y-3">
-					<NavLink
+					{/* ツール一覧はナビゲーションバーに表示しなくていいかな */}
+					{/* <NavLink
 						href="/tools"
 						label="ツール一覧"
 						description="使えるツールを一覧で確認できます。"
 						active={pathname === "/tools"}
 						onClick={() => setOpen(false)}
-					/>
+					/> */}
 					{toolDefinitions.map((tool) => (
 						<NavLink
 							key={tool.id}

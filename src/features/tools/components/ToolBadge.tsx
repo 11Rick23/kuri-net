@@ -9,6 +9,7 @@ type Props = {
 	wrapperClassName?: string;
 	triggerToneClassName?: string;
 	contentToneClassName?: string;
+	triggerClassName?: string;
 };
 
 export default function ToolBadge({
@@ -18,6 +19,7 @@ export default function ToolBadge({
 	wrapperClassName = "",
 	triggerToneClassName = "",
 	contentToneClassName = "",
+	triggerClassName = "",
 }: Props) {
 	const [open, setOpen] = useState(false);
 
@@ -34,8 +36,9 @@ export default function ToolBadge({
 				aria-expanded={open}
 				onClick={() => setOpen((prev) => !prev)}
 				className={[
-					"inline-block rounded-full p-2 mb-4 cursor-help",
+					"inline-flex items-center justify-center rounded-full p-2 cursor-help",
 					triggerToneClassName,
+					triggerClassName,
 				].join(" ")}
 			>
 				{icon}
