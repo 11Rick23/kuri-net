@@ -12,15 +12,8 @@
 		{
 			"idx": 1,
 			"version": "7",
-			"when": 1775148391247,
-			"tag": "0001_small_notepad",
-			"breakpoints": true
-		},
-		{
-			"idx": 2,
-			"version": "7",
 			"when": 1775289194600,
-			"tag": "0002_magical_vision",
+			"tag": "0001_small_notepad",
 			"breakpoints": true
 		}
 	]
