@@ -12,7 +12,7 @@ export default async function NotepadPage() {
 	const session = await verifySession();
 
 	if (!session?.userID) {
-		return <AuthRequired />;
+		return <AuthRequired fullscreen={false} />;
 	}
 
 	const initialNotepad = await getCurrentUserNotepad();

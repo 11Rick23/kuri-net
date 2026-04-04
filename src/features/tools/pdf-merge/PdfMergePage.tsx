@@ -26,10 +26,9 @@ export default function PdfMergePage() {
 	});
 
 	return (
-		<main className="min-h-screen">
+		<main className="min-h-[calc(100vh-5rem)] px-4 py-6 sm:px-6">
 			{isDragging && <DropOverlay isDraggingPDF={isDraggingPDF} />}
-			<div className="h-16" />
-			<div className="max-w-4xl mx-auto p-6">
+			<div className="mx-auto max-w-4xl">
 				<h1 className="text-3xl font-bold mb-4 text-center">PDF統合ツール</h1>
 				<Badges />
 

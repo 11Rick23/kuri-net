@@ -6,12 +6,17 @@ import { usePathname } from "next/navigation";
 export default function PageButton({
 	url,
 	display,
+	match = "exact",
 }: {
 	url: string;
 	display: string;
+	match?: "exact" | "prefix";
 }) {
 	const pathname = usePathname();
-	const isActive = pathname === url;
+	const isActive =
+		match === "prefix"
+			? pathname === url || pathname.startsWith(`${url}/`)
+			: pathname === url;
 
 	return (
 		<Link

@@ -8,9 +8,8 @@ export default function NotepadScreen({
 	initialUpdatedAt: string | null;
 }) {
 	return (
-		<main className="min-h-screen">
-			<div className="h-16" />
-			<div className="mx-auto flex max-w-5xl flex-col gap-6 px-4 py-6">
+		<main className="min-h-[calc(100vh-5rem)] px-4 py-6 sm:px-6">
+			<div className="mx-auto flex max-w-5xl flex-col gap-6">
 				<div className="space-y-3 px-1">
 					<h1 className="text-4xl font-bold tracking-tight text-ctp-text">
 						ちょこっとメモ
