@@ -6,6 +6,7 @@ export default function ToolsIndexScreen() {
 	return (
 		<ToolsPageFrame
 			title="ツール一覧"
+			englishTitle="Tools"
 			description="ちょっとした便利ツールを提供しています。随時追加予定です。"
 		>
 			<div className="grid gap-4 md:grid-cols-2">
