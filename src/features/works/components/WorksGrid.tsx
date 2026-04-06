@@ -12,7 +12,7 @@ export default function WorksGrid({ works }: { works: WorkEntry[] }) {
 		<div className="grid gap-5 lg:grid-cols-2">
 			{works.map((work) => (
 				<WorkCard
-					key={work.slug}
+					key={work.title}
 					work={work}
 					onOpen={(entry) =>
 						openModal(<WorkDetailModal work={entry} />, { paddingSize: 0 })

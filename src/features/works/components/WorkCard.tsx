@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import type { WorkEntry } from "@/features/works/types";
+import WorkCoverVisual from "./WorkCoverVisual";
 
 export default function WorkCard({
 	work,
@@ -17,14 +17,7 @@ export default function WorkCard({
 			className="group flex h-full cursor-pointer flex-col overflow-hidden rounded-[1.75rem] border border-ctp-surface1 bg-ctp-base text-left shadow-light transition duration-200 hover:-translate-y-0.5 hover:border-ctp-overlay0 hover:shadow-[0_18px_40px_rgba(0,0,0,0.18)] dark:shadow-dark"
 		>
 			<div className="relative aspect-[16/10] overflow-hidden bg-ctp-crust">
-				<Image
-					src={work.coverImage}
-					alt={work.coverAlt}
-					fill
-					sizes="(max-width: 1024px) 100vw, 50vw"
-					className="object-cover transition duration-500 group-hover:scale-[1.02]"
-				/>
-				<div className="absolute inset-0 bg-gradient-to-t from-ctp-crust/55 via-transparent to-transparent" />
+				<WorkCoverVisual work={work} variant="card" />
 			</div>
 
 			<div className="flex flex-1 flex-col gap-4 border-t border-ctp-surface1 px-5 py-5 sm:px-6 sm:py-6">

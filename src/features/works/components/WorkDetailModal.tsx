@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import type { WorkEntry } from "@/features/works/types";
+import WorkCoverVisual from "./WorkCoverVisual";
 
 function MetaItem({
 	label,
@@ -31,13 +31,7 @@ export default function WorkDetailModal({ work }: { work: WorkEntry }) {
 	return (
 		<article className="w-[min(92vw,56rem)] max-h-[88vh] overflow-y-auto rounded-[1.75rem] bg-ctp-surface0">
 			<div className="relative aspect-[16/9] overflow-hidden rounded-t-[1.75rem] bg-ctp-crust">
-				<Image
-					src={work.coverImage}
-					alt={work.coverAlt}
-					fill
-					sizes="(max-width: 768px) 100vw, 56rem"
-					className="object-cover"
-				/>
+				<WorkCoverVisual work={work} variant="detail" />
 				<div className="absolute inset-0 bg-gradient-to-t from-ctp-crust via-ctp-crust/45 to-transparent" />
 				<div className="absolute inset-x-0 bottom-0 p-6 pr-14 sm:p-8 sm:pr-20">
 					<p className="text-xs font-semibold uppercase tracking-[0.32em] text-ctp-subtext0">

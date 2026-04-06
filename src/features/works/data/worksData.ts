@@ -2,34 +2,27 @@ import type { WorkEntry } from "@/features/works/types";
 
 export const worksData: WorkEntry[] = [
 	{
-		slug: "kuri-net",
-		title: "kuri-net",
-		summary:
-			"認証つきの便利ツール群と自己紹介導線を一つにまとめた、個人開発のポートフォリオ兼プロダクトサイトです。",
-		coverImage: "/works/kuri-net-cover.svg",
-		coverAlt:
-			"kuri-net のトップページ、ツール一覧、管理UIの雰囲気を抽象的に表現したカバーイメージ",
+		title: "Kuri-Net",
+		links: [
+			{
+				label: "ソースコード",
+				href: "https://github.com/11Rick23/kuri-net",
+			},
+		],
+		summary: "本ウェブサイトです。",
 		stack: [
-			"Next.js",
-			"React",
 			"TypeScript",
+			"Next.js",
 			"Tailwind CSS",
 			"Drizzle ORM",
 			"PostgreSQL",
 			"WebAuthn",
+			"Catppuccin",
 		],
-		appealTags: [
-			"UI設計",
-			"フルスタック実装",
-			"認証設計",
-			"情報設計",
-			"個人開発",
-		],
-		lead:
-			"自分の制作物を見せるだけでなく、そのまま使える小さなプロダクトとして成立させたいと考えて作っているのが kuri-net です。単なる作品集ではなく、設計・実装・運用の感覚まで伝わる場として育てています。",
-		period: "2026 - 現在",
-		role: "企画 / 設計 / 実装 / デザイン",
-		teamSize: "1人",
+		lead: "自分の制作物を見せるだけでなく、そのまま使える小さなプロダクトとして成立させたいと考えて作っているのが kuri-net です。単なる作品集ではなく、設計・実装・運用の感覚まで伝わる場として育てています。",
+		period: "2025 - 現在",
+		role: "フルスタック開発",
+		teamSize: "個人",
 		sections: [
 			{
 				heading: "背景・目的",
@@ -70,6 +63,33 @@ export const worksData: WorkEntry[] = [
 				heading: "使用技術",
 				paragraphs: [
 					"フロントエンドは Next.js / React / TypeScript、スタイリングは Tailwind CSS を採用しています。データ層は Drizzle ORM と PostgreSQL、認証は WebAuthn ベースで組んでいます。",
+				],
+			},
+		],
+	},
+	{
+		title: "GDGoC Japan Hackathon",
+		links: [
+			{
+				label: "ソースコード",
+				href: "https://github.com/11Rick23/GDGoC-Del4-Demo",
+			},
+		],
+		summary:
+			"GDGoC Japan Hackathon に参加し、制作したアプリケーションがAI賞を受賞しました。",
+		stack: [],
+		coverImage: "/works/gdgoc-cover.png",
+		coverAlt: "GDGoC Japan Hackathon のロゴ",
+		lead: "自分の制作物を見せるだけでなく、そのまま使える小さなプロダクトとして成立させたいと考えて作っているのが kuri-net です。単なる作品集ではなく、設計・実装・運用の感覚まで伝わる場として育てています。",
+		period: "2026年3月",
+		role: "開発基盤作成 / 認証基盤設計 / DMシステム設計 / DB管理",
+		teamSize: "4人グループ",
+		sections: [
+			{
+				heading: "背景・目的",
+				paragraphs: [
+					"プロフィールだけでは自分が何を作れて、どの粒度まで設計できるのかが伝わりにくいと感じていました。そのため、自己紹介ページと実際に動くツールを同居させたサイトを作り、手触りのあるアウトプットとして能力を見せる方針を取りました。",
+					"閲覧者が短時間で全体像を掴めることと、気になったら細部まで読めることの両立を重視し、情報量の密度をページごとに調整できる構成を目指しています。",
 				],
 			},
 		],

@@ -9,13 +9,11 @@ export type WorkLink = {
 };
 
 export type WorkEntry = {
-	slug: string;
 	title: string;
 	summary: string;
-	coverImage: string;
-	coverAlt: string;
+	coverImage?: string;
+	coverAlt?: string;
 	stack: string[];
-	appealTags: string[];
 	lead: string;
 	sections: WorkSection[];
 	period?: string;
