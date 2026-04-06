@@ -14,7 +14,7 @@
 	"dependencies": {
 		"@simplewebauthn/browser": "^13.3.0",
 		"@simplewebauthn/server": "^13.3.0",
-		"dotenv": "^17.4.0",
+		"dotenv": "^17.4.1",
 		"drizzle-orm": "^0.45.2",
 		"nanoid": "^5.1.7",
 		"next": "16.2.2",
