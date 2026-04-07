@@ -107,7 +107,7 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
 								onClick={closeModal}
 								size="md"
 								className="
-                                absolute top-2 right-2 rounded-lg
+                                absolute top-2 right-2 z-20 rounded-lg
                                 text-ctp-overlay1 text-3xl leading-none"
 							>
 								<IoIosClose />
