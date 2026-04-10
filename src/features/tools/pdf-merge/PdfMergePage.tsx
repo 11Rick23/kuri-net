@@ -1,11 +1,11 @@
 "use client";
 
 import ToolsPageFrame from "@/features/tools/components/ToolsPageFrame";
-import ActionButtons from "@/features/tools/pdf-merge/components/actionButtons";
-import DropOverlay from "@/features/tools/pdf-merge/components/dropOverlay";
-import { FileList } from "@/features/tools/pdf-merge/components/fileList";
-import InfoModal from "@/features/tools/pdf-merge/components/infoModal";
-import { UploadArea } from "@/features/tools/pdf-merge/components/uploadArea";
+import ActionButtons from "@/features/tools/pdf-merge/components/ActionButtons";
+import DropOverlay from "@/features/tools/pdf-merge/components/DropOverlay";
+import { FileList } from "@/features/tools/pdf-merge/components/FileList";
+import InfoModal from "@/features/tools/pdf-merge/components/InfoModal";
+import { UploadArea } from "@/features/tools/pdf-merge/components/UploadArea";
 import { useGlobalDrag } from "@/features/tools/pdf-merge/hooks/useGlobalDrag";
 import { usePdfMerge } from "@/features/tools/pdf-merge/hooks/usePdfMerge";
 import { getToolDefinitionBySlug } from "@/features/tools/toolDefinitions";

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { M_PLUS_1 } from "next/font/google";
 import "./globals.css";
-import Header from "@/shared/components/header/wrapper";
+import Header from "@/shared/components/header/Header";
 import Providers from "./providers";
 
 const mPlus1 = M_PLUS_1({

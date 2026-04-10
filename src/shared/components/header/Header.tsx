@@ -1,11 +1,11 @@
 "use server";
 
 import { verifySession } from "@/features/auth/server/verifySession";
-import ColorModeButton from "./colorModeButton";
-import HomeButton from "./homeButton";
-import LogInButton from "./loginButton";
-import LogOutButton from "./logoutButton";
-import PageButton from "./pageButton";
+import ColorModeButton from "./ColorModeButton";
+import HomeButton from "./HomeButton";
+import LogInButton from "./LoginButton";
+import LogOutButton from "./LogoutButton";
+import PageButton from "./PageButton";
 
 function Border() {
 	return (

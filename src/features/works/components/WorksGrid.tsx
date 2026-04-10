@@ -1,7 +1,7 @@
 "use client";
 
 import type { WorkEntry } from "@/features/works/types";
-import { useModal } from "@/shared/components/modal/modalProvider";
+import { useModal } from "@/shared/components/modal/ModalProvider";
 import WorkCard from "./WorkCard";
 import WorkDetailModal from "./WorkDetailModal";
 

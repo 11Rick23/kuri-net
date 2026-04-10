@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import AuthRequired from "@/features/auth/components/authRequired";
+import AuthRequired from "@/features/auth/components/AuthRequired";
 import { verifySession } from "@/features/auth/server/verifySession";
 import NotepadScreen from "@/features/tools/notepad/NotepadScreen";
 import { getCurrentUserNotepad } from "@/features/tools/notepad/server/notepad";

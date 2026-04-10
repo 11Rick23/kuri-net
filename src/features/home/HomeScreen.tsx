@@ -1,5 +1,5 @@
 import { verifySession } from "@/features/auth/server/verifySession";
-import LiveClock from "@/shared/components/liveClock";
+import LiveClock from "@/shared/components/LiveClock";
 
 export default async function HomeScreen() {
 	const session = await verifySession();
