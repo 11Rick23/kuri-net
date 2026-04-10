@@ -24,7 +24,7 @@ export const worksData: WorkEntry[] = [
 			"WebSocket",
 			"Gemini",
 		],
-		coverImage: "/works/hello_mate-cover.png",
+		coverImageAssetKey: "works/hello_mate-cover.png",
 		coverAlt: "GDGoC Japan Hackathon のロゴ",
 		lead: "AIエージェントを活用し、ストレスなく新しい友達を見つけられることを目指したウェブアプリです。",
 		period: "2026年3月",
@@ -40,6 +40,14 @@ export const worksData: WorkEntry[] = [
 			},
 			{
 				heading: "プロジェクトの概要",
+				media: [
+					{
+						type: "video",
+						title: "ハロメイト 発表用デモ動画",
+						assetKey: "works/hello_mate-demo.mp4",
+						placement: "before",
+					},
+				],
 				paragraphs: [
 					"『ハロメイト』はAIを活用した友達探しアプリで、手軽にストレスなく新しい友達を見つけることを目標としています。",
 					"プロフィール作成の手間、個人情報公開のリスク、ぴったりの友達を探す難しさなどを、AIエージェントを活用することで解決しました。",

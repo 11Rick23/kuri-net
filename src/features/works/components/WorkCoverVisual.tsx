@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { WorkEntry } from "@/features/works/types";
+import { resolveAssetUrl } from "@/shared/utils/resolveAssetUrl";
 
 function TitleArtwork({
 	title,
@@ -18,7 +19,9 @@ function TitleArtwork({
 				aria-hidden="true"
 				className={[
 					"absolute right-4 top-4 font-black uppercase leading-none tracking-[-0.08em] text-black/10 dark:text-white/8",
-					isDetail ? "text-[clamp(5.5rem,22vw,13rem)]" : "text-[clamp(4.2rem,15vw,7.5rem)]",
+					isDetail
+						? "text-[clamp(5.5rem,22vw,13rem)]"
+						: "text-[clamp(4.2rem,15vw,7.5rem)]",
 				].join(" ")}
 			>
 				{title}
@@ -34,14 +37,20 @@ export default function WorkCoverVisual({
 	work: WorkEntry;
 	variant: "card" | "detail";
 }) {
-	if (work.coverImage && work.coverAlt) {
+	if (work.coverImageAssetKey && work.coverAlt) {
+		const coverImageUrl = resolveAssetUrl(work.coverImageAssetKey);
+
 		return (
 			<>
 				<Image
-					src={work.coverImage}
+					src={coverImageUrl}
 					alt={work.coverAlt}
 					fill
-					sizes={variant === "detail" ? "(max-width: 768px) 100vw, 56rem" : "(max-width: 1024px) 100vw, 50vw"}
+					sizes={
+						variant === "detail"
+							? "(max-width: 768px) 100vw, 56rem"
+							: "(max-width: 1024px) 100vw, 50vw"
+					}
 					className="object-cover transition duration-500 group-hover:scale-[1.02]"
 				/>
 				<div className="absolute inset-0 bg-gradient-to-t from-ctp-crust/55 via-transparent to-transparent" />

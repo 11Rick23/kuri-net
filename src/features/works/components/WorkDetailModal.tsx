@@ -1,16 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import type { WorkEntry } from "@/features/works/types";
+import type { WorkEntry, WorkSectionMedia } from "@/features/works/types";
+import VideoPlayer from "@/shared/components/media/VideoPlayer";
+import { resolveAssetUrl } from "@/shared/utils/resolveAssetUrl";
 import WorkCoverVisual from "./WorkCoverVisual";
 
-function MetaItem({
-	label,
-	value,
-}: {
-	label: string;
-	value: string;
-}) {
+function MetaItem({ label, value }: { label: string; value: string }) {
 	return (
 		<div className="rounded-2xl border border-ctp-surface1 bg-ctp-base px-4 py-3">
 			<p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-ctp-subtext0">
@@ -19,6 +15,31 @@ function MetaItem({
 			<p className="mt-2 text-sm font-semibold text-ctp-text">{value}</p>
 		</div>
 	);
+}
+
+function SectionMedia({ media }: { media: WorkSectionMedia }) {
+	if (media.type === "video") {
+		return (
+			<div className="space-y-3">
+				<VideoPlayer
+					src={resolveAssetUrl(media.assetKey)}
+					poster={
+						media.posterAssetKey
+							? resolveAssetUrl(media.posterAssetKey)
+							: undefined
+					}
+					title={media.title}
+				/>
+				{media.caption ? (
+					<p className="px-1 text-sm leading-7 text-ctp-subtext1">
+						{media.caption}
+					</p>
+				) : null}
+			</div>
+		);
+	}
+
+	return null;
 }
 
 export default function WorkDetailModal({ work }: { work: WorkEntry }) {
@@ -50,7 +71,11 @@ export default function WorkDetailModal({ work }: { work: WorkEntry }) {
 				{metaItems.length > 0 && (
 					<div className="grid gap-3 sm:grid-cols-3">
 						{metaItems.map((item) => (
-							<MetaItem key={item.label} label={item.label} value={item.value} />
+							<MetaItem
+								key={item.label}
+								label={item.label}
+								value={item.value}
+							/>
 						))}
 					</div>
 				)}
@@ -78,11 +103,27 @@ export default function WorkDetailModal({ work }: { work: WorkEntry }) {
 							<h3 className="text-2xl font-bold tracking-tight text-ctp-text">
 								{section.heading}
 							</h3>
+							{section.media
+								?.filter((media) => media.placement === "before")
+								.map((media) => (
+									<SectionMedia
+										key={`${section.heading}-${media.type}-${media.assetKey}-before`}
+										media={media}
+									/>
+								))}
 							<div className="space-y-4 text-sm leading-8 text-ctp-subtext1 sm:text-base">
 								{section.paragraphs.map((paragraph) => (
 									<p key={paragraph}>{paragraph}</p>
 								))}
 							</div>
+							{section.media
+								?.filter((media) => media.placement === "after")
+								.map((media) => (
+									<SectionMedia
+										key={`${section.heading}-${media.type}-${media.assetKey}-after`}
+										media={media}
+									/>
+								))}
 						</section>
 					))}
 				</div>

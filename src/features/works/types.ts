@@ -1,6 +1,18 @@
 export type WorkSection = {
 	heading: string;
 	paragraphs: string[];
+	media?: WorkSectionMedia[];
+};
+
+export type WorkSectionMedia = WorkSectionVideoMedia;
+
+export type WorkSectionVideoMedia = {
+	type: "video";
+	title: string;
+	assetKey: string;
+	placement: "before" | "after";
+	caption?: string;
+	posterAssetKey?: string;
 };
 
 export type WorkLink = {
@@ -11,7 +23,7 @@ export type WorkLink = {
 export type WorkEntry = {
 	title: string;
 	summary: string;
-	coverImage?: string;
+	coverImageAssetKey?: string;
 	coverAlt?: string;
 	stack: string[];
 	lead: string;
