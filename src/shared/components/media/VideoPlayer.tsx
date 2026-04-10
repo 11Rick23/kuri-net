@@ -40,6 +40,8 @@ type PlayerIconButtonProps = {
 	onClick: (event: MouseEvent<HTMLButtonElement>) => void;
 	children: ReactNode;
 	className?: string;
+	onFocus?: () => void;
+	tabIndex?: number;
 };
 
 function PlayerIconButton({
@@ -47,12 +49,16 @@ function PlayerIconButton({
 	onClick,
 	children,
 	className,
+	onFocus,
+	tabIndex,
 }: PlayerIconButtonProps) {
 	return (
 		<button
 			type="button"
 			aria-label={ariaLabel}
 			onClick={onClick}
+			onFocus={onFocus}
+			tabIndex={tabIndex}
 			className={cx(
 				"flex items-center justify-center rounded-full transition hover:cursor-pointer focus:outline-none",
 				className,
@@ -93,6 +99,7 @@ export default function VideoPlayer({
 }: VideoPlayerProps) {
 	const videoRef = useRef<HTMLVideoElement | null>(null);
 	const containerRef = useRef<HTMLDivElement | null>(null);
+	const controlsRef = useRef<HTMLDivElement | null>(null);
 	const hideControlsTimeoutRef = useRef<number | null>(null);
 	const pointerInsideRef = useRef(false);
 	const hoverCapableRef = useRef(false);
@@ -183,7 +190,20 @@ export default function VideoPlayer({
 		hideControlsTimeoutRef.current = null;
 	};
 
+	const controlsContainFocus = () => {
+		if (typeof document === "undefined") return false;
+
+		const activeElement = document.activeElement;
+
+		return (
+			activeElement instanceof HTMLElement &&
+			controlsRef.current?.contains(activeElement) === true
+		);
+	};
+
 	const hideControls = () => {
+		if (controlsContainFocus()) return;
+
 		setShowControls(false);
 		setIsVolumePanelOpen(false);
 	};
@@ -192,6 +212,7 @@ export default function VideoPlayer({
 		clearHideControlsTimer();
 
 		hideControlsTimeoutRef.current = window.setTimeout(() => {
+			if (controlsContainFocus()) return;
 			if (hoverCapableRef.current && !pointerInsideRef.current) return;
 			hideControls();
 		}, CONTROLS_IDLE_MS);
@@ -303,10 +324,23 @@ export default function VideoPlayer({
 		clearHideControlsTimer();
 	};
 
+	const handleControlsBlur = (event: FocusEvent<HTMLDivElement>) => {
+		if (event.currentTarget.contains(event.relatedTarget)) return;
+
+		if (pointerInsideRef.current) {
+			revealControls();
+			return;
+		}
+
+		clearHideControlsTimer();
+		hideControls();
+	};
+
 	const progressMax = duration > 0 ? duration : 0;
 	const progressValue = Math.min(currentTime, progressMax || 0);
 	const shouldShowVolumeSlider =
 		isHoverCapable && showControls && isVolumePanelOpen;
+	const controlsTabIndex = showControls ? 0 : -1;
 
 	return (
 		<div className={cx("space-y-3", className)}>
@@ -346,6 +380,7 @@ export default function VideoPlayer({
 							: `${title}の操作パネルを表示`
 					}
 					onClick={() => handleSurfaceClick()}
+					onFocus={revealControls}
 					className="absolute inset-0 z-10"
 				>
 					<span className="sr-only">{title}</span>
@@ -365,12 +400,16 @@ export default function VideoPlayer({
 				) : null}
 
 				<div
+					ref={controlsRef}
+					aria-hidden={!showControls}
 					className={cx(
 						"absolute inset-x-0 bottom-0 z-20 p-3 transition duration-200 sm:p-4",
 						showControls
 							? "pointer-events-auto opacity-100"
 							: "pointer-events-none opacity-0",
 					)}
+					onFocusCapture={revealControls}
+					onBlurCapture={handleControlsBlur}
 				>
 					<div className="rounded-[1.25rem] border border-white/8 bg-ctp-crust/82 px-3 py-3 backdrop-blur-md sm:px-4">
 						<div className="flex items-center gap-2 sm:gap-3">
@@ -380,6 +419,7 @@ export default function VideoPlayer({
 									stopPropagation(event);
 									void togglePlayback();
 								}}
+								tabIndex={controlsTabIndex}
 								className="h-10 w-10 shrink-0 bg-ctp-blue text-lg text-ctp-base hover:brightness-105 focus:ring-2 focus:ring-ctp-blue/60"
 							>
 								{isPlaying ? (
@@ -408,6 +448,7 @@ export default function VideoPlayer({
 									value={progressValue}
 									onClick={stopPropagation}
 									onChange={(event) => handleSeek(event.target.value)}
+									tabIndex={controlsTabIndex}
 									disabled={progressMax <= 0}
 									className="h-2 w-full disabled:cursor-not-allowed disabled:opacity-50"
 								/>
@@ -437,6 +478,7 @@ export default function VideoPlayer({
 												stopPropagation(event);
 												toggleMuted();
 											}}
+											tabIndex={controlsTabIndex}
 											className="h-10 w-10 text-lg text-ctp-text hover:bg-white/8 focus:ring-2 focus:ring-ctp-blue/45"
 										>
 											{isMuted ? <GoMute /> : <GoUnmute />}
@@ -463,6 +505,9 @@ export default function VideoPlayer({
 												onChange={(event) =>
 													handleVolumeChange(event.target.value)
 												}
+												tabIndex={
+													shouldShowVolumeSlider ? controlsTabIndex : -1
+												}
 												className="h-2 w-24 sm:w-28"
 											/>
 										</div>
@@ -478,6 +523,7 @@ export default function VideoPlayer({
 									stopPropagation(event);
 									void toggleFullscreen();
 								}}
+								tabIndex={controlsTabIndex}
 								className="h-10 w-10 text-lg text-ctp-text hover:bg-white/8 focus:ring-2 focus:ring-ctp-blue/45"
 							>
 								{isFullscreen ? <IoScanOutline /> : <IoScan />}
