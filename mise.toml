@@ -4,3 +4,4 @@ node = "latest"
 
 [env]
 DATABASE_URL = { required = true }
+NEXT_PUBLIC_ASSET_BASE_URL = { required = true }

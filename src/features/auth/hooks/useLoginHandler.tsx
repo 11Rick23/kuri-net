@@ -2,9 +2,9 @@
 
 import { browserSupportsWebAuthn } from "@simplewebauthn/browser";
 import login from "@/features/auth/client/login";
-import RegistrationModalContent from "@/features/auth/components/registrationModal";
-import { useModal } from "@/shared/components/modal/modalProvider";
-import { useToast } from "@/shared/components/toast/toastProvider";
+import RegistrationModalContent from "@/features/auth/components/RegistrationModal";
+import { useModal } from "@/shared/components/modal/ModalProvider";
+import { useToast } from "@/shared/components/toast/ToastProvider";
 
 export default function useLoginHandler() {
 	const { toast, dismiss } = useToast();

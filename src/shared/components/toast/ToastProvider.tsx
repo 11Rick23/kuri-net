@@ -16,7 +16,7 @@ import type {
 	ToastItem,
 	ToastOptions,
 } from "@/shared/types/toast";
-import ToastCard from "./toastCard";
+import ToastCard from "./ToastCard";
 
 // トースト操作を共有するためのコンテキスト
 const ToastContext = createContext<ToastContextValue | null>(null);
