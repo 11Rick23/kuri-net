@@ -29,6 +29,14 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 - `home`: top page that switches content based on session state
 - `about`: standalone about screen
 
+## Deployment Notes
+
+This project uses Drizzle SQL migrations stored in `drizzle`.
+
+- Generate a new migration after schema changes: `bunx drizzle-kit generate`
+- Apply pending migrations locally or in production: `bun run db:migrate`
+- For Dokploy with Nixpacks, set `NIXPACKS_START_CMD="bun run db:migrate && bun run start"`
+
 ## Static Assets
 
 - Works assets are resolved through `NEXT_PUBLIC_ASSET_BASE_URL`.
