@@ -39,7 +39,25 @@ function SectionMedia({ media }: { media: WorkSectionMedia }) {
 		);
 	}
 
-	return null;
+	return (
+		<div className="space-y-4 py-2">
+			<div className="flex justify-center">
+				<Link
+					href={resolveAssetUrl(media.assetKey)}
+					target="_blank"
+					rel="noreferrer"
+					className="inline-flex min-w-[16rem] items-center justify-center rounded-2xl border border-ctp-blue/35 bg-ctp-blue px-6 py-3 text-center text-sm font-semibold text-ctp-base shadow-[0_12px_28px_rgba(30,102,245,0.28)] transition hover:-translate-y-0.5 hover:bg-ctp-sapphire hover:shadow-[0_16px_36px_rgba(32,159,181,0.26)]"
+				>
+					{media.title}
+				</Link>
+			</div>
+			{media.caption ? (
+				<p className="text-center text-sm leading-7 text-ctp-subtext1">
+					{media.caption}
+				</p>
+			) : null}
+		</div>
+	);
 }
 
 export default function WorkDetailModal({ work }: { work: WorkEntry }) {

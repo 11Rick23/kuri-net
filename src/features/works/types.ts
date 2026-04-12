@@ -4,15 +4,25 @@ export type WorkSection = {
 	media?: WorkSectionMedia[];
 };
 
-export type WorkSectionMedia = WorkSectionVideoMedia;
+export type WorkSectionMedia = WorkSectionVideoMedia | WorkSectionPdfMedia;
+
+export type WorkSectionMediaPlacement = "before" | "after";
 
 export type WorkSectionVideoMedia = {
 	type: "video";
 	title: string;
 	assetKey: string;
-	placement: "before" | "after";
+	placement: WorkSectionMediaPlacement;
 	caption?: string;
 	posterAssetKey?: string;
+};
+
+export type WorkSectionPdfMedia = {
+	type: "pdf";
+	title: string;
+	assetKey: string;
+	placement: WorkSectionMediaPlacement;
+	caption?: string;
 };
 
 export type WorkLink = {

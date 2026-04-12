@@ -153,6 +153,14 @@ export const worksData: WorkEntry[] = [
 			},
 			{
 				heading: "得られた経験・学んだこと",
+				media: [
+					{
+						type: "pdf",
+						title: "新しいタブでパンフレットを表示",
+						assetKey: "works/hiyoshi_fest-booklet.pdf",
+						placement: "after",
+					},
+				],
 				paragraphs: [
 					"この機会に新しいことに挑戦してみたいと思い、本格的なデザインソフトである Adobe InDesign を使用して制作を行いました。",
 					"最初は、ただ自分が好きなデザインでパンフレットを作れることが楽しいと感じていました。しかし、制作を進めていくうちに、デザインの見やすさや情報の表現方法などを工夫することに興味が湧いてきました。そこから軽くデザインの手法をリサーチし、初心者ながらにUI/UXを意識したパンフレットを作ることができました。",
