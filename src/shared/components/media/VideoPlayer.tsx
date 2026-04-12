@@ -28,6 +28,13 @@ function formatTime(value: number) {
 	return `${minutes}:${seconds.toString().padStart(2, "0")}`;
 }
 
+function containsRelatedTarget(
+	currentTarget: HTMLDivElement,
+	relatedTarget: EventTarget | null,
+) {
+	return relatedTarget instanceof Node && currentTarget.contains(relatedTarget);
+}
+
 type VideoPlayerProps = {
 	src: string;
 	poster?: string;
@@ -233,10 +240,14 @@ export default function VideoPlayer({
 		const video = videoRef.current;
 		if (!video) return;
 
-		if (video.paused || video.ended) {
-			await video.play();
-		} else {
-			video.pause();
+		try {
+			if (video.paused || video.ended) {
+				await video.play();
+			} else {
+				video.pause();
+			}
+		} catch (error) {
+			console.error("Failed to toggle video playback.", error);
 		}
 
 		revealControls();
@@ -278,17 +289,28 @@ export default function VideoPlayer({
 		const container = containerRef.current;
 		if (!container) return;
 
-		if (document.fullscreenElement === container) {
-			await document.exitFullscreen();
-		} else {
-			await container.requestFullscreen();
+		if (
+			document.fullscreenElement !== container &&
+			!document.fullscreenEnabled
+		) {
+			return;
+		}
+
+		try {
+			if (document.fullscreenElement === container) {
+				await document.exitFullscreen();
+			} else {
+				await container.requestFullscreen();
+			}
+		} catch (error) {
+			console.error("Failed to toggle fullscreen mode.", error);
 		}
 
 		revealControls();
 	};
 
 	const handleVolumeBlur = (event: FocusEvent<HTMLDivElement>) => {
-		if (event.currentTarget.contains(event.relatedTarget)) return;
+		if (containsRelatedTarget(event.currentTarget, event.relatedTarget)) return;
 		if (!isHoverCapable) return;
 
 		setIsVolumePanelOpen(false);
@@ -325,7 +347,7 @@ export default function VideoPlayer({
 	};
 
 	const handleControlsBlur = (event: FocusEvent<HTMLDivElement>) => {
-		if (event.currentTarget.contains(event.relatedTarget)) return;
+		if (containsRelatedTarget(event.currentTarget, event.relatedTarget)) return;
 
 		if (pointerInsideRef.current) {
 			revealControls();

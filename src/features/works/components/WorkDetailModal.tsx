@@ -45,7 +45,7 @@ function SectionMedia({ media }: { media: WorkSectionMedia }) {
 				<Link
 					href={resolveAssetUrl(media.assetKey)}
 					target="_blank"
-					rel="noreferrer"
+					rel="noopener noreferrer"
 					className="inline-flex min-w-[16rem] items-center justify-center rounded-2xl border border-ctp-blue/35 bg-ctp-blue px-6 py-3 text-center text-sm font-semibold text-ctp-base shadow-[0_12px_28px_rgba(30,102,245,0.28)] transition hover:-translate-y-0.5 hover:bg-ctp-sapphire hover:shadow-[0_16px_36px_rgba(32,159,181,0.26)]"
 				>
 					{media.title}
@@ -117,7 +117,7 @@ export default function WorkDetailModal({ work }: { work: WorkEntry }) {
 
 				<div className="space-y-8">
 					{work.sections.map((section) => (
-						<section key={section.heading} className="space-y-3">
+						<section key={section.id} className="space-y-3">
 							<h3 className="text-2xl font-bold tracking-tight text-ctp-text">
 								{section.heading}
 							</h3>
@@ -131,7 +131,7 @@ export default function WorkDetailModal({ work }: { work: WorkEntry }) {
 								))}
 							<div className="space-y-4 text-sm leading-8 text-ctp-subtext1 sm:text-base">
 								{section.paragraphs.map((paragraph) => (
-									<p key={paragraph}>{paragraph}</p>
+									<p key={`${section.id}-${paragraph}`}>{paragraph}</p>
 								))}
 							</div>
 							{section.media
@@ -157,7 +157,7 @@ export default function WorkDetailModal({ work }: { work: WorkEntry }) {
 									key={link.href}
 									href={link.href}
 									target="_blank"
-									rel="noreferrer"
+									rel="noopener noreferrer"
 									className="rounded-full border border-ctp-surface1 bg-ctp-base px-4 py-2 text-sm font-semibold text-ctp-text transition hover:border-ctp-blue/45 hover:text-ctp-blue"
 								>
 									{link.label}

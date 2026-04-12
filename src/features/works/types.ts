@@ -1,4 +1,5 @@
 export type WorkSection = {
+	id: string;
 	heading: string;
 	paragraphs: string[];
 	media?: WorkSectionMedia[];

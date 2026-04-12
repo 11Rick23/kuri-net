@@ -32,6 +32,7 @@ export const worksData: WorkEntry[] = [
 		teamSize: "4人グループ",
 		sections: [
 			{
+				id: "background",
 				heading: "背景",
 				paragraphs: [
 					"大学で同じ研究室に所属するメンバー4人で Google Developer Group on Campus Japan が主催する GDGoC Japan Hackathon に出場しました。",
@@ -39,6 +40,7 @@ export const worksData: WorkEntry[] = [
 				],
 			},
 			{
+				id: "overview",
 				heading: "プロジェクトの概要",
 				media: [
 					{
@@ -54,6 +56,7 @@ export const worksData: WorkEntry[] = [
 				],
 			},
 			{
+				id: "stack",
 				heading: "使用技術",
 				paragraphs: [
 					"構成は標準的な Next.js のアプリとなっており、DBのベクトリングを使ったマッチングを行う機能部分のみ、 Python と FastAPI 使ったマイクロサービスとして実装しました。",
@@ -63,6 +66,7 @@ export const worksData: WorkEntry[] = [
 				],
 			},
 			{
+				id: "responsibilities",
 				heading: "担当箇所",
 				paragraphs: [
 					"私はこのプロジェクトにおいて、開発基盤の作成、認証基盤の設計、DMシステムの設計、DB管理を担当しました。",
@@ -98,6 +102,7 @@ export const worksData: WorkEntry[] = [
 		teamSize: "個人",
 		sections: [
 			{
+				id: "background-purpose",
 				heading: "背景・目的",
 				paragraphs: [
 					"私がこのプロジェクトを始めた理由は、自身の技術力をアウトプットする場が欲しかったからです。",
@@ -106,6 +111,7 @@ export const worksData: WorkEntry[] = [
 				],
 			},
 			{
+				id: "overview",
 				heading: "プロジェクトの概要",
 				paragraphs: [
 					"このウェブサイトの機能は大まかに3つに分類できます。",
@@ -116,6 +122,7 @@ export const worksData: WorkEntry[] = [
 				],
 			},
 			{
+				id: "stack",
 				heading: "使用技術",
 				paragraphs: [
 					"本サイトは Typescript で書かれており、 Next.js フレームワークを基盤としています。",
@@ -126,6 +133,7 @@ export const worksData: WorkEntry[] = [
 				],
 			},
 			{
+				id: "learnings",
 				heading: "工夫した点・学んだこと",
 				paragraphs: [
 					"本プロジェクトでは、配色の見やすさや操作方法の分かりやすさなど、使用感に特に気を配ったUIやUXの設計を特に大切にしています。それにより、見やすいUIや分かりやすいUXの作り方を実践的に学習することができています。",
@@ -146,6 +154,7 @@ export const worksData: WorkEntry[] = [
 		role: "実行委員会副委員長",
 		sections: [
 			{
+				id: "background",
 				heading: "背景",
 				paragraphs: [
 					"私は高校時代に文化祭の実行委員会に所属しており、3年生で副委員長を務めました。副委員長として委員会を統括する立場にあった私は、進行管理、企画管理、関係者との調整など、運営に必要な全ての業務に携わりました。",
@@ -153,6 +162,7 @@ export const worksData: WorkEntry[] = [
 				],
 			},
 			{
+				id: "learnings",
 				heading: "得られた経験・学んだこと",
 				media: [
 					{
@@ -188,6 +198,7 @@ export const worksData: WorkEntry[] = [
 		teamSize: "2人",
 		sections: [
 			{
+				id: "background-purpose",
 				heading: "背景・目的",
 				paragraphs: [
 					"私は中学生の頃からとあるDiscordコミュニティに所属しており、その管理・運営に携わっています。コミュニティの運営には様々なBotを導入していましたが、機能ごとに違うBotを導入していたり、既存のBotが提供する機能が自分たちのコミュニティに完全にはマッチしていなかったりと、運用面での不便さを感じていました。",
@@ -196,6 +207,7 @@ export const worksData: WorkEntry[] = [
 				],
 			},
 			{
+				id: "features",
 				heading: "機能",
 				paragraphs: [
 					"本Botにはコミュニティの運営を補助するための様々な機能が実装されています。大規模な機能としては、レベリングシステム、処罰システム、チャンネル管理システムなどがあります。",
@@ -206,6 +218,7 @@ export const worksData: WorkEntry[] = [
 				],
 			},
 			{
+				id: "technical-specs",
 				heading: "技術仕様",
 				paragraphs: [
 					"本プロジェクトを開始したのは2021年で、その後技術力やライブラリの変化に合わせて何度か作り直しを行っています。現在は第三世代目となります。",
@@ -215,6 +228,7 @@ export const worksData: WorkEntry[] = [
 				],
 			},
 			{
+				id: "learnings",
 				heading: "学んだこと",
 				paragraphs: [
 					"本プロジェクトは私のプログラミング学習の初期段階から現在に至るまで継続しているプロジェクトであり、私の技術力の成長とともに進化してきました。",

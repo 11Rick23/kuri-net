@@ -11,7 +11,7 @@ export function resolveAssetUrl(assetKey: string) {
 		throw new Error("Asset key is required.");
 	}
 
-	const normalizedAssetKey = trimLeadingSlash(assetKey);
+	const normalizedAssetKey = trimLeadingSlash(assetKey.trim());
 	const assetBaseUrl = process.env.NEXT_PUBLIC_ASSET_BASE_URL?.trim();
 
 	if (!assetBaseUrl) {
