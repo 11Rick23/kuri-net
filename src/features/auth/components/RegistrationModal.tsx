@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { FaCheck } from "react-icons/fa";
 import register from "@/features/auth/client/registration";
-import { useModal } from "@/shared/components/modal/modalProvider";
+import { useModal } from "@/shared/components/modal/ModalProvider";
 
 export default function RegistrationModalContent() {
 	const [agreed, setAgreed] = useState(false);

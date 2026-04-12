@@ -1,6 +1,6 @@
 import { MdOutlineInfo } from "react-icons/md";
 import IconButton from "@/shared/components/button/IconButton";
-import { useModal } from "@/shared/components/modal/modalProvider";
+import { useModal } from "@/shared/components/modal/ModalProvider";
 
 function InfoModalContent() {
 	return (

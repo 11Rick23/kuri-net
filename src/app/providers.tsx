@@ -2,8 +2,8 @@
 
 import { ThemeProvider } from "next-themes";
 import type React from "react";
-import { ModalProvider } from "@/shared/components/modal/modalProvider";
-import { ToastProvider } from "@/shared/components/toast/toastProvider";
+import { ModalProvider } from "@/shared/components/modal/ModalProvider";
+import { ToastProvider } from "@/shared/components/toast/ToastProvider";
 
 export default function Providers({
 	children,

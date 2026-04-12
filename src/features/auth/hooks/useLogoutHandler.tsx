@@ -1,7 +1,7 @@
 "use client";
 
 import { logout } from "@/features/auth/server/logout";
-import { useToast } from "@/shared/components/toast/toastProvider";
+import { useToast } from "@/shared/components/toast/ToastProvider";
 
 export default function useLogoutHandler() {
 	const { toast } = useToast();

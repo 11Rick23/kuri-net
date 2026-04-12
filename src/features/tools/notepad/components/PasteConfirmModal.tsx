@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useModal } from "@/shared/components/modal/modalProvider";
+import { useModal } from "@/shared/components/modal/ModalProvider";
 
 export default function PasteConfirmModal({
 	onConfirm,

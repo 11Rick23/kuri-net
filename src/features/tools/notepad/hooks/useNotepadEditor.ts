@@ -3,8 +3,8 @@
 import { createElement, useCallback, useEffect, useRef, useState } from "react";
 import PasteConfirmModal from "@/features/tools/notepad/components/PasteConfirmModal";
 import { saveCurrentUserNotepad } from "@/features/tools/notepad/server/notepad";
-import { useModal } from "@/shared/components/modal/modalProvider";
-import { useToast } from "@/shared/components/toast/toastProvider";
+import { useModal } from "@/shared/components/modal/ModalProvider";
+import { useToast } from "@/shared/components/toast/ToastProvider";
 
 export type SaveState = "saved" | "saving" | "pending" | "error";
 

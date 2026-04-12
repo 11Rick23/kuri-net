@@ -8,7 +8,7 @@ import {
 import { IoIosClose } from "react-icons/io";
 import IconButton from "@/shared/components/button/IconButton";
 import type { ToastItem, ToastType } from "@/shared/types/toast";
-import { useToast } from "./toastProvider";
+import { useToast } from "./ToastProvider";
 
 export default function ToastCard({
 	item,
