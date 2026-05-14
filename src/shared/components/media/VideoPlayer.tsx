@@ -317,6 +317,8 @@ export default function VideoPlayer({
 
 		const doc = document as Document & {
 			webkitFullscreenElement?: Element | null;
+			webkitExitFullscreen?: () => Promise<void>;
+			webkitCancelFullScreen?: () => void;
 		};
 		const isCurrentlyFullscreen =
 			document.fullscreenElement === container ||
@@ -327,6 +329,13 @@ export default function VideoPlayer({
 			if (isCurrentlyFullscreen) {
 				if (document.fullscreenElement === container) {
 					await document.exitFullscreen();
+				} else if (doc.webkitFullscreenElement === container) {
+					// Desktop Safari: exit via webkit document fullscreen API
+					if (doc.webkitExitFullscreen) {
+						await doc.webkitExitFullscreen();
+					} else if (doc.webkitCancelFullScreen) {
+						doc.webkitCancelFullScreen();
+					}
 				} else if (video.webkitDisplayingFullscreen === true && video.webkitExitFullscreen) {
 					video.webkitExitFullscreen();
 				}
