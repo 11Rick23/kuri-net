@@ -25,7 +25,7 @@ function NavLink({
 			href={href}
 			onClick={onClick}
 			className={[
-				"block rounded-2xl border px-4 py-3 transition",
+				"block rounded-lg border px-4 py-3 transition",
 				active
 					? "border-ctp-blue bg-ctp-blue/10"
 					: "border-ctp-surface1 bg-ctp-mantle hover:border-ctp-overlay0",
@@ -69,7 +69,6 @@ export default function ToolsShell({
 				bg-ctp-base/95
 				text-ctp-text
 				backdrop-blur-md transition
-				shadow-light dark:shadow-dark
 				hover:bg-ctp-surface0 hover:cursor-pointer"
 			>
 				{open ? <FaXmark size={18} /> : <FaBars size={18} />}
@@ -86,7 +85,7 @@ export default function ToolsShell({
 
 			<aside
 				className={[
-					"fixed inset-y-0 left-0 z-80 w-[min(20rem,86vw)] border-r border-ctp-surface1 bg-ctp-base px-4 pb-6 pt-20 shadow-light transition-transform duration-200 dark:shadow-dark",
+					"fixed inset-y-0 left-0 z-80 w-[min(20rem,86vw)] border-r border-ctp-surface1 bg-ctp-base px-4 pb-6 pt-20 transition-transform duration-200",
 					open ? "translate-x-0" : "-translate-x-full",
 				].join(" ")}
 			>

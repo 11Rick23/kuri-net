@@ -14,7 +14,7 @@ export default function ToolsIndexScreen() {
 					<Link
 						key={tool.id}
 						href={tool.href}
-						className="group rounded-[1.75rem] border border-ctp-surface1 bg-ctp-base p-6 shadow-light transition hover:-translate-y-0.5 hover:border-ctp-blue/40 hover:bg-ctp-mantle dark:shadow-dark"
+						className="group rounded-lg border border-ctp-surface1 bg-ctp-base p-6 transition hover:border-ctp-blue/40 hover:bg-ctp-mantle"
 					>
 						<div className="flex h-full flex-col gap-4">
 							<div className="space-y-2">

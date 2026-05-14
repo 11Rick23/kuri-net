@@ -16,7 +16,7 @@ export default function HomeButton() {
 			className={`
                 w-7 h-7
                 flex items-center justify-center
-                rounded-full cursor-pointer
+                rounded-md cursor-pointer
                 text-ctp-text
                 ${isActive ? "bg-ctp-surface0" : "bg-transparent"}
                 hover:bg-ctp-surface0

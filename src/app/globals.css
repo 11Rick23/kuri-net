@@ -18,8 +18,8 @@
 }
 
 @theme {
-	--shadow-light: 0 14px 32px rgba(136, 57, 239, 0.1);
-	--shadow-dark: 0 14px 32px rgba(198, 160, 246, 0.1);
+	--shadow-light: none;
+	--shadow-dark: none;
 	--animate-float: float-updown 3s ease-in-out infinite;
 }
 

@@ -59,7 +59,7 @@ export default function ToolBadge({
 					px-3 py-2 rounded-md
 					bg-ctp-base text-center text-ctp-text
 					border border-ctp-overlay0
-					text-sm whitespace-nowrap shadow-sm`,
+					text-sm whitespace-nowrap`,
 					isOpen ? "block" : "hidden",
 					contentToneClassName,
 				].join(" ")}
