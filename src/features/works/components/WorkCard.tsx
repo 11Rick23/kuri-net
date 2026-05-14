@@ -14,7 +14,7 @@ export default function WorkCard({
 		<button
 			type="button"
 			onClick={() => onOpen(work)}
-			className="group flex h-full cursor-pointer flex-col overflow-hidden rounded-[1.75rem] border border-ctp-surface1 bg-ctp-base text-left shadow-light transition duration-200 hover:-translate-y-0.5 hover:border-ctp-overlay0 hover:shadow-[0_18px_40px_rgba(0,0,0,0.18)] dark:shadow-dark"
+			className="group flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl border border-ctp-surface1 bg-ctp-base text-left transition duration-200 hover:border-ctp-overlay0 hover:bg-ctp-mantle"
 		>
 			<div className="relative aspect-[16/10] overflow-hidden bg-ctp-crust">
 				<WorkCoverVisual work={work} variant="card" />

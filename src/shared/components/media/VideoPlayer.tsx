@@ -370,10 +370,10 @@ export default function VideoPlayer({
 			<div
 				ref={containerRef}
 				className={cx(
-					"relative overflow-hidden border border-ctp-surface1 bg-ctp-crust shadow-[0_20px_50px_rgba(0,0,0,0.22)]",
+					"relative overflow-hidden border border-ctp-surface1 bg-ctp-crust",
 					isFullscreen
 						? "flex h-full w-full items-center justify-center rounded-none bg-black"
-						: "rounded-[1.5rem]",
+						: "rounded-2xl",
 				)}
 				onMouseEnter={handleMouseEnter}
 				onMouseMove={handleMouseMove}
@@ -415,7 +415,7 @@ export default function VideoPlayer({
 							stopPropagation(event);
 							void togglePlayback();
 						}}
-						className="absolute left-1/2 top-1/2 z-20 h-18 w-18 -translate-x-1/2 -translate-y-1/2 border border-white/14 bg-ctp-base/88 text-3xl text-ctp-text shadow-[0_10px_30px_rgba(0,0,0,0.35)] backdrop-blur-sm hover:scale-[1.03]"
+						className="absolute left-1/2 top-1/2 z-20 h-18 w-18 -translate-x-1/2 -translate-y-1/2 border border-white/14 bg-ctp-base/88 text-3xl text-ctp-text backdrop-blur-sm hover:bg-ctp-surface0"
 					>
 						<IoPlay className="translate-x-0.5" />
 					</PlayerIconButton>

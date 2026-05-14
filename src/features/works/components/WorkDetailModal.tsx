@@ -46,7 +46,7 @@ function SectionMedia({ media }: { media: WorkSectionMedia }) {
 					href={resolveAssetUrl(media.assetKey)}
 					target="_blank"
 					rel="noopener noreferrer"
-					className="inline-flex min-w-[16rem] items-center justify-center rounded-2xl border border-ctp-blue/35 bg-ctp-blue px-6 py-3 text-center text-sm font-semibold text-ctp-base shadow-[0_12px_28px_rgba(30,102,245,0.28)] transition hover:-translate-y-0.5 hover:bg-ctp-sapphire hover:shadow-[0_16px_36px_rgba(32,159,181,0.26)]"
+					className="inline-flex min-w-[16rem] items-center justify-center rounded-2xl border border-ctp-blue/35 bg-ctp-blue px-6 py-3 text-center text-sm font-semibold text-ctp-base transition hover:bg-ctp-sapphire"
 				>
 					{media.title}
 				</Link>
@@ -68,8 +68,8 @@ export default function WorkDetailModal({ work }: { work: WorkEntry }) {
 	].filter((item): item is { label: string; value: string } => item !== null);
 
 	return (
-		<article className="w-[min(92vw,56rem)] max-h-[88vh] overflow-y-auto rounded-[1.75rem] bg-ctp-surface0">
-			<div className="relative aspect-[16/9] overflow-hidden rounded-t-[1.75rem] bg-ctp-crust">
+		<article className="w-[min(92vw,56rem)] max-h-[88vh] overflow-y-auto rounded-2xl bg-ctp-surface0">
+			<div className="relative aspect-[16/9] overflow-hidden rounded-t-2xl bg-ctp-crust">
 				<WorkCoverVisual work={work} variant="detail" />
 				<div className="absolute inset-0 bg-gradient-to-t from-ctp-crust via-ctp-crust/45 to-transparent" />
 				<div className="absolute inset-x-0 bottom-0 p-6 pr-14 sm:p-8 sm:pr-20">

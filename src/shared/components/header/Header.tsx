@@ -24,9 +24,9 @@ export default async function Header() {
 				className="
             inline-flex items-center justify-center
             m-2 px-2 py-1 gap-1 rounded-full
-            bg-ctp-base/75 text-ctp-text
+            bg-ctp-base/90 text-ctp-text
             border border-ctp-surface1
-            backdrop-blur-md shadow-light dark:shadow-dark
+            backdrop-blur-md
             "
 			>
 				<HomeButton />
