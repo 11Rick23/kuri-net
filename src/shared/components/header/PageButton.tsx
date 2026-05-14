@@ -25,7 +25,7 @@ export default function PageButton({
 			aria-label={`${display}ページへ`}
 			className={`
                 flex items-center justify-center
-                rounded-full px-2 py-1 cursor-pointer
+                rounded-md px-2 py-1 cursor-pointer
                 ${isActive ? "bg-ctp-surface0" : "bg-transparent"}
                 text-xs font-bold text-ctp-text
                 hover:bg-ctp-surface0

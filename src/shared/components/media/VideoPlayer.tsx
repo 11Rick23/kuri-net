@@ -373,7 +373,7 @@ export default function VideoPlayer({
 					"relative overflow-hidden border border-ctp-surface1 bg-ctp-crust",
 					isFullscreen
 						? "flex h-full w-full items-center justify-center rounded-none bg-black"
-						: "rounded-2xl",
+						: "rounded-lg",
 				)}
 				onMouseEnter={handleMouseEnter}
 				onMouseMove={handleMouseMove}
@@ -433,7 +433,7 @@ export default function VideoPlayer({
 					onFocusCapture={revealControls}
 					onBlurCapture={handleControlsBlur}
 				>
-					<div className="rounded-[1.25rem] border border-white/8 bg-ctp-crust/82 px-3 py-3 backdrop-blur-md sm:px-4">
+					<div className="rounded-lg border border-white/8 bg-ctp-crust/82 px-3 py-3 backdrop-blur-md sm:px-4">
 						<div className="flex items-center gap-2 sm:gap-3">
 							<PlayerIconButton
 								ariaLabel={isPlaying ? "動画を一時停止" : "動画を再生"}

@@ -40,7 +40,7 @@ export default function PdfMergePage() {
 			badges={tool.badges}
 		>
 			{isDragging && <DropOverlay isDraggingPDF={isDraggingPDF} />}
-			<div className="relative z-20 flex flex-col gap-6 rounded-2xl border border-ctp-surface1 bg-ctp-base p-6">
+			<div className="relative z-20 flex flex-col gap-6 rounded-lg border border-ctp-surface1 bg-ctp-base p-6">
 				<InfoModal />
 				<UploadArea onChange={handleFileInputChange} />
 				<FileList

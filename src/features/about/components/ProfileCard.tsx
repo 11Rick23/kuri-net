@@ -1,7 +1,7 @@
 export default function ProfileCard() {
 	return (
 		<section className="flex min-h-screen items-center justify-center px-6 pt-24 pb-10">
-			<div className="w-full max-w-2xl rounded-2xl border border-ctp-surface1 bg-ctp-base/90 px-8 py-12 text-center backdrop-blur-sm">
+			<div className="w-full max-w-2xl rounded-lg border border-ctp-surface1 bg-ctp-base/90 px-8 py-12 text-center backdrop-blur-sm">
 				<p className="mb-4 text-sm font-bold tracking-[0.3em] text-ctp-sapphire uppercase">
 					About
 				</p>

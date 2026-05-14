@@ -25,7 +25,7 @@ function NavLink({
 			href={href}
 			onClick={onClick}
 			className={[
-				"block rounded-2xl border px-4 py-3 transition",
+				"block rounded-lg border px-4 py-3 transition",
 				active
 					? "border-ctp-blue bg-ctp-blue/10"
 					: "border-ctp-surface1 bg-ctp-mantle hover:border-ctp-overlay0",

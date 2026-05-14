@@ -16,7 +16,7 @@ export default function AuthRequired({
 				"relative flex items-center justify-center flex-col",
 				fullscreen
 					? "w-screen h-screen gap-10"
-					: "min-h-[calc(100vh-8rem)] w-full gap-8 rounded-2xl border border-ctp-surface1 bg-ctp-base p-8 text-center",
+					: "min-h-[calc(100vh-8rem)] w-full gap-8 rounded-lg border border-ctp-surface1 bg-ctp-base p-8 text-center",
 			].join(" ")}
 		>
 			{fullscreen && (

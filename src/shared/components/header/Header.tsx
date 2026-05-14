@@ -23,7 +23,7 @@ export default async function Header() {
 			<div
 				className="
             inline-flex items-center justify-center
-            m-2 px-2 py-1 gap-1 rounded-full
+            m-2 px-2 py-1 gap-1 rounded-lg
             bg-ctp-base/90 text-ctp-text
             border border-ctp-surface1
             backdrop-blur-md
