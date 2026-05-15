@@ -3,6 +3,7 @@
 import { ThemeProvider } from "next-themes";
 import type React from "react";
 import { ModalProvider } from "@/shared/components/modal/ModalProvider";
+import FaviconSync from "@/shared/components/theme/FaviconSync";
 import { ToastProvider } from "@/shared/components/toast/ToastProvider";
 
 export default function Providers({
@@ -16,6 +17,7 @@ export default function Providers({
 			disableTransitionOnChange
 			value={{ light: "latte", dark: "macchiato" }}
 		>
+			<FaviconSync />
 			<ToastProvider>
 				<ModalProvider>{children}</ModalProvider>
 			</ToastProvider>
