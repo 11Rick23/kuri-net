@@ -336,7 +336,10 @@ export default function VideoPlayer({
 					} else if (doc.webkitCancelFullScreen) {
 						doc.webkitCancelFullScreen();
 					}
-				} else if (video.webkitDisplayingFullscreen === true && video.webkitExitFullscreen) {
+				} else if (
+					video.webkitDisplayingFullscreen === true &&
+					video.webkitExitFullscreen
+				) {
 					video.webkitExitFullscreen();
 				}
 			} else if (document.fullscreenEnabled) {
