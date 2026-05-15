@@ -1,3 +1,9 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+	title: "404",
+};
+
 export default function NotFound() {
 	return (
 		<div className="flex items-center justify-center w-screen h-screen flex-col gap-10">

@@ -96,7 +96,7 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
 						{/* パネル */}
 						<div
 							className={[
-								"relative overflow-auto rounded-xl border border-ctp-overlay0 bg-ctp-surface0 text-ctp-text shadow-lg",
+								"relative overflow-auto rounded-lg border border-ctp-overlay0 bg-ctp-surface0 text-ctp-text",
 								paddingClassName[state.options.paddingSize] ?? "p-12",
 							].join(" ")}
 							onClick={(e) => e.stopPropagation()}

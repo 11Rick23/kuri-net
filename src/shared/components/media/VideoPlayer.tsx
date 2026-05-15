@@ -155,7 +155,17 @@ export default function VideoPlayer({
 		};
 
 		const syncFullscreenState = () => {
-			setIsFullscreen(document.fullscreenElement === containerRef.current);
+			const doc = document as Document & {
+				webkitFullscreenElement?: Element | null;
+			};
+			const vid = video as HTMLVideoElement & {
+				webkitDisplayingFullscreen?: boolean;
+			};
+			setIsFullscreen(
+				document.fullscreenElement === containerRef.current ||
+					doc.webkitFullscreenElement === containerRef.current ||
+					(vid.webkitDisplayingFullscreen ?? false),
+			);
 		};
 
 		syncVideoState();
@@ -168,6 +178,9 @@ export default function VideoPlayer({
 		video.addEventListener("ended", syncVideoState);
 		video.addEventListener("volumechange", syncVideoState);
 		document.addEventListener("fullscreenchange", syncFullscreenState);
+		document.addEventListener("webkitfullscreenchange", syncFullscreenState);
+		video.addEventListener("webkitbeginfullscreen", syncFullscreenState);
+		video.addEventListener("webkitendfullscreen", syncFullscreenState);
 
 		return () => {
 			video.removeEventListener("loadedmetadata", syncVideoState);
@@ -178,6 +191,12 @@ export default function VideoPlayer({
 			video.removeEventListener("ended", syncVideoState);
 			video.removeEventListener("volumechange", syncVideoState);
 			document.removeEventListener("fullscreenchange", syncFullscreenState);
+			document.removeEventListener(
+				"webkitfullscreenchange",
+				syncFullscreenState,
+			);
+			video.removeEventListener("webkitbeginfullscreen", syncFullscreenState);
+			video.removeEventListener("webkitendfullscreen", syncFullscreenState);
 		};
 	}, []);
 
@@ -287,20 +306,47 @@ export default function VideoPlayer({
 
 	const toggleFullscreen = async () => {
 		const container = containerRef.current;
-		if (!container) return;
+		const video = videoRef.current as
+			| (HTMLVideoElement & {
+					webkitEnterFullscreen?: () => void;
+					webkitExitFullscreen?: () => void;
+					webkitDisplayingFullscreen?: boolean;
+			  })
+			| null;
+		if (!container || !video) return;
 
-		if (
-			document.fullscreenElement !== container &&
-			!document.fullscreenEnabled
-		) {
-			return;
-		}
+		const doc = document as Document & {
+			webkitFullscreenElement?: Element | null;
+			webkitExitFullscreen?: () => Promise<void>;
+			webkitCancelFullScreen?: () => void;
+		};
+		const isCurrentlyFullscreen =
+			document.fullscreenElement === container ||
+			doc.webkitFullscreenElement === container ||
+			(video.webkitDisplayingFullscreen ?? false);
 
 		try {
-			if (document.fullscreenElement === container) {
-				await document.exitFullscreen();
-			} else {
+			if (isCurrentlyFullscreen) {
+				if (document.fullscreenElement === container) {
+					await document.exitFullscreen();
+				} else if (doc.webkitFullscreenElement === container) {
+					// Desktop Safari: exit via webkit document fullscreen API
+					if (doc.webkitExitFullscreen) {
+						await doc.webkitExitFullscreen();
+					} else if (doc.webkitCancelFullScreen) {
+						doc.webkitCancelFullScreen();
+					}
+				} else if (
+					video.webkitDisplayingFullscreen === true &&
+					video.webkitExitFullscreen
+				) {
+					video.webkitExitFullscreen();
+				}
+			} else if (document.fullscreenEnabled) {
 				await container.requestFullscreen();
+			} else if (video.webkitEnterFullscreen) {
+				// iOS Safari: only the video element itself supports webkit fullscreen
+				video.webkitEnterFullscreen();
 			}
 		} catch (error) {
 			console.error("Failed to toggle fullscreen mode.", error);
@@ -370,10 +416,10 @@ export default function VideoPlayer({
 			<div
 				ref={containerRef}
 				className={cx(
-					"relative overflow-hidden border border-ctp-surface1 bg-ctp-crust shadow-[0_20px_50px_rgba(0,0,0,0.22)]",
+					"relative overflow-hidden border border-ctp-surface1 bg-ctp-crust",
 					isFullscreen
 						? "flex h-full w-full items-center justify-center rounded-none bg-black"
-						: "rounded-[1.5rem]",
+						: "rounded-lg",
 				)}
 				onMouseEnter={handleMouseEnter}
 				onMouseMove={handleMouseMove}
@@ -415,7 +461,7 @@ export default function VideoPlayer({
 							stopPropagation(event);
 							void togglePlayback();
 						}}
-						className="absolute left-1/2 top-1/2 z-20 h-18 w-18 -translate-x-1/2 -translate-y-1/2 border border-white/14 bg-ctp-base/88 text-3xl text-ctp-text shadow-[0_10px_30px_rgba(0,0,0,0.35)] backdrop-blur-sm hover:scale-[1.03]"
+						className="absolute left-1/2 top-1/2 z-20 h-18 w-18 -translate-x-1/2 -translate-y-1/2 border border-white/14 bg-ctp-base/88 text-3xl text-ctp-text backdrop-blur-sm hover:bg-ctp-surface0"
 					>
 						<IoPlay className="translate-x-0.5" />
 					</PlayerIconButton>
@@ -433,7 +479,7 @@ export default function VideoPlayer({
 					onFocusCapture={revealControls}
 					onBlurCapture={handleControlsBlur}
 				>
-					<div className="rounded-[1.25rem] border border-white/8 bg-ctp-crust/82 px-3 py-3 backdrop-blur-md sm:px-4">
+					<div className="rounded-lg border border-white/8 bg-ctp-crust/82 px-3 py-3 backdrop-blur-md sm:px-4">
 						<div className="flex items-center gap-2 sm:gap-3">
 							<PlayerIconButton
 								ariaLabel={isPlaying ? "動画を一時停止" : "動画を再生"}

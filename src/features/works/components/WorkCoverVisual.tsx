@@ -51,7 +51,7 @@ export default function WorkCoverVisual({
 							? "(max-width: 768px) 100vw, 56rem"
 							: "(max-width: 1024px) 100vw, 50vw"
 					}
-					className="object-cover transition duration-500 group-hover:scale-[1.02]"
+					className="object-cover"
 				/>
 				<div className="absolute inset-0 bg-gradient-to-t from-ctp-crust/55 via-transparent to-transparent" />
 			</>

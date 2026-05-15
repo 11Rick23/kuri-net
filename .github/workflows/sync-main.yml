@@ -1,0 +1,54 @@
+name: Create dev to main PR
+
+on:
+  push:
+    branches:
+      - dev
+  schedule:
+    - cron: "0 0 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check branch difference
+        id: diff
+        run: |
+          git fetch origin main dev
+          ahead_count=$(git rev-list --count origin/main..origin/dev)
+          echo "ahead_count=$ahead_count" >> "$GITHUB_OUTPUT"
+
+      - name: Check existing PR
+        if: steps.diff.outputs.ahead_count != '0'
+        id: pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          existing_pr=$(gh pr list \
+            --base main \
+            --head dev \
+            --state open \
+            --json number \
+            --jq '.[0].number // empty')
+          echo "number=$existing_pr" >> "$GITHUB_OUTPUT"
+
+      - name: Create PR
+        if: steps.diff.outputs.ahead_count != '0' && steps.pr.outputs.number == ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr create \
+            --base main \
+            --head dev \
+            --title "dev の変更を main に反映" \
+            --body "dev ブランチが main より進んだため、自動で作成された同期用 PR です。"

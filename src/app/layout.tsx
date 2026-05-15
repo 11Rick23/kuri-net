@@ -14,6 +14,20 @@ export const metadata: Metadata = {
 		default: "kuri-net",
 	},
 	description: "kuri-kuriのウェブページ",
+	icons: {
+		icon: [
+			{
+				url: "/favicon/kuri-net-peach-light.png",
+				type: "image/png",
+				media: "(prefers-color-scheme: light)",
+			},
+			{
+				url: "/favicon/kuri-net-peach-dark.png",
+				type: "image/png",
+				media: "(prefers-color-scheme: dark)",
+			},
+		],
+	},
 };
 
 export default function RootLayout({

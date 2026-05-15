@@ -30,7 +30,7 @@ export default function NotepadEditor({
 	});
 
 	return (
-		<div className="flex flex-col gap-4 rounded-2xl border border-ctp-surface1 bg-ctp-base p-5 shadow-light dark:shadow-dark">
+		<div className="flex flex-col gap-4 rounded-lg border border-ctp-surface1 bg-ctp-base p-5">
 			<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 				<p className={`text-sm ${getSaveStatusClassName(saveState)}`}>
 					{getSaveStatusMessage(saveState, lastSavedAt)}
@@ -54,7 +54,7 @@ export default function NotepadEditor({
 				onBlur={handleBlur}
 				placeholder="ここに自由にメモを書いてください。"
 				className="
-				min-h-[60vh] w-full resize-y rounded-2xl
+				min-h-[60vh] w-full resize-y rounded-lg
 				border border-ctp-surface1
 				bg-ctp-mantle px-5 py-4
 				text-base leading-7 text-ctp-text transition
