@@ -3,9 +3,12 @@ import AuthRequired from "@/features/auth/components/AuthRequired";
 import { verifySession } from "@/features/auth/server/verifySession";
 import NotepadScreen from "@/features/tools/notepad/NotepadScreen";
 import { getCurrentUserNotepad } from "@/features/tools/notepad/server/notepad";
+import { getToolDefinitionBySlug } from "@/features/tools/toolDefinitions";
+
+const tool = getToolDefinitionBySlug("notepad");
 
 export const metadata: Metadata = {
-	title: "Notepad",
+	title: tool?.title ?? "notepad",
 };
 
 export default async function NotepadPage() {
