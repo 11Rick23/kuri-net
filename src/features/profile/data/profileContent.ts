@@ -18,7 +18,8 @@ export type RichTextContent = string | (string | RichTextLink)[];
 export const profileParagraphs = [
 	{
 		id: "intro",
-		content: "初めまして、kuri-kuri です。11Rick23 というハンドルネームも使っています。",
+		content:
+			"初めまして、kuri-kuri です。11Rick23 というハンドルネームも使っています。",
 	},
 	{
 		id: "background",
