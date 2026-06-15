@@ -1,6 +1,7 @@
 import type React from "react";
 import type { ToolBadgeDefinition } from "@/features/tools/badgeTemplates";
 import ToolBadgeList from "@/features/tools/components/ToolBadgeList";
+import PageContainer from "@/shared/components/layout/PageContainer";
 
 type ToolsPageFrameProps = {
 	title: string;
@@ -19,7 +20,7 @@ export default function ToolsPageFrame({
 }: ToolsPageFrameProps) {
 	return (
 		<main className="min-h-[calc(100vh-5rem)] px-4 py-6 sm:px-6">
-			<div className="mx-auto flex max-w-6xl flex-col gap-8">
+			<PageContainer className="gap-8">
 				<div className="flex flex-col gap-4 px-1 sm:flex-row sm:items-start sm:justify-between">
 					<div className="min-w-0 flex-1 space-y-3">
 						{englishTitle && (
@@ -44,7 +45,7 @@ export default function ToolsPageFrame({
 				</div>
 
 				{children}
-			</div>
+			</PageContainer>
 		</main>
 	);
 }

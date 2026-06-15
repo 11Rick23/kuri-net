@@ -31,7 +31,7 @@ export default async function Header() {
 			>
 				<HomeButton />
 				<Border />
-				<PageButton url="/about" display="About" />
+				<PageButton url="/profile" display="Profile" />
 				<PageButton url="/works" display="Works" />
 				<PageButton url="/tools" display="Tools" match="prefix" />
 				<Border />

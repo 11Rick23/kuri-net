@@ -1,10 +1,11 @@
 import WorksGrid from "@/features/works/components/WorksGrid";
 import { worksData } from "@/features/works/data/worksData";
+import PageContainer from "@/shared/components/layout/PageContainer";
 
 export default function WorksScreen() {
 	return (
 		<main className="min-h-screen px-4 pb-12 pt-24 sm:px-6 sm:pb-16">
-			<div className="mx-auto flex max-w-5xl flex-col gap-8">
+			<PageContainer className="gap-8">
 				<section className="space-y-3 px-1">
 					<p className="text-xs font-semibold uppercase tracking-[0.28em] text-ctp-subtext0">
 						Works
@@ -24,7 +25,7 @@ export default function WorksScreen() {
 				<div className="h-px w-full bg-ctp-surface1" />
 
 				<WorksGrid works={worksData} />
-			</div>
+			</PageContainer>
 		</main>
 	);
 }
