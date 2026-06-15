@@ -10,11 +10,12 @@ import {
 	interests,
 	profileParagraphs,
 } from "@/features/profile/data/profileContent";
+import PageContainer from "@/shared/components/layout/PageContainer";
 
 export default function ProfileScreen() {
 	return (
 		<main className="min-h-screen px-4 pt-24 pb-16 sm:px-6">
-			<div className="mx-auto flex max-w-5xl flex-col gap-12">
+			<PageContainer className="gap-12">
 				<ProfileCard />
 
 				<ProfileSection label="Profile" title="私について">
@@ -37,7 +38,7 @@ export default function ProfileScreen() {
 				<ProfileSection label="Activities" title="活動・趣味">
 					<TopicGrid topics={activities} />
 				</ProfileSection>
-			</div>
+			</PageContainer>
 		</main>
 	);
 }
