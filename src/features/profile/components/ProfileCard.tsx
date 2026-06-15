@@ -64,7 +64,7 @@ export default function ProfileCard() {
 							<a
 								href={profileGitHub.href}
 								target="_blank"
-								rel="noreferrer"
+								rel="noopener noreferrer"
 								className="inline-flex min-w-0 items-center justify-center gap-2 rounded-md border border-ctp-surface1 bg-ctp-mantle px-3 py-2 text-sm font-semibold text-ctp-text transition hover:border-ctp-blue/50 hover:bg-ctp-surface0"
 							>
 								<FaGithub className="h-5 w-5 shrink-0 text-ctp-blue" />

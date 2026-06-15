@@ -1,5 +1,6 @@
 import type { IconType } from "react-icons";
 import { MdCake, MdLocationOn, MdSchool } from "react-icons/md";
+import { resolveAssetUrl } from "@/shared/utils/resolveAssetUrl";
 
 export type ProfileDetail = {
 	label: string;
@@ -16,8 +17,8 @@ export const profileTags = [
 ];
 
 export const profileLogo = {
-	light: "https://assets.kuri-kuri.net/profile/logo-white.webp",
-	dark: "https://assets.kuri-kuri.net/profile/logo-dark.webp",
+	light: resolveAssetUrl("profile/logo-white.webp"),
+	dark: resolveAssetUrl("profile/logo-dark.webp"),
 	alt: "kuri-kuri logo",
 };
 

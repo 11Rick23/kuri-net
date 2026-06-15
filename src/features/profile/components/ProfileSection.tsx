@@ -65,7 +65,7 @@ function InlineLink({ link }: { link: RichTextLink }) {
 		<a
 			href={link.href}
 			target={isExternal ? "_blank" : undefined}
-			rel={isExternal ? "noreferrer" : undefined}
+			rel={isExternal ? "noopener noreferrer" : undefined}
 			className="font-semibold text-ctp-blue underline decoration-ctp-blue/40 underline-offset-4 transition hover:text-ctp-sapphire hover:decoration-ctp-sapphire"
 		>
 			{link.text}
