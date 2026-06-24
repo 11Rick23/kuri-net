@@ -8,8 +8,6 @@ type Props = {
 };
 
 export function FileList({ files, onRemove, onReorder }: Props) {
-	if (files.length === 0) return null;
-
 	const handleDragStart = (
 		e: React.DragEvent<HTMLLIElement>,
 		index: number,
@@ -34,12 +32,35 @@ export function FileList({ files, onRemove, onReorder }: Props) {
 		onReorder(updated);
 	};
 
+	const formatFileSize = (size: number) =>
+		size > 1024 * 1024
+			? `${(size / 1024 / 1024).toFixed(2)} MB`
+			: `${(size / 1024).toFixed(2)} KB`;
+
+	if (files.length === 0) {
+		return (
+			<div className="rounded-lg border border-ctp-surface1 bg-ctp-mantle px-5 py-6 text-center">
+				<p className="text-sm font-semibold text-ctp-text">
+					まだPDFが選択されていません
+				</p>
+				<p className="mt-2 text-sm leading-6 text-ctp-subtext1">
+					結合したいPDFを2件以上追加してください。
+				</p>
+			</div>
+		);
+	}
+
 	return (
-		<div>
-			<h2 className="mb-3 text-lg font-semibold text-ctp-text">
-				選択されたファイル ({files.length}件)
-			</h2>
-			<ul>
+		<div className="space-y-3">
+			<div className="flex items-end justify-between gap-3">
+				<h2 className="text-lg font-semibold tracking-tight text-ctp-text">
+					選択されたファイル
+				</h2>
+				<p className="text-sm font-semibold text-ctp-subtext0">
+					{files.length}件
+				</p>
+			</div>
+			<ul className="space-y-2">
 				{files.map(({ id, file }, index) => (
 					<li
 						key={id}
@@ -48,40 +69,38 @@ export function FileList({ files, onRemove, onReorder }: Props) {
 						onDragOver={handleDragOver}
 						onDrop={(e) => handleDrop(e, index)}
 						className="
-                        flex items-center justify-between
-                        my-2 p-2
-                        rounded-lg border border-ctp-overlay0
-                        bg-ctp-surface0/30 cursor-move
+                        flex cursor-move items-center justify-between gap-3
+                        rounded-lg border border-ctp-surface1 bg-ctp-mantle
+                        px-3 py-3 transition duration-200
+                        hover:border-ctp-overlay0 hover:bg-ctp-surface0
                         "
 					>
-						<div className="flex items-center space-x-3">
+						<div className="flex min-w-0 items-center gap-3">
 							<MdOutlineDragIndicator
 								size={20}
-								className="hidden text-ctp-overlay0 sm:inline-block"
+								aria-hidden
+								className="hidden shrink-0 text-ctp-overlay0 sm:inline-block"
 							/>
-							<span
-								className="
-                            text-sm text-ctp-text truncate
-                            max-w-32 sm:max-w-75 md:max-w-md lg:max-w-150
-                            "
-								title={file.name}
-							>
-								{file.name}
-							</span>
-							<span className="text-xs text-ctp-subtext0">
-								{file.size > 1024 * 1024
-									? `${(file.size / 1024 / 1024).toFixed(2)} MB`
-									: `${(file.size / 1024).toFixed(2)} KB`}
-							</span>
+							<div className="min-w-0">
+								<p
+									className="truncate text-sm font-medium text-ctp-text"
+									title={file.name}
+								>
+									{file.name}
+								</p>
+								<p className="mt-1 text-xs text-ctp-subtext0">
+									{formatFileSize(file.size)}
+								</p>
+							</div>
 						</div>
 						<button
 							type="button"
 							onClick={() => onRemove(id)}
 							className="
-                            text-ctp-red hover:text-ctp-maroon
-                            hover:bg-ctp-surface0
-                            text-sm font-medium px-2 py-1
-                            rounded-md hover:cursor-pointer
+                            min-h-9 shrink-0 cursor-pointer rounded-md px-3 py-2 text-sm
+                            font-semibold text-ctp-red transition duration-200
+                            hover:bg-ctp-red/10 hover:text-ctp-maroon
+                            active:scale-[0.98]
                             "
 						>
 							削除

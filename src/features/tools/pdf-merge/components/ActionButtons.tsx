@@ -12,17 +12,23 @@ export default function ActionButtons({
 	clearFiles,
 	mergePdfs,
 }: Props) {
+	const canMerge = files.length >= 2 && !isLoading;
+
 	return (
-		<div className="flex gap-4">
+		<div className="flex flex-col gap-3 sm:flex-row">
 			<button
 				type="button"
 				onClick={mergePdfs}
-				disabled={files.length < 2 || isLoading}
+				disabled={!canMerge}
+				aria-busy={isLoading}
 				className="
-                flex-1 rounded-lg py-3 px-6
-                bg-ctp-blue disabled:bg-ctp-blue-100 hover:bg-ctp-blue/90 
-				hover:cursor-pointer disabled:cursor-not-allowed
-                text-ctp-crust disabled:text-ctp-crust/50 font-semibold
+                min-h-12 flex-1 cursor-pointer rounded-lg bg-ctp-blue px-6 py-3
+                font-semibold text-ctp-crust
+                transition duration-200 hover:bg-ctp-sapphire
+                active:scale-[0.98]
+                disabled:cursor-not-allowed disabled:bg-ctp-surface1
+                disabled:text-ctp-subtext0 disabled:hover:bg-ctp-surface1
+                disabled:active:scale-100
                 "
 			>
 				{isLoading ? "統合中..." : "PDFを統合して保存"}
@@ -34,11 +40,14 @@ export default function ActionButtons({
 					onClick={clearFiles}
 					disabled={isLoading}
 					className="
-                    rounded-lg
-                    bg-ctp-surface1 disabled:bg-ctp-surface1
-                    hover:cursor-pointer hover:bg-ctp-surface1/80 disabled:cursor-not-allowed
-                    text-ctp-text font-semibold
-                    py-3 px-6
+                    min-h-12 cursor-pointer rounded-lg border border-ctp-surface1
+                    bg-ctp-mantle px-6 py-3
+                    font-semibold text-ctp-text
+                    transition duration-200
+                    hover:border-ctp-overlay0 hover:bg-ctp-surface0
+                    active:scale-[0.98]
+                    disabled:cursor-not-allowed disabled:opacity-60
+                    disabled:active:scale-100
                     "
 				>
 					クリア
