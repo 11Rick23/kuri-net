@@ -6,12 +6,10 @@ import type {
 } from "@/features/profile/data/profileContent";
 
 export function ProfileSection({
-	label,
 	title,
 	description,
 	children,
 }: {
-	label: string;
 	title: string;
 	description?: ReactNode;
 	children: ReactNode;
@@ -19,9 +17,6 @@ export function ProfileSection({
 	return (
 		<section className="scroll-mt-24 space-y-5">
 			<div className="space-y-3 px-1">
-				<p className="text-xs font-semibold uppercase tracking-[0.28em] text-ctp-subtext0">
-					{label}
-				</p>
 				<h2 className="text-2xl font-bold tracking-tight text-ctp-text sm:text-3xl">
 					{title}
 				</h2>

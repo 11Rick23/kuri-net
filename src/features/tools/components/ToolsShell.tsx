@@ -90,9 +90,6 @@ export default function ToolsShell({
 				].join(" ")}
 			>
 				<div className="space-y-2 px-1 pb-4">
-					<p className="text-xs font-semibold uppercase tracking-[0.25em] text-ctp-subtext0">
-						Tools
-					</p>
 					<h2 className="text-2xl font-bold text-ctp-text">ツールメニュー</h2>
 					<p className="text-sm leading-6 text-ctp-subtext1">
 						ここから各ツールへ移動できます。

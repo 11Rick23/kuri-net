@@ -7,9 +7,6 @@ export default function WorksScreen() {
 		<main className="min-h-screen px-4 pb-12 pt-24 sm:px-6 sm:pb-16">
 			<PageContainer className="gap-8">
 				<section className="space-y-3 px-1">
-					<p className="text-xs font-semibold uppercase tracking-[0.28em] text-ctp-subtext0">
-						Works
-					</p>
 					<h1 className="text-3xl font-bold tracking-tight text-ctp-text sm:text-4xl">
 						制作実績
 					</h1>

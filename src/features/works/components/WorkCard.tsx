@@ -46,23 +46,19 @@ export default function WorkCard({
 				</div>
 
 				<div className="mt-auto flex flex-col gap-3 border-t border-ctp-surface1 pt-4 sm:flex-row sm:items-end sm:justify-between">
-					<div className="grid grid-cols-2 gap-3 text-xs">
+					<div className="grid w-full grid-cols-[minmax(0,7rem)_minmax(0,1fr)] gap-3 text-xs sm:w-64 sm:shrink-0">
 						{work.period ? (
-							<div>
-								<p className="font-semibold uppercase tracking-[0.14em] text-ctp-subtext0">
-									Period
-								</p>
-								<p className="mt-1 font-semibold text-ctp-text">
+							<div className="col-start-1 min-w-0">
+								<p className="font-semibold text-ctp-subtext0">期間</p>
+								<p className="mt-1 break-words font-semibold text-ctp-text">
 									{work.period}
 								</p>
 							</div>
 						) : null}
 						{work.teamSize ? (
-							<div>
-								<p className="font-semibold uppercase tracking-[0.14em] text-ctp-subtext0">
-									Team
-								</p>
-								<p className="mt-1 font-semibold text-ctp-text">
+							<div className="col-start-2 min-w-0">
+								<p className="font-semibold text-ctp-subtext0">体制</p>
+								<p className="mt-1 break-words font-semibold text-ctp-text">
 									{work.teamSize}
 								</p>
 							</div>

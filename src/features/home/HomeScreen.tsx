@@ -41,7 +41,7 @@ export default async function HomeScreen() {
 					<Link
 						key={link.href}
 						href={link.href}
-						className="rounded-md border border-ctp-surface1 bg-ctp-base/80 px-4 py-2 text-sm font-semibold text-ctp-text backdrop-blur-md transition duration-200 hover:border-ctp-blue/50 hover:bg-ctp-mantle active:scale-[0.98]"
+						className="inline-flex w-24 items-center justify-center rounded-md border border-ctp-surface1 bg-ctp-base/80 px-4 py-2.5 text-sm font-semibold text-ctp-text backdrop-blur-md transition duration-200 hover:border-ctp-blue/50 hover:bg-ctp-mantle active:scale-[0.98]"
 					>
 						{link.label}
 					</Link>

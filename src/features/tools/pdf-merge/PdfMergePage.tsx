@@ -35,7 +35,6 @@ export default function PdfMergePage() {
 	return (
 		<ToolsPageFrame
 			title={tool.title}
-			englishTitle={tool.englishTitle}
 			description={tool.description}
 			badges={tool.badges}
 		>

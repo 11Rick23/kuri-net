@@ -9,9 +9,7 @@ import WorkCoverVisual from "./WorkCoverVisual";
 function MetaItem({ label, value }: { label: string; value: string }) {
 	return (
 		<div className="rounded-lg border border-ctp-surface1 bg-ctp-base px-4 py-3">
-			<p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-ctp-subtext0">
-				{label}
-			</p>
+			<p className="text-[11px] font-semibold text-ctp-subtext0">{label}</p>
 			<p className="mt-2 text-sm font-semibold text-ctp-text">{value}</p>
 		</div>
 	);
@@ -62,9 +60,9 @@ function SectionMedia({ media }: { media: WorkSectionMedia }) {
 
 export default function WorkDetailModal({ work }: { work: WorkEntry }) {
 	const metaItems = [
-		work.period ? { label: "Period", value: work.period } : null,
-		work.role ? { label: "Role", value: work.role } : null,
-		work.teamSize ? { label: "Team", value: work.teamSize } : null,
+		work.period ? { label: "期間", value: work.period } : null,
+		work.role ? { label: "担当", value: work.role } : null,
+		work.teamSize ? { label: "体制", value: work.teamSize } : null,
 	].filter((item): item is { label: string; value: string } => item !== null);
 
 	return (
@@ -73,10 +71,7 @@ export default function WorkDetailModal({ work }: { work: WorkEntry }) {
 				<WorkCoverVisual work={work} variant="detail" />
 				<div className="absolute inset-0 bg-gradient-to-t from-ctp-crust via-ctp-crust/45 to-transparent" />
 				<div className="absolute inset-x-0 bottom-0 p-6 pr-14 sm:p-8 sm:pr-20">
-					<p className="text-xs font-semibold uppercase tracking-[0.32em] text-ctp-subtext0">
-						Works
-					</p>
-					<h2 className="mt-3 text-3xl font-bold tracking-tight text-ctp-text sm:text-4xl">
+					<h2 className="text-3xl font-bold tracking-tight text-ctp-text sm:text-4xl">
 						{work.title}
 					</h2>
 					<p className="mt-3 max-w-3xl text-sm leading-7 text-ctp-subtext1 sm:text-base">

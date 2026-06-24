@@ -45,10 +45,7 @@ export default function NotepadEditor({
 			className="flex flex-col gap-4 rounded-lg border border-ctp-surface1 bg-ctp-base p-4 sm:p-5"
 		>
 			<div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-				<div className="space-y-2">
-					<p className="text-xs font-semibold uppercase tracking-[0.2em] text-ctp-subtext0">
-						Editor
-					</p>
+				<div>
 					<div
 						aria-live="polite"
 						className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-ctp-surface1 bg-ctp-mantle px-3 py-2"

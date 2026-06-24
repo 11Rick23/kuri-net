@@ -5,7 +5,6 @@ import PageContainer from "@/shared/components/layout/PageContainer";
 
 type ToolsPageFrameProps = {
 	title: string;
-	englishTitle?: string;
 	description?: React.ReactNode;
 	badges?: ToolBadgeDefinition[];
 	children: React.ReactNode;
@@ -13,7 +12,6 @@ type ToolsPageFrameProps = {
 
 export default function ToolsPageFrame({
 	title,
-	englishTitle,
 	description,
 	badges = [],
 	children,
@@ -23,11 +21,6 @@ export default function ToolsPageFrame({
 			<PageContainer className="gap-8">
 				<div className="flex flex-col gap-4 px-1 sm:flex-row sm:items-start sm:justify-between">
 					<div className="min-w-0 flex-1 space-y-3">
-						{englishTitle && (
-							<p className="text-sm font-semibold uppercase tracking-[0.2em] text-ctp-subtext0">
-								{englishTitle}
-							</p>
-						)}
 						<h1 className="text-4xl font-bold tracking-tight text-ctp-text">
 							{title}
 						</h1>

@@ -18,7 +18,7 @@ export default function ProfileScreen() {
 			<PageContainer className="gap-12">
 				<ProfileCard />
 
-				<ProfileSection label="Profile" title="私について">
+				<ProfileSection title="私について">
 					<TextCard>
 						{profileParagraphs.map((paragraph, index) => (
 							<p
@@ -31,11 +31,11 @@ export default function ProfileScreen() {
 					</TextCard>
 				</ProfileSection>
 
-				<ProfileSection label="Interests" title="興味分野">
+				<ProfileSection title="興味分野">
 					<TopicGrid topics={interests} />
 				</ProfileSection>
 
-				<ProfileSection label="Activities" title="活動・趣味">
+				<ProfileSection title="活動・趣味">
 					<TopicGrid topics={activities} />
 				</ProfileSection>
 			</PageContainer>
