@@ -46,7 +46,7 @@ function SectionMedia({ media }: { media: WorkSectionMedia }) {
 					href={resolveAssetUrl(media.assetKey)}
 					target="_blank"
 					rel="noopener noreferrer"
-					className="inline-flex min-w-[16rem] items-center justify-center rounded-lg border border-ctp-blue/35 bg-ctp-blue px-6 py-3 text-center text-sm font-semibold text-ctp-base transition hover:bg-ctp-sapphire"
+					className="inline-flex min-h-12 min-w-[16rem] items-center justify-center rounded-lg border border-ctp-blue/35 bg-ctp-blue px-6 py-3 text-center text-sm font-semibold text-ctp-base transition duration-200 hover:bg-ctp-sapphire active:scale-[0.98]"
 				>
 					{media.title}
 				</Link>
@@ -68,7 +68,7 @@ export default function WorkDetailModal({ work }: { work: WorkEntry }) {
 	].filter((item): item is { label: string; value: string } => item !== null);
 
 	return (
-		<article className="w-[min(92vw,56rem)] max-h-[88vh] overflow-y-auto rounded-lg bg-ctp-surface0">
+		<article className="w-[min(92vw,56rem)] max-h-[88vh] overflow-y-auto rounded-lg border border-ctp-overlay0 bg-ctp-surface0">
 			<div className="relative aspect-[16/9] overflow-hidden rounded-t-lg bg-ctp-crust">
 				<WorkCoverVisual work={work} variant="detail" />
 				<div className="absolute inset-0 bg-gradient-to-t from-ctp-crust via-ctp-crust/45 to-transparent" />
@@ -158,7 +158,7 @@ export default function WorkDetailModal({ work }: { work: WorkEntry }) {
 									href={link.href}
 									target="_blank"
 									rel="noopener noreferrer"
-									className="rounded-full border border-ctp-surface1 bg-ctp-base px-4 py-2 text-sm font-semibold text-ctp-text transition hover:border-ctp-blue/45 hover:text-ctp-blue"
+									className="inline-flex min-h-10 items-center justify-center rounded-lg border border-ctp-surface1 bg-ctp-base px-4 py-2 text-sm font-semibold text-ctp-text transition duration-200 hover:border-ctp-blue/45 hover:bg-ctp-mantle hover:text-ctp-blue active:scale-[0.98]"
 								>
 									{link.label}
 								</Link>

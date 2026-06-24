@@ -13,12 +13,8 @@ export default function WorksScreen() {
 					<h1 className="text-3xl font-bold tracking-tight text-ctp-text sm:text-4xl">
 						制作実績
 					</h1>
-					<p className="max-w-3xl text-sm leading-7 text-ctp-subtext1 sm:text-base">
-						私の過去のプロジェクトの一覧です。
-						<br />
-						個人開発とチーム開発のどちらも掲載しています。
-						<br />
-						各カードをクリックすることでプロジェクトの詳細を読むことができますので、ぜひご覧ください。
+					<p className="text-sm leading-7 text-ctp-subtext1 text-pretty sm:text-base">
+						個人開発とチーム開発で取り組んだプロジェクトをまとめています。カードを開くと、担当範囲や使用技術、制作の背景を確認できます。
 					</p>
 				</section>
 
