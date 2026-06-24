@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import FullscreenMessage from "@/shared/components/layout/FullscreenMessage";
 
 export const metadata: Metadata = {
 	title: "404",
@@ -6,22 +8,20 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
 	return (
-		<div className="flex items-center justify-center w-screen h-screen flex-col gap-10">
-			<h1
-				className="
-                absolute
-                text-[clamp(0rem,40vw,40rem)]
-                font-bold blur-sm
-                text-ctp-lavender/10
-                select-none pointer-events-none
-                "
-			>
-				404
-			</h1>
-			<p className="text-[clamp(24px,8vw,80px)]">Page Not Found</p>
-			<p className="text-[clamp(12px,2vw,40px)]">
-				ページが見つかりませんでした。
-			</p>
-		</div>
+		<main>
+			<FullscreenMessage
+				backgroundLabel="404"
+				title="Page Not Found"
+				description="ページが見つかりませんでした。"
+				actions={
+					<Link
+						href="/"
+						className="rounded-md border border-ctp-blue bg-ctp-blue px-5 py-2 text-sm font-semibold text-ctp-crust transition duration-200 hover:bg-ctp-sapphire active:scale-[0.98]"
+					>
+						トップページへ戻る
+					</Link>
+				}
+			/>
+		</main>
 	);
 }

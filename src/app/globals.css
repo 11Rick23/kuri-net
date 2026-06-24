@@ -14,6 +14,7 @@
 
 	html {
 		background-color: var(--color-ctp-crust);
+		scroll-behavior: smooth;
 	}
 }
 
@@ -53,9 +54,10 @@
 }
 
 body {
-	min-height: 100vh;
+	min-height: 100dvh;
 	background-color: var(--color-ctp-crust);
 	color: var(--color-ctp-text);
+	font-variant-numeric: tabular-nums;
 }
 
 ::selection {
@@ -64,4 +66,9 @@ body {
 		var(--color-app-accent) 30%,
 		transparent
 	);
+}
+
+:focus-visible {
+	outline: 2px solid var(--color-app-accent);
+	outline-offset: 3px;
 }
