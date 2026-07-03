@@ -35,12 +35,14 @@ export default function PdfMergePage() {
 	return (
 		<ToolsPageFrame
 			title={tool.title}
-			englishTitle={tool.englishTitle}
 			description={tool.description}
 			badges={tool.badges}
 		>
 			{isDragging && <DropOverlay isDraggingPDF={isDraggingPDF} />}
-			<div className="relative z-20 flex flex-col gap-6 rounded-lg border border-ctp-surface1 bg-ctp-base p-6">
+			<section
+				aria-label="PDF結合ツール"
+				className="relative z-20 flex flex-col gap-7 rounded-lg border border-ctp-surface1 bg-ctp-base p-4 sm:p-6"
+			>
 				<InfoModal />
 				<UploadArea onChange={handleFileInputChange} />
 				<FileList
@@ -54,7 +56,7 @@ export default function PdfMergePage() {
 					clearFiles={clearFiles}
 					mergePdfs={mergePdfs}
 				/>
-			</div>
+			</section>
 		</ToolsPageFrame>
 	);
 }

@@ -5,12 +5,12 @@ import { useModal } from "@/shared/components/modal/ModalProvider";
 function InfoModalContent() {
 	return (
 		<>
-			<h3 className="font-semibold mb-2">使い方</h3>
-			<ol className="list-decimal list-inside space-y-2 text-sm">
+			<h3 className="mb-2 font-semibold text-ctp-text">使い方</h3>
+			<ol className="list-inside list-decimal space-y-2 text-sm leading-6 text-ctp-subtext1">
 				<li>PDFファイルを追加</li>
 				<li>統合したい順序に並び替える</li>
 				<li>「PDFを統合して保存」ボタンをクリック</li>
-				<li>統合されたPDFファイルがダウンロードされます！</li>
+				<li>統合されたPDFファイルがダウンロードされます</li>
 			</ol>
 		</>
 	);

@@ -499,7 +499,7 @@ export default function VideoPlayer({
 
 							<div className="min-w-0 flex-1">
 								<div className="mb-1.5 flex items-center justify-between gap-3 text-[11px] font-semibold tracking-[0.16em] text-ctp-subtext0 sm:text-xs">
-									<span className="truncate uppercase">{title}</span>
+									<span className="truncate">{title}</span>
 									<span className="shrink-0 tabular-nums text-ctp-subtext1">
 										{formatTime(currentTime)} / {formatTime(duration)}
 									</span>

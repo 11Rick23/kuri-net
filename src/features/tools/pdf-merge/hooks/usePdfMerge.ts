@@ -2,10 +2,12 @@ import { nanoid } from "nanoid";
 import { PDFDocument } from "pdf-lib";
 import { useState } from "react";
 import type { FileEntry } from "@/features/tools/pdf-merge/types";
+import { useToast } from "@/shared/components/toast/ToastProvider";
 
 export function usePdfMerge() {
 	const [files, setFiles] = useState<FileEntry[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
+	const { toast } = useToast();
 
 	const addFiles = (newFiles: File[]) => {
 		const pdfFiles = newFiles.filter((file) => file.type === "application/pdf");
@@ -37,7 +39,10 @@ export function usePdfMerge() {
 
 	const mergePdfs = async () => {
 		if (files.length < 2) {
-			alert("統合するには少なくとも2つのPDFファイルが必要です。");
+			toast("統合するには PDF ファイルを2つ以上追加してください。", {
+				type: "warning",
+				id: "pdf-merge-min-files",
+			});
 			return;
 		}
 
@@ -77,7 +82,13 @@ export function usePdfMerge() {
 			setFiles([]);
 		} catch (error) {
 			console.error("PDF統合エラー:", error);
-			alert("PDFの統合中にエラーが発生しました。");
+			toast(
+				"PDF の統合に失敗しました。ファイルを確認して再度お試しください。",
+				{
+					type: "error",
+					id: "pdf-merge-error",
+				},
+			);
 		} finally {
 			setIsLoading(false);
 		}

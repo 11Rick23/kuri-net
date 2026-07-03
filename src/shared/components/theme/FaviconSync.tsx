@@ -4,8 +4,8 @@ import { useTheme } from "next-themes";
 import { useEffect } from "react";
 
 const faviconByTheme = {
-	light: "/favicon/kuri-net-peach-light.png",
-	dark: "/favicon/kuri-net-peach-dark.png",
+	light: "/favicon/kuri-net-peach-light.webp",
+	dark: "/favicon/kuri-net-peach-dark.webp",
 } as const;
 
 export default function FaviconSync() {
@@ -26,7 +26,7 @@ export default function FaviconSync() {
 
 		const faviconLink = document.createElement("link");
 		faviconLink.rel = "icon";
-		faviconLink.type = "image/png";
+		faviconLink.type = "image/webp";
 		faviconLink.dataset.themeFavicon = "active";
 		faviconLink.href = faviconByTheme[resolvedTheme];
 		document.head.append(faviconLink);

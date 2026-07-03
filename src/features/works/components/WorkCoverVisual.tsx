@@ -18,7 +18,7 @@ function TitleArtwork({
 			<div
 				aria-hidden="true"
 				className={[
-					"absolute right-4 top-4 font-black uppercase leading-none tracking-[-0.08em] text-black/10 dark:text-white/8",
+					"absolute right-4 top-4 font-black uppercase leading-none tracking-normal text-black/10 dark:text-white/8",
 					isDetail
 						? "text-[clamp(5.5rem,22vw,13rem)]"
 						: "text-[clamp(4.2rem,15vw,7.5rem)]",

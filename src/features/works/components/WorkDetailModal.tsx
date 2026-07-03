@@ -9,9 +9,7 @@ import WorkCoverVisual from "./WorkCoverVisual";
 function MetaItem({ label, value }: { label: string; value: string }) {
 	return (
 		<div className="rounded-lg border border-ctp-surface1 bg-ctp-base px-4 py-3">
-			<p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-ctp-subtext0">
-				{label}
-			</p>
+			<p className="text-[11px] font-semibold text-ctp-subtext0">{label}</p>
 			<p className="mt-2 text-sm font-semibold text-ctp-text">{value}</p>
 		</div>
 	);
@@ -46,7 +44,7 @@ function SectionMedia({ media }: { media: WorkSectionMedia }) {
 					href={resolveAssetUrl(media.assetKey)}
 					target="_blank"
 					rel="noopener noreferrer"
-					className="inline-flex min-w-[16rem] items-center justify-center rounded-lg border border-ctp-blue/35 bg-ctp-blue px-6 py-3 text-center text-sm font-semibold text-ctp-base transition hover:bg-ctp-sapphire"
+					className="inline-flex min-h-12 min-w-[16rem] items-center justify-center rounded-lg border border-ctp-blue/35 bg-ctp-blue px-6 py-3 text-center text-sm font-semibold text-ctp-base transition duration-200 hover:bg-ctp-sapphire active:scale-[0.98]"
 				>
 					{media.title}
 				</Link>
@@ -62,21 +60,18 @@ function SectionMedia({ media }: { media: WorkSectionMedia }) {
 
 export default function WorkDetailModal({ work }: { work: WorkEntry }) {
 	const metaItems = [
-		work.period ? { label: "Period", value: work.period } : null,
-		work.role ? { label: "Role", value: work.role } : null,
-		work.teamSize ? { label: "Team", value: work.teamSize } : null,
+		work.period ? { label: "期間", value: work.period } : null,
+		work.role ? { label: "担当", value: work.role } : null,
+		work.teamSize ? { label: "体制", value: work.teamSize } : null,
 	].filter((item): item is { label: string; value: string } => item !== null);
 
 	return (
-		<article className="w-[min(92vw,56rem)] max-h-[88vh] overflow-y-auto rounded-lg bg-ctp-surface0">
+		<article className="w-[min(92vw,56rem)] max-h-[88vh] overflow-y-auto rounded-lg border border-ctp-overlay0 bg-ctp-surface0">
 			<div className="relative aspect-[16/9] overflow-hidden rounded-t-lg bg-ctp-crust">
 				<WorkCoverVisual work={work} variant="detail" />
 				<div className="absolute inset-0 bg-gradient-to-t from-ctp-crust via-ctp-crust/45 to-transparent" />
 				<div className="absolute inset-x-0 bottom-0 p-6 pr-14 sm:p-8 sm:pr-20">
-					<p className="text-xs font-semibold uppercase tracking-[0.32em] text-ctp-subtext0">
-						Works
-					</p>
-					<h2 className="mt-3 text-3xl font-bold tracking-tight text-ctp-text sm:text-4xl">
+					<h2 className="text-3xl font-bold tracking-tight text-ctp-text sm:text-4xl">
 						{work.title}
 					</h2>
 					<p className="mt-3 max-w-3xl text-sm leading-7 text-ctp-subtext1 sm:text-base">
@@ -158,7 +153,7 @@ export default function WorkDetailModal({ work }: { work: WorkEntry }) {
 									href={link.href}
 									target="_blank"
 									rel="noopener noreferrer"
-									className="rounded-full border border-ctp-surface1 bg-ctp-base px-4 py-2 text-sm font-semibold text-ctp-text transition hover:border-ctp-blue/45 hover:text-ctp-blue"
+									className="inline-flex min-h-10 items-center justify-center rounded-lg border border-ctp-surface1 bg-ctp-base px-4 py-2 text-sm font-semibold text-ctp-text transition duration-200 hover:border-ctp-blue/45 hover:bg-ctp-mantle hover:text-ctp-blue active:scale-[0.98]"
 								>
 									{link.label}
 								</Link>

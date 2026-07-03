@@ -5,7 +5,6 @@ export type ToolDefinition = {
 	slug: string;
 	href: string;
 	title: string;
-	englishTitle: string;
 	description: string;
 	requiresAuth: boolean;
 	badges: ToolBadgeDefinition[];
@@ -17,7 +16,6 @@ export const toolDefinitions: ToolDefinition[] = [
 		slug: "pdf-merge",
 		href: "/tools/pdf-merge",
 		title: "PDF統合",
-		englishTitle: "Merge PDFs",
 		description: "複数のPDFファイルを1つのPDFファイルに結合します。",
 		requiresAuth: false,
 		badges: [
@@ -32,7 +30,6 @@ export const toolDefinitions: ToolDefinition[] = [
 		slug: "notepad",
 		href: "/tools/notepad",
 		title: "ちょこっとメモ",
-		englishTitle: "Small Notepad",
 		description: "超シンプルなメモ帳です。",
 		requiresAuth: true,
 		badges: [

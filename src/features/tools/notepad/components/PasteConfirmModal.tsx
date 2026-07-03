@@ -28,12 +28,14 @@ export default function PasteConfirmModal({
 					onClick={closeModal}
 					disabled={isSubmitting}
 					className="
-					rounded-full border border-ctp-surface1
+					min-h-10 cursor-pointer rounded-lg border border-ctp-surface1
 					bg-ctp-base px-4 py-2
 					text-sm font-semibold text-ctp-text
-					transition
-					hover:border-ctp-overlay1 hover:cursor-pointer
-					disabled:cursor-not-allowed disabled:opacity-60"
+					transition duration-200
+					hover:border-ctp-overlay1 hover:bg-ctp-mantle
+					active:scale-[0.98]
+					disabled:cursor-not-allowed disabled:opacity-60
+					disabled:active:scale-100"
 				>
 					キャンセル
 				</button>
@@ -46,12 +48,14 @@ export default function PasteConfirmModal({
 						await onConfirm();
 					}}
 					className="
-					rounded-full border border-ctp-surface1
+					min-h-10 cursor-pointer rounded-lg border border-ctp-surface1
 					bg-ctp-green px-4 py-2
 					text-sm font-semibold text-ctp-crust
-					transition
-					hover:opacity-90 hover:border-ctp-overlay1 hover:cursor-pointer
-					disabled:cursor-not-allowed disabled:opacity-60"
+					transition duration-200
+					hover:border-ctp-overlay1 hover:opacity-90
+					active:scale-[0.98]
+					disabled:cursor-not-allowed disabled:opacity-60
+					disabled:active:scale-100"
 				>
 					置き換える
 				</button>

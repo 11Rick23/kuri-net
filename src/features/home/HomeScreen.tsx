@@ -1,39 +1,52 @@
+import Link from "next/link";
 import { verifySession } from "@/features/auth/server/verifySession";
 import LiveClock from "@/shared/components/LiveClock";
+import FullscreenMessage from "@/shared/components/layout/FullscreenMessage";
+
+const homeLinks = [
+	{ href: "/profile", label: "Profile" },
+	{ href: "/works", label: "Works" },
+	{ href: "/tools", label: "Tools" },
+];
 
 export default async function HomeScreen() {
 	const session = await verifySession();
 
 	const loggedOutContent = {
-		title: "こんにちは！",
+		title: "こんにちは",
 		description: (
 			<>
 				kuri-kuri.net へようこそ。
 				<br />
-				ヘッダーの一番右にあるログインボタンから
-				<br />
-				アカウントの登録やログインができます。
+				プロフィール、制作実績、ウェブアプリなどをまとめています。
 			</>
 		),
 	};
 
 	const loggedInContent = {
-		title: "お帰りなさい！",
+		title: "お帰りなさい",
 		description: <LiveClock />,
 	};
 
 	return (
 		<main>
-			<div className="flex items-center justify-center w-screen h-screen flex-col gap-10">
-				<h1 className="text-[clamp(0rem,10vw,30rem)] text-center animate-float">
-					{session?.userID ? loggedInContent.title : loggedOutContent.title}
-				</h1>
-				<p className="text-[clamp(0rem,3vw,10rem)] text-center">
-					{session?.userID
+			<FullscreenMessage
+				title={session?.userID ? loggedInContent.title : loggedOutContent.title}
+				description={
+					session?.userID
 						? loggedInContent.description
-						: loggedOutContent.description}
-				</p>
-			</div>
+						: loggedOutContent.description
+				}
+				actions={homeLinks.map((link) => (
+					<Link
+						key={link.href}
+						href={link.href}
+						className="inline-flex w-24 items-center justify-center rounded-md border border-ctp-surface1 bg-ctp-base/80 px-4 py-2.5 text-sm font-semibold text-ctp-text backdrop-blur-md transition duration-200 hover:border-ctp-blue/50 hover:bg-ctp-mantle active:scale-[0.98]"
+					>
+						{link.label}
+					</Link>
+				))}
+			/>
 		</main>
 	);
 }
