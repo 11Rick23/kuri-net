@@ -84,7 +84,7 @@ export async function completePasskeyRegistration(): Promise<ActionResult> {
 			.for("update")
 			.limit(1);
 
-		if (!user || user.status !== "REGISTERING" || !user.isAnonymous) {
+		if (user?.status !== "REGISTERING" || !user.isAnonymous) {
 			return { ok: false, error: "登録状態が無効です。" };
 		}
 
