@@ -1,6 +1,6 @@
 "use server";
 
-import { verifySession } from "@/features/auth/server/verifySession";
+import { getAuthenticatedSession } from "@/features/auth/server/session";
 import {
 	getNotepadByUserID,
 	saveNotepad,
@@ -14,13 +14,13 @@ export async function getCurrentUserNotepad(userID?: string): Promise<{
 	let resolvedUserID = userID;
 
 	if (!resolvedUserID) {
-		const session = await verifySession();
+		const session = await getAuthenticatedSession();
 
-		if (!session?.userID) {
+		if (!session) {
 			throw new Error("Authentication required.");
 		}
 
-		resolvedUserID = session.userID;
+		resolvedUserID = session.user.id;
 	}
 
 	const notepad = await getNotepadByUserID(resolvedUserID);
@@ -39,13 +39,13 @@ export async function saveCurrentUserNotepad(content: string): Promise<{
 		throw new InvalidInputError("指定されたメモ内容が無効です。");
 	}
 
-	const session = await verifySession();
+	const session = await getAuthenticatedSession();
 
-	if (!session?.userID) {
+	if (!session) {
 		throw new Error("Authentication required.");
 	}
 
-	const saved = await saveNotepad(session.userID, content);
+	const saved = await saveNotepad(session.user.id, content);
 
 	return {
 		ok: true,

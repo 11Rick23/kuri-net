@@ -43,6 +43,8 @@ Temporary Items
 
 # testing
 /coverage
+/playwright-report
+/test-results
 
 # next.js
 /.next/
@@ -77,4 +79,3 @@ next-env.d.ts
 
 # Mise
 mise.local.toml
-
