@@ -36,6 +36,20 @@ export type Deduction = {
 	sources: number[];
 	rule: DeductionRule;
 	explanation: string;
+	constraintSize?: number;
+};
+
+export type DifficultyFeatures = {
+	maxRuleCost: number;
+	subsetCount: number;
+	enumerationCount: number;
+	maxSourceCount: number;
+	maxConstraintSize: number;
+	maxEnumerationConstraintSize: number;
+	maxHardStepStreak: number;
+	maxHardStepsInWindow: number;
+	scarceStepRatio: number;
+	basicStepRatio: number;
 };
 
 export type BoardCell = {
@@ -52,6 +66,7 @@ export type LogicalBoard = {
 	seed: string;
 	cells: BoardCell[];
 	difficultyScore: number;
+	difficultyFeatures: DifficultyFeatures;
 	maxRule: DeductionRule;
 	solutionSteps: Deduction[];
 };
@@ -81,10 +96,17 @@ type SolverResult = {
 	solved: boolean;
 	contradiction: boolean;
 	steps: Deduction[];
-	maxRuleCost: number;
-	subsetCount: number;
-	enumerationCount: number;
+	progress: number;
+	features: DifficultyFeatures;
 };
+
+type EvaluatedCandidate = {
+	board: LogicalBoard;
+	result: SolverResult;
+	distance: number;
+};
+
+type MineMutation = "move" | "add" | "remove";
 
 const ruleCosts: Record<DeductionRule, number> = {
 	"remaining-mines-zero": 1,
@@ -92,6 +114,19 @@ const ruleCosts: Record<DeductionRule, number> = {
 	"subset-difference": 3,
 	"global-mine-count": 5,
 	"constraint-enumeration": 8,
+};
+
+const emptyDifficultyFeatures: DifficultyFeatures = {
+	maxRuleCost: 0,
+	subsetCount: 0,
+	enumerationCount: 0,
+	maxSourceCount: 0,
+	maxConstraintSize: 0,
+	maxEnumerationConstraintSize: 0,
+	maxHardStepStreak: 0,
+	maxHardStepsInWindow: 0,
+	scarceStepRatio: 0,
+	basicStepRatio: 1,
 };
 
 export const ruleLabels: Record<DeductionRule, string> = {
@@ -234,6 +269,7 @@ function createBoardFromMines(
 		seed,
 		cells,
 		difficultyScore: 0,
+		difficultyFeatures: { ...emptyDifficultyFeatures },
 		maxRule: "remaining-mines-zero",
 		solutionSteps: [],
 	};
@@ -525,6 +561,10 @@ function findDeduction(
 	if (contradiction) {
 		return { deduction: null, contradiction: true, maxConstraintSize: 0 };
 	}
+	const maxConstraintSize = constraints.reduce(
+		(maximum, constraint) => Math.max(maximum, constraint.variables.length),
+		0,
+	);
 	const safeTargets: number[] = [];
 	const safeSources: number[] = [];
 	const mineTargets: number[] = [];
@@ -548,7 +588,7 @@ function findDeduction(
 				"remaining-mines-zero",
 			),
 			contradiction: false,
-			maxConstraintSize: 0,
+			maxConstraintSize,
 		};
 	}
 	if (mineTargets.length > 0) {
@@ -560,14 +600,14 @@ function findDeduction(
 				"all-unknown-are-mines",
 			),
 			contradiction: false,
-			maxConstraintSize: 0,
+			maxConstraintSize,
 		};
 	}
 	const subset = deduceBySubset(constraints);
 	if (subset.contradiction || subset.deduction) {
 		return {
 			...subset,
-			maxConstraintSize: 0,
+			maxConstraintSize,
 		};
 	}
 	const unresolved = board.cells
@@ -575,25 +615,23 @@ function findDeduction(
 		.filter((index) => !revealed.has(index) && !flagged.has(index));
 	const remainingMines = board.mineCount - flagged.size;
 	if (remainingMines < 0 || remainingMines > unresolved.length) {
-		return { deduction: null, contradiction: true, maxConstraintSize: 0 };
+		return { deduction: null, contradiction: true, maxConstraintSize };
 	}
 	if (remainingMines === 0 && unresolved.length > 0) {
 		return {
 			deduction: makeDeduction("reveal", unresolved, [], "global-mine-count"),
 			contradiction: false,
-			maxConstraintSize: 0,
+			maxConstraintSize,
 		};
 	}
 	if (remainingMines === unresolved.length && unresolved.length > 0) {
 		return {
 			deduction: makeDeduction("flag", unresolved, [], "global-mine-count"),
 			contradiction: false,
-			maxConstraintSize: 0,
+			maxConstraintSize,
 		};
 	}
-	let maxConstraintSize = 0;
 	for (const component of getConstraintComponents(constraints)) {
-		maxConstraintSize = Math.max(maxConstraintSize, component.variables.length);
 		const result = enumerateComponent(
 			component.variables,
 			component.constraints,
@@ -608,24 +646,30 @@ function findDeduction(
 		);
 		if (result.safe.length > 0) {
 			return {
-				deduction: makeDeduction(
-					"reveal",
-					result.safe,
-					sources,
-					"constraint-enumeration",
-				),
+				deduction: {
+					...makeDeduction(
+						"reveal",
+						result.safe,
+						sources,
+						"constraint-enumeration",
+					),
+					constraintSize: component.variables.length,
+				},
 				contradiction: false,
 				maxConstraintSize,
 			};
 		}
 		if (result.mines.length > 0) {
 			return {
-				deduction: makeDeduction(
-					"flag",
-					result.mines,
-					sources,
-					"constraint-enumeration",
-				),
+				deduction: {
+					...makeDeduction(
+						"flag",
+						result.mines,
+						sources,
+						"constraint-enumeration",
+					),
+					constraintSize: component.variables.length,
+				},
 				contradiction: false,
 				maxConstraintSize,
 			};
@@ -634,17 +678,70 @@ function findDeduction(
 	return { deduction: null, contradiction: false, maxConstraintSize };
 }
 
+function collectDifficultyFeatures(
+	steps: Deduction[],
+	maxConstraintSize: number,
+): DifficultyFeatures {
+	if (steps.length === 0) {
+		return { ...emptyDifficultyFeatures, maxConstraintSize };
+	}
+	const isHardStep = (step: Deduction) =>
+		step.rule === "subset-difference" || step.rule === "constraint-enumeration";
+	let hardStreak = 0;
+	let maxHardStepStreak = 0;
+	for (const step of steps) {
+		if (isHardStep(step)) {
+			hardStreak += 1;
+			maxHardStepStreak = Math.max(maxHardStepStreak, hardStreak);
+		} else {
+			hardStreak = 0;
+		}
+	}
+	let maxHardStepsInWindow = 0;
+	for (let index = 0; index < steps.length; index += 1) {
+		maxHardStepsInWindow = Math.max(
+			maxHardStepsInWindow,
+			steps.slice(index, index + 5).filter((step) => isHardStep(step)).length,
+		);
+	}
+	const basicStepCount = steps.filter(
+		(step) =>
+			step.rule === "remaining-mines-zero" ||
+			step.rule === "all-unknown-are-mines",
+	).length;
+	return {
+		maxRuleCost: Math.max(...steps.map((step) => ruleCosts[step.rule])),
+		subsetCount: steps.filter((step) => step.rule === "subset-difference")
+			.length,
+		enumerationCount: steps.filter(
+			(step) => step.rule === "constraint-enumeration",
+		).length,
+		maxSourceCount: Math.max(...steps.map((step) => step.sources.length)),
+		maxConstraintSize,
+		maxEnumerationConstraintSize: Math.max(
+			0,
+			...steps
+				.filter((step) => step.rule === "constraint-enumeration")
+				.map((step) => step.constraintSize ?? 0),
+		),
+		maxHardStepStreak,
+		maxHardStepsInWindow,
+		scarceStepRatio:
+			steps.filter((step) => step.targets.length <= 2).length / steps.length,
+		basicStepRatio: basicStepCount / steps.length,
+	};
+}
+
 function solveBoard(board: LogicalBoard): SolverResult {
 	const revealed = new Set(getOpeningCells(board, board.firstIndex));
 	const flagged = new Set<number>();
 	const steps: Deduction[] = [];
 	let contradiction = false;
-	let maxRuleCost = 0;
-	let subsetCount = 0;
-	let enumerationCount = 0;
+	let maxConstraintSize = 0;
 	for (let iteration = 0; iteration < board.cells.length * 4; iteration += 1) {
 		if (revealed.size === board.cells.length - board.mineCount) break;
 		const result = findDeduction(board, revealed, flagged);
+		maxConstraintSize = Math.max(maxConstraintSize, result.maxConstraintSize);
 		if (result.contradiction) {
 			contradiction = true;
 			break;
@@ -667,9 +764,6 @@ function solveBoard(board: LogicalBoard): SolverResult {
 			break;
 		}
 		steps.push(applied);
-		maxRuleCost = Math.max(maxRuleCost, ruleCosts[deduction.rule]);
-		if (deduction.rule === "subset-difference") subsetCount += 1;
-		if (deduction.rule === "constraint-enumeration") enumerationCount += 1;
 		if (deduction.action === "flag") {
 			for (const index of freshTargets) flagged.add(index);
 		} else {
@@ -680,13 +774,13 @@ function solveBoard(board: LogicalBoard): SolverResult {
 			}
 		}
 	}
+	const safeCellCount = board.cells.length - board.mineCount;
 	return {
-		solved: revealed.size === board.cells.length - board.mineCount,
+		solved: revealed.size === safeCellCount,
 		contradiction,
 		steps,
-		maxRuleCost,
-		subsetCount,
-		enumerationCount,
+		progress: safeCellCount > 0 ? revealed.size / safeCellCount : 0,
+		features: collectDifficultyFeatures(steps, maxConstraintSize),
 	};
 }
 
@@ -701,6 +795,7 @@ function selectFirstIndex(width: number, height: number, random: SeededRandom) {
 function createCandidate(
 	options: GenerateBoardOptions,
 	seed: string,
+	mineCount = options.mineCount,
 ): LogicalBoard {
 	const random = new SeededRandom(seed);
 	const firstIndex = selectFirstIndex(options.width, options.height, random);
@@ -712,7 +807,7 @@ function createCandidate(
 		{ length: options.width * options.height },
 		(_, index) => index,
 	).filter((index) => !safeZone.has(index));
-	const mines = random.shuffle(candidates).slice(0, options.mineCount);
+	const mines = random.shuffle(candidates).slice(0, mineCount);
 	return createBoardFromMines(
 		options.width,
 		options.height,
@@ -722,65 +817,211 @@ function createCandidate(
 	);
 }
 
-function scoreSolution(result: SolverResult) {
-	return (
-		result.maxRuleCost * 8 +
-		result.subsetCount * 3 +
-		result.enumerationCount * 10 +
-		Math.min(result.steps.length, 40)
+function getMineCountBounds(options: GenerateBoardOptions) {
+	const playableCells = options.width * options.height - 9;
+	return {
+		minimum: Math.max(1, Math.floor(options.mineCount * 0.7)),
+		maximum: Math.min(
+			playableCells,
+			Math.max(options.mineCount + 2, Math.ceil(options.mineCount * 1.35)),
+		),
+	};
+}
+
+function mutateCandidate(
+	board: LogicalBoard,
+	mutation: MineMutation,
+	random: SeededRandom,
+	seed: string,
+	bounds: ReturnType<typeof getMineCountBounds>,
+) {
+	const safeZone = new Set([
+		board.firstIndex,
+		...getNeighborIndices(board.firstIndex, board.width, board.height),
+	]);
+	const mines = board.cells
+		.filter((cell) => cell.mine)
+		.map((cell) => cell.index);
+	const mineSet = new Set(mines);
+	const emptyCandidates = board.cells
+		.map((cell) => cell.index)
+		.filter((index) => !safeZone.has(index) && !mineSet.has(index));
+	const nextMines = [...mines];
+	if (
+		mutation === "add" &&
+		nextMines.length < bounds.maximum &&
+		emptyCandidates.length > 0
+	) {
+		nextMines.push(emptyCandidates[random.int(0, emptyCandidates.length)]);
+	} else if (mutation === "remove" && nextMines.length > bounds.minimum) {
+		nextMines.splice(random.int(0, nextMines.length), 1);
+	} else if (nextMines.length > 0 && emptyCandidates.length > 0) {
+		nextMines[random.int(0, nextMines.length)] =
+			emptyCandidates[random.int(0, emptyCandidates.length)];
+	}
+	return createBoardFromMines(
+		board.width,
+		board.height,
+		nextMines,
+		board.firstIndex,
+		seed,
 	);
+}
+
+function scoreSolution(result: SolverResult) {
+	const features = result.features;
+	return Math.round(
+		features.maxRuleCost * 10 +
+			features.subsetCount * 4 +
+			features.enumerationCount * 12 +
+			features.maxSourceCount * 0.5 +
+			Math.min(features.maxConstraintSize, 12) * 0.5 +
+			features.maxEnumerationConstraintSize * 2 +
+			features.maxHardStepStreak * 6 +
+			features.maxHardStepsInWindow * 4 +
+			features.scarceStepRatio * 10 +
+			(1 - features.basicStepRatio) * 10 +
+			Math.min(result.steps.length, 40) * 0.25,
+	);
+}
+
+export function difficultyFeaturesMatchDefinition(
+	features: DifficultyFeatures,
+	difficulty: DifficultyKey,
+) {
+	switch (difficulty) {
+		case "beginner":
+			return (
+				features.maxRuleCost <= 1 &&
+				features.subsetCount === 0 &&
+				features.enumerationCount === 0
+			);
+		case "intermediate":
+			return (
+				features.subsetCount >= 1 &&
+				features.subsetCount <= 3 &&
+				features.enumerationCount === 0 &&
+				features.maxRuleCost <= 3
+			);
+		case "advanced":
+			return (
+				features.subsetCount >= 4 &&
+				features.enumerationCount === 0 &&
+				features.maxRuleCost <= 3 &&
+				features.maxHardStepStreak >= 2 &&
+				features.maxHardStepsInWindow >= 2 &&
+				features.scarceStepRatio >= 0.4
+			);
+		case "expert":
+			return (
+				features.enumerationCount > 0 &&
+				features.maxEnumerationConstraintSize >= 8
+			);
+	}
 }
 
 function solutionMatchesDifficulty(
 	result: SolverResult,
 	difficulty: DifficultyKey,
 ) {
-	switch (difficulty) {
-		case "beginner":
-			return result.maxRuleCost <= 1;
-		case "intermediate":
-			return (
-				result.subsetCount > 0 &&
-				result.enumerationCount === 0 &&
-				result.maxRuleCost <= 3
-			);
-		case "advanced":
-			return (
-				result.subsetCount > 0 &&
-				result.enumerationCount === 0 &&
-				scoreSolution(result) >= 35
-			);
-		case "expert":
-			return result.enumerationCount > 0;
-	}
+	return (
+		result.solved &&
+		!result.contradiction &&
+		result.steps.length > 0 &&
+		difficultyFeaturesMatchDefinition(result.features, difficulty)
+	);
 }
 
-function difficultyDistance(result: SolverResult, difficulty: DifficultyKey) {
+function difficultyDistance(
+	result: SolverResult,
+	difficulty: DifficultyKey,
+	mineCount: number,
+	requestedMineCount: number,
+) {
+	if (result.contradiction) return 10_000;
+	const features = result.features;
 	const score = scoreSolution(result);
-	const target = {
-		beginner: 12,
-		intermediate: 34,
-		advanced: 58,
-		expert: 92,
-	}[difficulty];
-	const enumerationPenalty =
-		difficulty === "expert"
-			? result.enumerationCount === 0
-				? 45
-				: 0
-			: result.enumerationCount > 0
-				? 30
-				: 0;
-	return Math.abs(score - target) + enumerationPenalty;
+	const unsolvedPenalty = result.solved
+		? 0
+		: 1_000 + Math.round((1 - result.progress) * 500);
+	const mineCountPenalty = Math.abs(mineCount - requestedMineCount) * 0.25;
+	let profilePenalty = 0;
+	switch (difficulty) {
+		case "beginner":
+			profilePenalty =
+				features.subsetCount * 120 +
+				features.enumerationCount * 240 +
+				Math.max(0, features.maxRuleCost - 1) * 80 +
+				Math.abs(score - 24) * 0.05;
+			break;
+		case "intermediate":
+			profilePenalty =
+				(features.subsetCount === 0 ? 140 : 0) +
+				Math.max(0, features.subsetCount - 3) * 45 +
+				features.enumerationCount * 220 +
+				Math.max(0, features.maxRuleCost - 3) * 80 +
+				Math.abs(features.subsetCount - 2) * 8 +
+				Math.abs(score - 58) * 0.05;
+			break;
+		case "advanced":
+			profilePenalty =
+				Math.max(0, 4 - features.subsetCount) * 45 +
+				features.enumerationCount * 240 +
+				Math.max(0, features.maxRuleCost - 3) * 100 +
+				Math.max(0, 2 - features.maxHardStepStreak) * 55 +
+				Math.max(0, 2 - features.maxHardStepsInWindow) * 25 +
+				Math.max(0, 0.4 - features.scarceStepRatio) * 180 +
+				Math.abs(features.subsetCount - 6) * 2 +
+				Math.abs(score - 92) * 0.05;
+			break;
+		case "expert":
+			profilePenalty =
+				(features.enumerationCount === 0 ? 280 : 0) +
+				Math.max(0, 8 - features.maxEnumerationConstraintSize) * 45 +
+				Math.abs(score - 145) * 0.05;
+			break;
+	}
+	return unsolvedPenalty + profilePenalty + mineCountPenalty;
 }
 
 function defaultAttemptCount(difficulty: DifficultyKey) {
 	return {
-		beginner: 180,
-		intermediate: 240,
-		advanced: 320,
-		expert: 420,
+		beginner: 360,
+		intermediate: 600,
+		advanced: 900,
+		expert: 1_200,
 	}[difficulty];
+}
+
+function evaluateCandidate(
+	board: LogicalBoard,
+	difficulty: DifficultyKey,
+	requestedMineCount: number,
+): EvaluatedCandidate {
+	const result = solveBoard(board);
+	return {
+		board,
+		result,
+		distance: difficultyDistance(
+			result,
+			difficulty,
+			board.mineCount,
+			requestedMineCount,
+		),
+	};
+}
+
+function finalizeCandidate(candidate: EvaluatedCandidate): LogicalBoard {
+	const maxRule = (Object.entries(ruleCosts) as Array<[DeductionRule, number]>)
+		.filter(([, cost]) => cost <= candidate.result.features.maxRuleCost)
+		.sort((left, right) => right[1] - left[1])[0]?.[0];
+	return {
+		...candidate.board,
+		difficultyScore: scoreSolution(candidate.result),
+		difficultyFeatures: candidate.result.features,
+		maxRule: maxRule ?? "remaining-mines-zero",
+		solutionSteps: candidate.result.steps,
+	};
 }
 
 export function generateLogicalBoard(
@@ -809,37 +1050,69 @@ export function generateLogicalBoard(
 		1,
 		options.maxAttempts ?? defaultAttemptCount(options.difficulty),
 	);
-	let best:
-		| { board: LogicalBoard; result: SolverResult; distance: number }
-		| undefined;
-	for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
-		const seed = attempt === 0 ? baseSeed : `${baseSeed}:${attempt}`;
-		const board = createCandidate(options, seed);
-		const result = solveBoard(board);
-		if (!result.solved || result.contradiction) continue;
-		const distance = difficultyDistance(result, options.difficulty);
-		if (!best || distance < best.distance) {
-			best = { board, result, distance };
-		}
-		if (solutionMatchesDifficulty(result, options.difficulty)) {
-			best = { board, result, distance };
-			break;
-		}
-	}
-	if (!best) {
-		throw new Error(
-			"論理だけで解ける盤面を生成できませんでした。もう一度お試しください。",
+	const bounds = getMineCountBounds(options);
+	const searchRandom = new SeededRandom(`${baseSeed}:local-search`);
+	const mutationPattern: MineMutation[] = [
+		"move",
+		"add",
+		"move",
+		"remove",
+		"move",
+		"move",
+	];
+	let evaluationCount = 0;
+	let restart = 0;
+	while (evaluationCount < maxAttempts) {
+		const initialSeed = `${baseSeed}:restart-${restart}`;
+		const initialMineCount =
+			restart === 0
+				? options.mineCount
+				: searchRandom.int(bounds.minimum, bounds.maximum + 1);
+		let current = evaluateCandidate(
+			createCandidate(options, initialSeed, initialMineCount),
+			options.difficulty,
+			options.mineCount,
 		);
+		evaluationCount += 1;
+		if (solutionMatchesDifficulty(current.result, options.difficulty)) {
+			return finalizeCandidate(current);
+		}
+		for (
+			let iteration = 0;
+			iteration < 48 && evaluationCount < maxAttempts;
+			iteration += 1
+		) {
+			let bestNeighbor: EvaluatedCandidate | undefined;
+			for (const mutation of searchRandom.shuffle(mutationPattern)) {
+				if (evaluationCount >= maxAttempts) break;
+				const mutationSeed = `${baseSeed}:restart-${restart}:candidate-${evaluationCount}`;
+				const evaluated = evaluateCandidate(
+					mutateCandidate(
+						current.board,
+						mutation,
+						searchRandom,
+						mutationSeed,
+						bounds,
+					),
+					options.difficulty,
+					options.mineCount,
+				);
+				evaluationCount += 1;
+				if (solutionMatchesDifficulty(evaluated.result, options.difficulty)) {
+					return finalizeCandidate(evaluated);
+				}
+				if (!bestNeighbor || evaluated.distance < bestNeighbor.distance) {
+					bestNeighbor = evaluated;
+				}
+			}
+			if (!bestNeighbor || bestNeighbor.distance >= current.distance) break;
+			current = bestNeighbor;
+		}
+		restart += 1;
 	}
-	const maxRule = (Object.entries(ruleCosts) as Array<[DeductionRule, number]>)
-		.filter(([, cost]) => cost <= best.result.maxRuleCost)
-		.sort((left, right) => right[1] - left[1])[0]?.[0];
-	return {
-		...best.board,
-		difficultyScore: scoreSolution(best.result),
-		maxRule: maxRule ?? "remaining-mines-zero",
-		solutionSteps: best.result.steps,
-	};
+	throw new Error(
+		"指定した論理難度の条件を満たす盤面を生成できませんでした。探索をやり直してください。",
+	);
 }
 
 export function isBoardWon(board: LogicalBoard, revealed: Set<number>) {

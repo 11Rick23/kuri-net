@@ -95,7 +95,7 @@ function BoardSettingsPanel({
 					["height", "高さ", 5, 20],
 					[
 						"mineCount",
-						"地雷数",
+						"地雷数目安",
 						1,
 						Math.max(1, settings.width * settings.height - 9),
 					],
@@ -351,7 +351,7 @@ export default function MinesweeperPage() {
 									key={key}
 									type="button"
 									aria-pressed={active}
-									aria-label={`${definition.label}、${definition.width}×${definition.height}、地雷${definition.mineCount}`}
+									aria-label={`${definition.label}、${definition.width}×${definition.height}、地雷目安${definition.mineCount}`}
 									disabled={isGenerating}
 									onClick={() =>
 										setBoardSettings({
@@ -418,9 +418,20 @@ export default function MinesweeperPage() {
 							/>
 						</div>
 
-						<span className="inline-flex h-9 items-center px-2 font-mono text-xs text-ctp-subtext0 sm:justify-self-center">
-							{board.width} × {board.height}
-						</span>
+						<div className="inline-flex h-9 items-center gap-2 px-2 font-mono text-xs text-ctp-subtext0 sm:justify-self-center">
+							<span>
+								{board.width} × {board.height}
+							</span>
+							<span aria-hidden="true" className="text-ctp-surface2">
+								/
+							</span>
+							<span>
+								難易度{" "}
+								<strong className="font-bold text-ctp-text">
+									{board.difficultyScore}
+								</strong>
+							</span>
+						</div>
 
 						<button
 							type="button"
