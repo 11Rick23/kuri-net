@@ -456,7 +456,24 @@ export default function MinesweeperPage() {
 						</button>
 					</div>
 
-					<div className="mt-3 overflow-x-auto border-t border-ctp-surface1 pt-3">
+					<div className="relative mt-3 overflow-x-auto border-t border-ctp-surface1 pt-3">
+						{(status === "won" || status === "lost") && (
+							<div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center">
+								<div
+									role="status"
+									aria-live="assertive"
+									aria-atomic="true"
+									className={[
+										"flex h-20 w-56 items-center justify-center whitespace-nowrap rounded-md border bg-ctp-base/60 px-4 text-center text-xl font-extrabold",
+										status === "won"
+											? "border-ctp-green/70 text-ctp-green"
+											: "border-ctp-red/70 text-ctp-red",
+									].join(" ")}
+								>
+									{status === "won" ? "クリア" : "ゲームオーバー"}
+								</div>
+							</div>
+						)}
 						<table
 							aria-label="マインスイーパー盤面"
 							className="mx-auto w-max border-separate border-spacing-1 rounded-lg border border-ctp-surface1 bg-ctp-mantle p-1"
