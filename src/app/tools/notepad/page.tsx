@@ -18,7 +18,7 @@ export default async function NotepadPage() {
 		return <AuthRequired fullscreen={false} />;
 	}
 
-	const initialNotepad = await getCurrentUserNotepad(session.user.id);
+	const initialNotepad = await getCurrentUserNotepad();
 
 	return (
 		<NotepadScreen
