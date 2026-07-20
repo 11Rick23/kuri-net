@@ -1,10 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import {
-	createBoardFromMines,
 	difficultyDefinitions,
 	difficultyKeys,
 	generateLogicalBoard,
-	getLogicalHint,
 	getNeighborIndices,
 	getOpeningCells,
 } from "@/features/tools/minesweeper/logic";
@@ -60,15 +58,6 @@ describe("完全論理式マインスイーパー", () => {
 		).toEqual(
 			first.cells.filter((cell) => cell.mine).map((cell) => cell.index),
 		);
-	});
-
-	test("公開済みの数字から地雷位置を説明できる", () => {
-		const board = createBoardFromMines(2, 2, [3], 0, "hint-board");
-		const hint = getLogicalHint(board, new Set([0, 1, 2]), new Set());
-
-		expect(hint?.action).toBe("flag");
-		expect(hint?.targets).toEqual([3]);
-		expect(hint?.rule).toBe("all-unknown-are-mines");
 	});
 
 	test("安全な初手領域を確保できない設定は拒否する", () => {

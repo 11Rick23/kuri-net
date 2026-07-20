@@ -11,7 +11,7 @@ export const difficultyDefinitions: Record<
 	DifficultyKey,
 	DifficultyDefinition
 > = {
-	beginner: { label: "入門", width: 9, height: 9, mineCount: 10 },
+	beginner: { label: "初級", width: 9, height: 9, mineCount: 10 },
 	intermediate: { label: "中級", width: 12, height: 12, mineCount: 24 },
 	advanced: { label: "上級", width: 16, height: 16, mineCount: 40 },
 	expert: { label: "熟練", width: 16, height: 16, mineCount: 48 },
@@ -28,7 +28,7 @@ export type DeductionRule =
 	| "global-mine-count"
 	| "constraint-enumeration";
 
-export type DeductionAction = "reveal" | "flag" | "unflag";
+export type DeductionAction = "reveal" | "flag";
 
 export type Deduction = {
 	action: DeductionAction;
@@ -204,7 +204,7 @@ export function getNeighborIndices(
 	return neighbors.sort((left, right) => left - right);
 }
 
-export function createBoardFromMines(
+function createBoardFromMines(
 	width: number,
 	height: number,
 	mineIndices: number[],
@@ -842,48 +842,6 @@ export function generateLogicalBoard(
 	};
 }
 
-export function getLogicalHint(
-	board: LogicalBoard,
-	revealed: Set<number>,
-	playerFlags: Set<number>,
-) {
-	const verifiedFlags = new Set<number>();
-	for (let iteration = 0; iteration <= board.mineCount; iteration += 1) {
-		const result = findDeduction(board, revealed, verifiedFlags);
-		if (result.contradiction || !result.deduction) return null;
-		const deduction = result.deduction;
-		if (deduction.action === "reveal") {
-			const incorrectFlags = deduction.targets.filter((index) =>
-				playerFlags.has(index),
-			);
-			if (incorrectFlags.length > 0) {
-				return {
-					...deduction,
-					action: "unflag" as const,
-					targets: incorrectFlags,
-					explanation: `${deduction.explanation} このマスの旗を外してください。`,
-				};
-			}
-			return deduction;
-		}
-		const unresolvedMines = deduction.targets.filter(
-			(index) => !playerFlags.has(index),
-		);
-		if (unresolvedMines.length > 0) {
-			return { ...deduction, targets: unresolvedMines };
-		}
-		let added = false;
-		for (const index of deduction.targets) {
-			if (!verifiedFlags.has(index)) {
-				verifiedFlags.add(index);
-				added = true;
-			}
-		}
-		if (!added) return null;
-	}
-	return null;
-}
-
 export function isBoardWon(board: LogicalBoard, revealed: Set<number>) {
 	return revealed.size === board.cells.length - board.mineCount;
 }
@@ -904,8 +862,6 @@ export function formatCellLabel(
 		flagged: boolean;
 		showMine: boolean;
 		first: boolean;
-		hintTarget: boolean;
-		hintSource: boolean;
 	},
 ) {
 	const cell = board.cells[index];
@@ -920,10 +876,6 @@ export function formatCellLabel(
 				? "安全な空きマス"
 				: `周囲の地雷 ${cell.adjacentMines}個`;
 	}
-	const annotations = [
-		options.first ? "初手" : "",
-		options.hintTarget ? "ヒント対象" : "",
-		options.hintSource ? "ヒントの根拠" : "",
-	].filter(Boolean);
+	const annotations = [options.first ? "初手" : ""].filter(Boolean);
 	return [`${row}行 ${column}列`, state, ...annotations].join("、");
 }
