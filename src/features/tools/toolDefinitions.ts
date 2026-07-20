@@ -12,6 +12,21 @@ export type ToolDefinition = {
 
 export const toolDefinitions: ToolDefinition[] = [
 	{
+		id: "minesweeper",
+		slug: "minesweeper",
+		href: "/apps/minesweeper",
+		title: "完全論理式マインスイーパー",
+		description:
+			"推測なしで、すべての一手を論理的に説明できるマインスイーパーです。",
+		requiresAuth: false,
+		badges: [
+			{
+				kind: "local",
+				description: "盤面の生成とプレイはすべて端末内で動作します。",
+			},
+		],
+	},
+	{
 		id: "pdf-merge",
 		slug: "pdf-merge",
 		href: "/apps/pdf-merge",
