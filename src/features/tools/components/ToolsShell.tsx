@@ -90,19 +90,19 @@ export default function ToolsShell({
 				].join(" ")}
 			>
 				<div className="space-y-2 px-1 pb-4">
-					<h2 className="text-2xl font-bold text-ctp-text">ツールメニュー</h2>
+					<h2 className="text-2xl font-bold text-ctp-text">アプリメニュー</h2>
 					<p className="text-sm leading-6 text-ctp-subtext1">
-						ここから各ツールへ移動できます。
+						ここから各アプリへ移動できます。
 					</p>
 				</div>
 
 				<nav className="space-y-3">
-					{/* ツール一覧はナビゲーションバーに表示しなくていいかな */}
+					{/* アプリ一覧はナビゲーションバーに表示しなくていいかな */}
 					{/* <NavLink
-						href="/tools"
-						label="ツール一覧"
-						description="使えるツールを一覧で確認できます。"
-						active={pathname === "/tools"}
+						href="/apps"
+						label="アプリ一覧"
+						description="使えるアプリを一覧で確認できます。"
+						active={pathname === "/apps"}
 						onClick={() => setOpen(false)}
 					/> */}
 					{toolDefinitions.map((tool) => (
