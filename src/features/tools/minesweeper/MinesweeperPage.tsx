@@ -2,25 +2,40 @@
 
 import {
 	type KeyboardEvent,
+	type PointerEvent as ReactPointerEvent,
 	useCallback,
 	useEffect,
 	useRef,
 	useState,
 } from "react";
-import { MdAutoAwesome, MdFlag, MdHelpOutline, MdTimer } from "react-icons/md";
+import { createPortal } from "react-dom";
+import {
+	MdAutoAwesome,
+	MdFlag,
+	MdHelpOutline,
+	MdOutlineLightbulb,
+	MdTimer,
+} from "react-icons/md";
 import ToolBadge from "@/features/tools/components/ToolBadge";
 import ToolsPageFrame from "@/features/tools/components/ToolsPageFrame";
 import {
+	getHintPopupPosition,
+	type HintPopupPosition,
+} from "@/features/tools/minesweeper/hintPosition";
+import {
 	createRandomSeed,
+	type Deduction,
 	type DifficultyKey,
 	difficultyDefinitions,
 	difficultyKeys,
 	formatCellLabel,
 	formatElapsedTime,
 	generateLogicalBoard,
+	getLogicalHint,
 	getOpeningCells,
 	isBoardWon,
 	type LogicalBoard,
+	ruleLabels,
 } from "@/features/tools/minesweeper/logic";
 import { getToolDefinitionBySlug } from "@/features/tools/toolDefinitions";
 
@@ -57,13 +72,25 @@ function Stat({
 	label,
 	value,
 	icon,
+	highlighted = false,
+	elementRef,
 }: {
 	label: string;
 	value: string;
 	icon: React.ReactNode;
+	highlighted?: boolean;
+	elementRef?: React.Ref<HTMLDivElement>;
 }) {
 	return (
-		<div className="inline-flex h-9 items-center gap-2 px-2 text-sm text-ctp-subtext1">
+		<div
+			ref={elementRef}
+			className={[
+				"inline-flex h-9 items-center gap-2 rounded-md border px-2 text-sm text-ctp-subtext1 transition",
+				highlighted
+					? "border-ctp-yellow bg-ctp-yellow/10 ring-1 ring-ctp-yellow"
+					: "border-transparent",
+			].join(" ")}
+		>
 			<span className="text-ctp-subtext0">{icon}</span>
 			<span className="sr-only">{label}</span>
 			<span className="font-mono font-bold text-ctp-text">{value}</span>
@@ -161,9 +188,24 @@ export default function MinesweeperPage() {
 	const [focusedIndex, setFocusedIndex] = useState(0);
 	const [interactionMode, setInteractionMode] =
 		useState<InteractionMode>("reveal");
+	const [hint, setHint] = useState<Deduction | null>(null);
+	const [isHintExplanationVisible, setIsHintExplanationVisible] =
+		useState(false);
+	const [hintPopupPosition, setHintPopupPosition] =
+		useState<HintPopupPosition | null>(null);
 	const [isGenerating, setIsGenerating] = useState(false);
 	const [generationError, setGenerationError] = useState<string | null>(null);
 	const cellRefs = useRef(new Map<number, HTMLButtonElement>());
+	const mineStatRef = useRef<HTMLDivElement>(null);
+	const boardRef = useRef<HTMLTableElement>(null);
+	const hintPopupRef = useRef<HTMLDivElement>(null);
+	const hintButtonRef = useRef<HTMLButtonElement>(null);
+	const hintDragRef = useRef<{
+		pointerId: number;
+		offsetX: number;
+		offsetY: number;
+	} | null>(null);
+	const isHintPopupManuallyPositioned = useRef(false);
 	const hasGeneratedInitialBoard = useRef(false);
 	const selectedPreset = presetKeys.find((key) => {
 		const preset = difficultyDefinitions[key];
@@ -191,6 +233,9 @@ export default function MinesweeperPage() {
 		setElapsedSeconds(0);
 		setFocusedIndex(nextBoard.firstIndex);
 		setInteractionMode("reveal");
+		setHint(null);
+		setIsHintExplanationVisible(false);
+		setHintPopupPosition(null);
 		window.requestAnimationFrame(() => {
 			cellRefs.current.get(nextBoard.firstIndex)?.focus();
 		});
@@ -230,6 +275,9 @@ export default function MinesweeperPage() {
 	const toggleFlag = useCallback(
 		(index: number) => {
 			if (!board || status !== "playing" || revealed.has(index)) return;
+			setHint(null);
+			setIsHintExplanationVisible(false);
+			setHintPopupPosition(null);
 			setFlags((current) => {
 				const next = new Set(current);
 				if (next.has(index)) next.delete(index);
@@ -252,6 +300,9 @@ export default function MinesweeperPage() {
 			) {
 				return;
 			}
+			setHint(null);
+			setIsHintExplanationVisible(false);
+			setHintPopupPosition(null);
 			setFocusedIndex(index);
 			const cell = board.cells[index];
 			if (cell.mine) {
@@ -267,6 +318,127 @@ export default function MinesweeperPage() {
 			setStatus(isBoardWon(board, nextRevealed) ? "won" : "playing");
 		},
 		[board, flags, revealed, status],
+	);
+
+	const showHint = useCallback(() => {
+		if (!board || status !== "playing") return;
+		if (hint) {
+			isHintPopupManuallyPositioned.current = false;
+			setIsHintExplanationVisible(true);
+			return;
+		}
+		setHint(getLogicalHint(board, revealed, flags));
+		setIsHintExplanationVisible(false);
+		setHintPopupPosition(null);
+	}, [board, flags, hint, revealed, status]);
+
+	useEffect(() => {
+		if (!hint || !isHintExplanationVisible) return;
+
+		const updatePosition = () => {
+			if (isHintPopupManuallyPositioned.current) return;
+			const anchor =
+				hint.sources.length > 0
+					? cellRefs.current.get(hint.sources[0])
+					: mineStatRef.current;
+			const popup = hintPopupRef.current;
+			const boardElement = boardRef.current;
+			if (!anchor || !popup || !boardElement) return;
+			const anchorRect = anchor.getBoundingClientRect();
+			const popupRect = popup.getBoundingClientRect();
+			const boardRect = boardElement.getBoundingClientRect();
+			const targetRects = hint.targets.flatMap((index) => {
+				const target = cellRefs.current.get(index);
+				return target ? [target.getBoundingClientRect()] : [];
+			});
+			setHintPopupPosition(
+				getHintPopupPosition(
+					anchorRect,
+					popupRect,
+					boardRect,
+					{
+						width: window.innerWidth,
+						height: window.innerHeight,
+					},
+					targetRects,
+				),
+			);
+		};
+
+		updatePosition();
+		window.addEventListener("resize", updatePosition);
+		document.addEventListener("scroll", updatePosition, true);
+		return () => {
+			window.removeEventListener("resize", updatePosition);
+			document.removeEventListener("scroll", updatePosition, true);
+		};
+	}, [hint, isHintExplanationVisible]);
+
+	useEffect(() => {
+		if (!isHintExplanationVisible) return;
+		const closeOnOutsidePointerDown = (event: PointerEvent) => {
+			const target = event.target;
+			if (!(target instanceof Node)) return;
+			if (
+				hintPopupRef.current?.contains(target) ||
+				hintButtonRef.current?.contains(target)
+			) {
+				return;
+			}
+			setIsHintExplanationVisible(false);
+			setHintPopupPosition(null);
+		};
+		document.addEventListener("pointerdown", closeOnOutsidePointerDown);
+		return () =>
+			document.removeEventListener("pointerdown", closeOnOutsidePointerDown);
+	}, [isHintExplanationVisible]);
+
+	const startHintDrag = useCallback(
+		(event: ReactPointerEvent<HTMLDivElement>) => {
+			const popup = hintPopupRef.current;
+			if (!popup || !hintPopupPosition) return;
+			event.preventDefault();
+			event.currentTarget.setPointerCapture(event.pointerId);
+			const rect = popup.getBoundingClientRect();
+			hintDragRef.current = {
+				pointerId: event.pointerId,
+				offsetX: event.clientX - rect.left,
+				offsetY: event.clientY - rect.top,
+			};
+			isHintPopupManuallyPositioned.current = true;
+		},
+		[hintPopupPosition],
+	);
+
+	const moveHintPopup = useCallback(
+		(event: ReactPointerEvent<HTMLDivElement>) => {
+			const drag = hintDragRef.current;
+			const popup = hintPopupRef.current;
+			if (!drag || drag.pointerId !== event.pointerId || !popup) return;
+			const padding = 12;
+			setHintPopupPosition({
+				left: Math.min(
+					window.innerWidth - popup.offsetWidth - padding,
+					Math.max(padding, event.clientX - drag.offsetX),
+				),
+				top: Math.min(
+					window.innerHeight - popup.offsetHeight - padding,
+					Math.max(padding, event.clientY - drag.offsetY),
+				),
+			});
+		},
+		[],
+	);
+
+	const endHintDrag = useCallback(
+		(event: ReactPointerEvent<HTMLDivElement>) => {
+			if (hintDragRef.current?.pointerId !== event.pointerId) return;
+			if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+				event.currentTarget.releasePointerCapture(event.pointerId);
+			}
+			hintDragRef.current = null;
+		},
+		[],
 	);
 
 	const primaryAction = useCallback(
@@ -334,6 +506,7 @@ export default function MinesweeperPage() {
 				? 36
 				: 40
 		: 40;
+	const hintSources = new Set(hint?.sources ?? []);
 	return (
 		<ToolsPageFrame title={tool.title}>
 			<section
@@ -410,6 +583,8 @@ export default function MinesweeperPage() {
 								label="地雷残数"
 								value={String(board.mineCount - flags.size)}
 								icon={<MdFlag size={20} aria-hidden="true" />}
+								highlighted={hint?.rule === "global-mine-count"}
+								elementRef={mineStatRef}
 							/>
 							<Stat
 								label="経過時間"
@@ -433,38 +608,52 @@ export default function MinesweeperPage() {
 							</span>
 						</div>
 
-						<button
-							type="button"
-							role="switch"
-							aria-checked={interactionMode === "flag"}
-							disabled={status !== "playing"}
-							onClick={() =>
-								setInteractionMode((mode) =>
-									mode === "reveal" ? "flag" : "reveal",
-								)
-							}
-							className="inline-flex h-9 cursor-pointer items-center gap-2 text-sm font-semibold text-ctp-text transition disabled:cursor-not-allowed disabled:opacity-40 sm:justify-self-end"
-						>
-							<span>フラグモード</span>
-							<span
-								aria-hidden="true"
-								className={[
-									"relative inline-block h-6 w-11 shrink-0 rounded-full border transition-colors",
-									interactionMode === "flag"
-										? "border-ctp-blue bg-ctp-blue"
-										: "border-ctp-surface1 bg-ctp-surface0",
-								].join(" ")}
+						<div className="flex items-center gap-3 sm:justify-self-end">
+							<button
+								ref={hintButtonRef}
+								type="button"
+								disabled={status !== "playing"}
+								onClick={showHint}
+								aria-expanded={isHintExplanationVisible}
+								aria-controls="minesweeper-hint-explanation"
+								className="inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-md border border-ctp-surface1 bg-ctp-mantle px-2.5 text-sm font-semibold text-ctp-text transition hover:border-ctp-yellow hover:text-ctp-yellow disabled:cursor-not-allowed disabled:opacity-40"
 							>
+								<MdOutlineLightbulb size={18} aria-hidden="true" />
+								<span>ヒント</span>
+							</button>
+							<button
+								type="button"
+								role="switch"
+								aria-checked={interactionMode === "flag"}
+								disabled={status !== "playing"}
+								onClick={() =>
+									setInteractionMode((mode) =>
+										mode === "reveal" ? "flag" : "reveal",
+									)
+								}
+								className="inline-flex h-9 cursor-pointer items-center gap-2 text-sm font-semibold text-ctp-text transition disabled:cursor-not-allowed disabled:opacity-40"
+							>
+								<span>フラグモード</span>
 								<span
+									aria-hidden="true"
 									className={[
-										"absolute left-0 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full border border-ctp-overlay0 bg-ctp-base transition-transform",
+										"relative inline-block h-6 w-11 shrink-0 rounded-full border transition-colors",
 										interactionMode === "flag"
-											? "translate-x-6"
-											: "translate-x-1",
+											? "border-ctp-blue bg-ctp-blue"
+											: "border-ctp-surface1 bg-ctp-surface0",
 									].join(" ")}
-								/>
-							</span>
-						</button>
+								>
+									<span
+										className={[
+											"absolute left-0 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full border border-ctp-overlay0 bg-ctp-base transition-transform",
+											interactionMode === "flag"
+												? "translate-x-6"
+												: "translate-x-1",
+										].join(" ")}
+									/>
+								</span>
+							</button>
+						</div>
 					</div>
 
 					<div className="relative mt-3 overflow-x-auto border-t border-ctp-surface1 pt-3">
@@ -486,6 +675,7 @@ export default function MinesweeperPage() {
 							</div>
 						)}
 						<table
+							ref={boardRef}
 							aria-label="マインスイーパー盤面"
 							className="mx-auto w-max border-separate border-spacing-1 rounded-lg border border-ctp-surface1 bg-ctp-mantle p-1"
 						>
@@ -510,6 +700,7 @@ export default function MinesweeperPage() {
 														status === "won" ||
 														status === "lost" ||
 														(status === "idle" && index !== board.firstIndex);
+													const isHintSource = hintSources.has(index);
 													return (
 														<td key={index} className="p-0">
 															<button
@@ -527,7 +718,13 @@ export default function MinesweeperPage() {
 																	first:
 																		status === "idle" &&
 																		index === board.firstIndex,
+																	hintSource: isHintSource,
 																})}
+																aria-describedby={
+																	isHintSource && isHintExplanationVisible
+																		? "minesweeper-hint-explanation"
+																		: undefined
+																}
 																aria-disabled={isDisabled}
 																tabIndex={focusedIndex === index ? 0 : -1}
 																style={{
@@ -558,6 +755,9 @@ export default function MinesweeperPage() {
 																	index === board.firstIndex
 																		? "z-10 ring-2 ring-ctp-blue ring-offset-2 ring-offset-ctp-mantle"
 																		: "",
+																	isHintSource
+																		? "z-10 border-ctp-yellow bg-ctp-yellow/10 ring-2 ring-ctp-yellow ring-offset-1 ring-offset-ctp-mantle"
+																		: "",
 																	isDisabled
 																		? "cursor-not-allowed opacity-55"
 																		: "cursor-pointer",
@@ -584,6 +784,35 @@ export default function MinesweeperPage() {
 					</div>
 				</section>
 			) : null}
+			{hint &&
+				isHintExplanationVisible &&
+				createPortal(
+					<div
+						ref={hintPopupRef}
+						id="minesweeper-hint-explanation"
+						role="status"
+						aria-live="polite"
+						style={{
+							top: hintPopupPosition?.top ?? 0,
+							left: hintPopupPosition?.left ?? 0,
+							visibility: hintPopupPosition ? "visible" : "hidden",
+						}}
+						className="pointer-events-auto fixed z-50 w-[min(16rem,calc(100vw-1.5rem))] rounded-md border border-ctp-yellow/70 bg-ctp-surface0/95 text-left text-xs leading-5 text-ctp-text backdrop-blur-md"
+					>
+						<div
+							title="ドラッグして移動"
+							onPointerDown={startHintDrag}
+							onPointerMove={moveHintPopup}
+							onPointerUp={endHintDrag}
+							onPointerCancel={endHintDrag}
+							className="touch-none select-none border-b border-ctp-surface1 px-3 py-1.5 font-bold text-ctp-yellow cursor-move"
+						>
+							{ruleLabels[hint.rule]}
+						</div>
+						<p className="px-3 py-2">{hint.explanation}</p>
+					</div>,
+					document.body,
+				)}
 		</ToolsPageFrame>
 	);
 }

@@ -1,14 +1,99 @@
 import { describe, expect, test } from "bun:test";
+import { getHintPopupPosition } from "@/features/tools/minesweeper/hintPosition";
 import {
 	difficultyDefinitions,
 	difficultyFeaturesMatchDefinition,
 	difficultyKeys,
+	formatCellLabel,
 	generateLogicalBoard,
+	getLogicalHint,
 	getNeighborIndices,
 	getOpeningCells,
+	ruleLabels,
 } from "@/features/tools/minesweeper/logic";
 
 describe("完全論理式マインスイーパー", () => {
+	test("ヒント説明を推論対象マスを隠さず画面内へ配置する", () => {
+		const board = { top: 100, left: 100, width: 600, height: 500 };
+		const popup = Object.defineProperties(
+			{},
+			{
+				width: { value: 240, enumerable: false },
+				height: { value: 80, enumerable: false },
+			},
+		) as { width: number; height: number };
+		const viewport = { width: 1000, height: 800 };
+
+		expect(
+			getHintPopupPosition(
+				{ top: 110, left: 360, width: 40, height: 40 },
+				popup,
+				board,
+				viewport,
+			),
+		).toEqual({ top: 20, left: 260 });
+		expect(
+			getHintPopupPosition(
+				{ top: 350, left: 650, width: 40, height: 40 },
+				popup,
+				board,
+				viewport,
+				[{ top: 260, left: 550, width: 150, height: 80 }],
+			),
+		).toEqual({ top: 400, left: 550 });
+		expect(
+			getHintPopupPosition(
+				{ top: 652, left: 682, width: 36, height: 36 },
+				{ width: 256, height: 78 },
+				{ top: 170, left: 366, width: 548, height: 548 },
+				{ width: 1280, height: 720 },
+				[{ top: 580, left: 600, width: 36, height: 36 }],
+			),
+		).toEqual({ top: 564, left: 646 });
+
+		const surroundedTargets = [
+			{ top: 154, left: 352, width: 36, height: 36 },
+			{ top: 318, left: 352, width: 36, height: 36 },
+			{ top: 242, left: 420, width: 36, height: 36 },
+			{ top: 242, left: 158, width: 36, height: 36 },
+			{ top: 20, left: 352, width: 36, height: 36 },
+			{ top: 520, left: 352, width: 36, height: 36 },
+			{ top: 242, left: 610, width: 36, height: 36 },
+			{ top: 242, left: 20, width: 36, height: 36 },
+		];
+		const searchedPosition = getHintPopupPosition(
+			{ top: 250, left: 350, width: 40, height: 40 },
+			{ width: 200, height: 100 },
+			{ top: 100, left: 100, width: 600, height: 400 },
+			{ width: 800, height: 600 },
+			surroundedTargets,
+		);
+		const searchedPopup = {
+			...searchedPosition,
+			width: 200,
+			height: 100,
+		};
+		expect(
+			surroundedTargets.every((target) => {
+				const overlapWidth = Math.max(
+					0,
+					Math.min(
+						searchedPopup.left + searchedPopup.width,
+						target.left + target.width,
+					) - Math.max(searchedPopup.left, target.left),
+				);
+				const overlapHeight = Math.max(
+					0,
+					Math.min(
+						searchedPopup.top + searchedPopup.height,
+						target.top + target.height,
+					) - Math.max(searchedPopup.top, target.top),
+				);
+				return overlapWidth * overlapHeight === 0;
+			}),
+		).toBe(true);
+	});
+
 	test("各プリセットで論理検証済みの盤面を生成できる", () => {
 		let adjustedMineCount = false;
 		for (const difficulty of difficultyKeys) {
@@ -63,8 +148,21 @@ describe("完全論理式マインスイーパー", () => {
 					),
 				),
 			).toBe(true);
+			expect(
+				board.solutionSteps.every(
+					(step) =>
+						!/(安全です|すべて地雷です|このマスは地雷です)/.test(
+							step.explanation,
+						),
+				),
+			).toBe(true);
 		}
 		expect(adjustedMineCount).toBe(true);
+		expect(
+			Object.values(ruleLabels).every(
+				(label) => !/(すべて地雷|残り地雷が0)/.test(label),
+			),
+		).toBe(true);
 	});
 
 	test("同じシードと設定から同じ盤面を再現できる", () => {
@@ -82,6 +180,60 @@ describe("完全論理式マインスイーパー", () => {
 		).toEqual(
 			first.cells.filter((cell) => cell.mine).map((cell) => cell.index),
 		);
+	});
+
+	test("ヒントは最も単純な推論の根拠だけを返す", () => {
+		const board = generateLogicalBoard({
+			...difficultyDefinitions.expert,
+			difficulty: "expert",
+			seed: "hint-source-test",
+		});
+		const revealed = new Set(getOpeningCells(board, board.firstIndex));
+		const flagged = new Set<number>();
+		let foundEnumeration = false;
+
+		for (const expectedStep of board.solutionSteps) {
+			const hint = getLogicalHint(board, revealed, flagged);
+			expect(hint).not.toBeNull();
+			if (!hint) break;
+
+			expect(hint.rule).toBe(expectedStep.rule);
+			expect(hint.sources.every((index) => revealed.has(index))).toBe(true);
+			expect(hint.targets.some((index) => hint.sources.includes(index))).toBe(
+				false,
+			);
+			if (
+				hint.rule === "remaining-mines-zero" ||
+				hint.rule === "all-unknown-are-mines"
+			) {
+				expect(hint.sources).toHaveLength(1);
+			}
+			if (hint.rule === "constraint-enumeration") foundEnumeration = true;
+
+			for (const source of hint.sources) {
+				expect(
+					formatCellLabel(board, source, {
+						revealed: true,
+						flagged: false,
+						showMine: false,
+						first: false,
+						hintSource: true,
+					}),
+				).toContain("ヒントの根拠");
+			}
+
+			if (expectedStep.action === "flag") {
+				for (const index of expectedStep.targets) flagged.add(index);
+			} else {
+				for (const index of expectedStep.targets) {
+					for (const opened of getOpeningCells(board, index, flagged)) {
+						revealed.add(opened);
+					}
+				}
+			}
+		}
+
+		expect(foundEnumeration).toBe(true);
 	});
 
 	test("安全な初手領域を確保できない設定は拒否する", () => {

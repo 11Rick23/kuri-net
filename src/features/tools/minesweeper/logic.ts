@@ -130,38 +130,21 @@ const emptyDifficultyFeatures: DifficultyFeatures = {
 };
 
 export const ruleLabels: Record<DeductionRule, string> = {
-	"remaining-mines-zero": "残雷0",
-	"all-unknown-are-mines": "全候補",
-	"subset-difference": "集合差",
-	"global-mine-count": "全体残数",
-	"constraint-enumeration": "制約列挙",
+	"remaining-mines-zero": "基本推測",
+	"all-unknown-are-mines": "基本推測",
+	"subset-difference": "集合差推測",
+	"global-mine-count": "地雷数推測",
+	"constraint-enumeration": "制約列挙推測",
 };
 
-const explanations: Record<DeductionRule, Record<"reveal" | "flag", string>> = {
-	"remaining-mines-zero": {
-		reveal:
-			"数字の周囲で必要な地雷がすべて確定しているため、残りのマスは安全です。",
-		flag: "数字の周囲に追加で置く地雷はありません。",
-	},
-	"all-unknown-are-mines": {
-		reveal: "数字の周囲に安全と確定できるマスはありません。",
-		flag: "残りの地雷数と未確定マス数が一致するため、すべて地雷です。",
-	},
-	"subset-difference": {
-		reveal:
-			"2つの数字が作る候補集合を比較すると、差分のマスには地雷が残らないため安全です。",
-		flag: "2つの数字が作る候補集合を比較すると、差分のマスはすべて地雷です。",
-	},
-	"global-mine-count": {
-		reveal:
-			"盤面全体の地雷がすべて確定しているため、残りの未確定マスは安全です。",
-		flag: "盤面全体の残り地雷数と未確定マス数が一致するため、残りはすべて地雷です。",
-	},
-	"constraint-enumeration": {
-		reveal:
-			"公開済みの数字を満たすすべての配置で地雷にならないため、このマスは安全です。",
-		flag: "公開済みの数字を満たすすべての配置で地雷になるため、このマスは地雷です。",
-	},
+const explanations: Record<DeductionRule, string> = {
+	"remaining-mines-zero": "周囲の地雷の数を確認してみましょう。",
+	"all-unknown-are-mines": "周囲の未確定マス数を確認してみましょう。",
+	"subset-difference":
+		"強調されたマスの共通部分に含まれる地雷数を確認してみましょう。",
+	"global-mine-count": "未発見の地雷の数と未確定マス数を比べてみましょう。",
+	"constraint-enumeration":
+		"強調されたマスの条件を同時に満たす配置を考えてみましょう。",
 };
 
 class SeededRandom {
@@ -366,7 +349,7 @@ function makeDeduction(
 		targets: uniqueSorted(targets),
 		sources: uniqueSorted(sources),
 		rule,
-		explanation: explanations[rule][action],
+		explanation: explanations[rule],
 	};
 }
 
@@ -676,6 +659,42 @@ function findDeduction(
 		}
 	}
 	return { deduction: null, contradiction: false, maxConstraintSize };
+}
+
+export function getLogicalHint(
+	board: LogicalBoard,
+	revealed: Set<number>,
+	flagged: Set<number>,
+) {
+	const result = findDeduction(board, revealed, flagged);
+	if (!result.deduction || result.contradiction) return null;
+
+	if (
+		result.deduction.rule !== "remaining-mines-zero" &&
+		result.deduction.rule !== "all-unknown-are-mines"
+	) {
+		return result.deduction;
+	}
+
+	const { constraints, contradiction } = buildConstraints(
+		board,
+		revealed,
+		flagged,
+	);
+	if (contradiction) return null;
+	const matchingConstraint = constraints.find((constraint) =>
+		result.deduction?.rule === "remaining-mines-zero"
+			? constraint.remainingMines === 0
+			: constraint.remainingMines === constraint.variables.length,
+	);
+	if (!matchingConstraint) return null;
+
+	return makeDeduction(
+		result.deduction.action,
+		matchingConstraint.variables,
+		matchingConstraint.sources.slice(0, 1),
+		result.deduction.rule,
+	);
 }
 
 function collectDifficultyFeatures(
@@ -1135,6 +1154,7 @@ export function formatCellLabel(
 		flagged: boolean;
 		showMine: boolean;
 		first: boolean;
+		hintSource?: boolean;
 	},
 ) {
 	const cell = board.cells[index];
@@ -1149,6 +1169,9 @@ export function formatCellLabel(
 				? "安全な空きマス"
 				: `周囲の地雷 ${cell.adjacentMines}個`;
 	}
-	const annotations = [options.first ? "初手" : ""].filter(Boolean);
+	const annotations = [
+		options.first ? "初手" : "",
+		options.hintSource ? "ヒントの根拠" : "",
+	].filter(Boolean);
 	return [`${row}行 ${column}列`, state, ...annotations].join("、");
 }
