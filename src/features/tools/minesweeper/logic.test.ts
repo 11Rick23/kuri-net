@@ -1,6 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import { getHintPopupPosition } from "@/features/tools/minesweeper/hintPosition";
 import {
+	type BoardCell,
+	createForcedMineBoard,
 	difficultyDefinitions,
 	difficultyFeaturesMatchDefinition,
 	difficultyKeys,
@@ -9,10 +11,82 @@ import {
 	getLogicalHint,
 	getNeighborIndices,
 	getOpeningCells,
+	type LogicalBoard,
 	ruleLabels,
 } from "@/features/tools/minesweeper/logic";
 
+function createTestBoard(
+	width: number,
+	height: number,
+	mineIndices: number[],
+): LogicalBoard {
+	const mines = new Set(mineIndices);
+	const cells: BoardCell[] = Array.from(
+		{ length: width * height },
+		(_, index) => ({
+			index,
+			mine: mines.has(index),
+			adjacentMines: mines.has(index)
+				? 0
+				: getNeighborIndices(index, width, height).filter((neighbor) =>
+						mines.has(neighbor),
+					).length,
+		}),
+	);
+	return {
+		width,
+		height,
+		mineCount: mineIndices.length,
+		firstIndex: 0,
+		seed: "test-board",
+		cells,
+		difficultyScore: 0,
+		difficultyFeatures: {
+			maxRuleCost: 0,
+			subsetCount: 0,
+			enumerationCount: 0,
+			maxSourceCount: 0,
+			maxConstraintSize: 0,
+			maxEnumerationConstraintSize: 0,
+			maxHardStepStreak: 0,
+			maxHardStepsInWindow: 0,
+			scarceStepRatio: 0,
+			basicStepRatio: 1,
+		},
+		maxRule: "remaining-mines-zero",
+		solutionSteps: [],
+	};
+}
+
 describe("完全論理式マインスイーパー", () => {
+	test("論理的に安全と確定していないマスを地雷へ変更する", () => {
+		const board = createTestBoard(3, 2, [1]);
+		const revealed = new Set([0]);
+		const originalClues = new Map(
+			[...revealed].map((index) => [index, board.cells[index].adjacentMines]),
+		);
+
+		const forcedMineBoard = createForcedMineBoard(board, revealed, 3);
+
+		expect(forcedMineBoard).not.toBeNull();
+		if (!forcedMineBoard) return;
+		expect(forcedMineBoard.cells[3].mine).toBe(true);
+		expect(forcedMineBoard.cells.filter((cell) => cell.mine)).toHaveLength(
+			board.mineCount,
+		);
+		for (const [index, adjacentMines] of originalClues) {
+			expect(forcedMineBoard.cells[index].mine).toBe(false);
+			expect(forcedMineBoard.cells[index].adjacentMines).toBe(adjacentMines);
+		}
+	});
+
+	test("残り条件から安全と証明できるマスは地雷へ変更しない", () => {
+		const board = createTestBoard(3, 2, [1]);
+		const revealed = new Set([0]);
+
+		expect(createForcedMineBoard(board, revealed, 2)).toBeNull();
+	});
+
 	test("ヒント説明を推論対象マスを隠さず画面内へ配置する", () => {
 		const board = { top: 100, left: 100, width: 600, height: 500 };
 		const popup = Object.defineProperties(
@@ -226,6 +300,7 @@ describe("完全論理式マインスイーパー", () => {
 				for (const index of expectedStep.targets) flagged.add(index);
 			} else {
 				for (const index of expectedStep.targets) {
+					expect(createForcedMineBoard(board, revealed, index)).toBeNull();
 					for (const opened of getOpeningCells(board, index, flagged)) {
 						revealed.add(opened);
 					}

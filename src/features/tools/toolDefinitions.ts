@@ -17,7 +17,7 @@ export const toolDefinitions: ToolDefinition[] = [
 		href: "/apps/minesweeper",
 		title: "完全論理式マインスイーパー",
 		description:
-			"推測なしで、すべての一手を論理的に説明できるマインスイーパーです。",
+			"論理的に安全と確定したマスだけを開いて進める、推測禁止のマインスイーパーです。",
 		requiresAuth: false,
 		badges: [
 			{

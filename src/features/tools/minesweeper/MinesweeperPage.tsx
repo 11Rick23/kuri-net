@@ -23,6 +23,7 @@ import {
 	type HintPopupPosition,
 } from "@/features/tools/minesweeper/hintPosition";
 import {
+	createForcedMineBoard,
 	createRandomSeed,
 	type Deduction,
 	type DifficultyKey,
@@ -295,6 +296,7 @@ export default function MinesweeperPage() {
 				status === "empty" ||
 				status === "won" ||
 				status === "lost" ||
+				revealed.has(index) ||
 				flags.has(index) ||
 				(status === "idle" && index !== board.firstIndex)
 			) {
@@ -304,8 +306,12 @@ export default function MinesweeperPage() {
 			setIsHintExplanationVisible(false);
 			setHintPopupPosition(null);
 			setFocusedIndex(index);
-			const cell = board.cells[index];
-			if (cell.mine) {
+			const forcedMineBoard =
+				status === "playing"
+					? createForcedMineBoard(board, revealed, index)
+					: null;
+			if (forcedMineBoard) {
+				setBoard(forcedMineBoard);
 				setRevealed((current) => new Set(current).add(index));
 				setStatus("lost");
 				return;
