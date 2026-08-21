@@ -15,14 +15,14 @@ export const toolDefinitions: ToolDefinition[] = [
 		id: "minesweeper",
 		slug: "minesweeper",
 		href: "/apps/minesweeper",
-		title: "完全論理式マインスイーパー",
+		title: "完全論理的マインスイーパー",
 		description:
-			"論理的に安全と確定したマスだけを開いて進める、推測禁止のマインスイーパーです。",
+			"最後まで推測無しでクリアできるマインスイーパーです。",
 		requiresAuth: false,
 		badges: [
 			{
 				kind: "local",
-				description: "盤面の生成とプレイはすべて端末内で動作します。",
+				description: "このアプリは端末内で動作します。",
 			},
 		],
 	},

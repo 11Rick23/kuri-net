@@ -60,10 +60,10 @@ function BoardSettingsFields({
 			))}
 			<div className="grid gap-1 text-xs text-ctp-subtext1">
 				<div className="flex items-center gap-1">
-					<span>論理難度</span>
+					<span>推論難度</span>
 					<ToolBadge
 						icon={<MdHelpOutline size={15} aria-hidden="true" />}
-						ariaLabel="論理難度の説明を表示"
+						ariaLabel="推論難度の説明を表示"
 						triggerClassName="!p-0 text-ctp-subtext0 hover:text-ctp-blue"
 						contentToneClassName="!right-auto !left-0 w-64 !translate-x-0 text-left leading-5"
 						wrapContent
@@ -72,7 +72,7 @@ function BoardSettingsFields({
 					</ToolBadge>
 				</div>
 				<select
-					aria-label="論理難度"
+					aria-label="推論難度"
 					value={settings.difficulty}
 					disabled={disabled}
 					onChange={(event) =>

@@ -240,6 +240,6 @@ export function generateLogicalBoard(
 		restart += 1;
 	}
 	throw new Error(
-		"指定した論理難度の条件を満たす盤面を生成できませんでした。探索をやり直してください。",
+		"指定した推論難度の条件を満たす盤面を生成できませんでした。探索をやり直してください。",
 	);
 }
