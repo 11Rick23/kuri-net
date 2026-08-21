@@ -2,7 +2,9 @@ import { describe, expect, test } from "bun:test";
 import { getHintPopupPosition } from "@/features/tools/minesweeper/hintPosition";
 import {
 	type BoardCell,
+	calculateAverageDifficultyScore,
 	createForcedMineBoard,
+	type Deduction,
 	difficultyDefinitions,
 	difficultyFeaturesMatchDefinition,
 	difficultyKeys,
@@ -43,8 +45,12 @@ function createTestBoard(
 		difficultyScore: 0,
 		difficultyFeatures: {
 			maxRuleCost: 0,
+			averageRuleCost: 0,
 			subsetCount: 0,
+			subsetRatio: 0,
 			enumerationCount: 0,
+			enumerationRatio: 0,
+			hardStepRatio: 0,
 			maxSourceCount: 0,
 			maxConstraintSize: 0,
 			maxEnumerationConstraintSize: 0,
@@ -59,6 +65,48 @@ function createTestBoard(
 }
 
 describe("完全論理式マインスイーパー", () => {
+	test("同じ推論構成なら手数が増えても平均難易度は変わらない", () => {
+		const steps: Deduction[] = [
+			{
+				action: "reveal",
+				targets: [1],
+				sources: [0],
+				rule: "remaining-mines-zero",
+				explanation: "",
+			},
+			{
+				action: "reveal",
+				targets: [2],
+				sources: [0, 3],
+				rule: "subset-difference",
+				explanation: "",
+			},
+		];
+
+		expect(calculateAverageDifficultyScore(steps)).toBe(200);
+		expect(calculateAverageDifficultyScore([...steps, ...steps])).toBe(200);
+	});
+
+	test("推論回数が違っても平均と割合が同じなら同じ難度になる", () => {
+		const features = {
+			...createTestBoard(3, 2, [1]).difficultyFeatures,
+			maxRuleCost: 3,
+			averageRuleCost: 1.2,
+			subsetCount: 1,
+			subsetRatio: 0.1,
+		};
+
+		expect(difficultyFeaturesMatchDefinition(features, "intermediate")).toBe(
+			true,
+		);
+		expect(
+			difficultyFeaturesMatchDefinition(
+				{ ...features, subsetCount: 100 },
+				"intermediate",
+			),
+		).toBe(true);
+	});
+
 	test("論理的に安全と確定していないマスを地雷へ変更する", () => {
 		const board = createTestBoard(3, 2, [1]);
 		const revealed = new Set([0]);

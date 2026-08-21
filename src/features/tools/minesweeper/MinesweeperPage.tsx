@@ -152,7 +152,7 @@ function BoardSettingsPanel({
 						contentToneClassName="!right-auto !left-0 w-64 !translate-x-0 text-left leading-5"
 						wrapContent
 					>
-						盤面を解くために必要な推論の複雑さです。盤面サイズや地雷数とは別で、高いほど集合比較や候補の組み合わせを使う盤面になります。
+						盤面を解くために必要な推論1手あたりの平均的な複雑さです。盤面サイズや地雷数とは別で、高いほど集合比較や候補の組み合わせを使う盤面になります。
 					</ToolBadge>
 				</div>
 				<select

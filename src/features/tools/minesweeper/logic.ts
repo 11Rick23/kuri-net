@@ -41,8 +41,12 @@ export type Deduction = {
 
 export type DifficultyFeatures = {
 	maxRuleCost: number;
+	averageRuleCost: number;
 	subsetCount: number;
+	subsetRatio: number;
 	enumerationCount: number;
+	enumerationRatio: number;
+	hardStepRatio: number;
 	maxSourceCount: number;
 	maxConstraintSize: number;
 	maxEnumerationConstraintSize: number;
@@ -118,8 +122,12 @@ const ruleCosts: Record<DeductionRule, number> = {
 
 const emptyDifficultyFeatures: DifficultyFeatures = {
 	maxRuleCost: 0,
+	averageRuleCost: 0,
 	subsetCount: 0,
+	subsetRatio: 0,
 	enumerationCount: 0,
+	enumerationRatio: 0,
+	hardStepRatio: 0,
 	maxSourceCount: 0,
 	maxConstraintSize: 0,
 	maxEnumerationConstraintSize: 0,
@@ -728,13 +736,23 @@ function collectDifficultyFeatures(
 			step.rule === "remaining-mines-zero" ||
 			step.rule === "all-unknown-are-mines",
 	).length;
+	const subsetCount = steps.filter(
+		(step) => step.rule === "subset-difference",
+	).length;
+	const enumerationCount = steps.filter(
+		(step) => step.rule === "constraint-enumeration",
+	).length;
+	const hardStepCount = steps.filter((step) => isHardStep(step)).length;
 	return {
 		maxRuleCost: Math.max(...steps.map((step) => ruleCosts[step.rule])),
-		subsetCount: steps.filter((step) => step.rule === "subset-difference")
-			.length,
-		enumerationCount: steps.filter(
-			(step) => step.rule === "constraint-enumeration",
-		).length,
+		averageRuleCost:
+			steps.reduce((total, step) => total + ruleCosts[step.rule], 0) /
+			steps.length,
+		subsetCount,
+		subsetRatio: subsetCount / steps.length,
+		enumerationCount,
+		enumerationRatio: enumerationCount / steps.length,
+		hardStepRatio: hardStepCount / steps.length,
 		maxSourceCount: Math.max(...steps.map((step) => step.sources.length)),
 		maxConstraintSize,
 		maxEnumerationConstraintSize: Math.max(
@@ -887,21 +905,17 @@ function mutateCandidate(
 	);
 }
 
+/** Returns the average deduction cost on a 100–800 scale. */
+export function calculateAverageDifficultyScore(steps: Deduction[]) {
+	if (steps.length === 0) return 0;
+	const averageRuleCost =
+		steps.reduce((total, step) => total + ruleCosts[step.rule], 0) /
+		steps.length;
+	return Math.round(averageRuleCost * 1_000) / 10;
+}
+
 function scoreSolution(result: SolverResult) {
-	const features = result.features;
-	return Math.round(
-		features.maxRuleCost * 10 +
-			features.subsetCount * 4 +
-			features.enumerationCount * 12 +
-			features.maxSourceCount * 0.5 +
-			Math.min(features.maxConstraintSize, 12) * 0.5 +
-			features.maxEnumerationConstraintSize * 2 +
-			features.maxHardStepStreak * 6 +
-			features.maxHardStepsInWindow * 4 +
-			features.scarceStepRatio * 10 +
-			(1 - features.basicStepRatio) * 10 +
-			Math.min(result.steps.length, 40) * 0.25,
-	);
+	return calculateAverageDifficultyScore(result.steps);
 }
 
 export function difficultyFeaturesMatchDefinition(
@@ -911,30 +925,36 @@ export function difficultyFeaturesMatchDefinition(
 	switch (difficulty) {
 		case "beginner":
 			return (
-				features.maxRuleCost <= 1 &&
-				features.subsetCount === 0 &&
-				features.enumerationCount === 0
+				features.averageRuleCost >= 1.08 &&
+				features.averageRuleCost < 1.2 &&
+				features.subsetRatio >= 0.04 &&
+				features.subsetRatio < 0.1 &&
+				features.enumerationRatio === 0 &&
+				features.maxRuleCost <= 3
 			);
 		case "intermediate":
 			return (
-				features.subsetCount >= 1 &&
-				features.subsetCount <= 3 &&
-				features.enumerationCount === 0 &&
+				features.averageRuleCost >= 1.2 &&
+				features.averageRuleCost < 1.35 &&
+				features.subsetRatio >= 0.1 &&
+				features.subsetRatio < 0.175 &&
+				features.enumerationRatio === 0 &&
 				features.maxRuleCost <= 3
 			);
 		case "advanced":
 			return (
-				features.subsetCount >= 4 &&
-				features.enumerationCount === 0 &&
+				features.averageRuleCost >= 1.35 &&
+				features.averageRuleCost < 1.6 &&
+				features.subsetRatio >= 0.175 &&
+				features.enumerationRatio === 0 &&
 				features.maxRuleCost <= 3 &&
-				features.maxHardStepStreak >= 2 &&
-				features.maxHardStepsInWindow >= 2 &&
 				features.scarceStepRatio >= 0.4
 			);
 		case "expert":
 			return (
-				features.enumerationCount > 0 &&
-				features.maxEnumerationConstraintSize >= 8
+				features.enumerationRatio >= 0.04 &&
+				features.averageRuleCost >= 1.6 &&
+				features.maxEnumerationConstraintSize >= 9
 			);
 	}
 }
@@ -968,36 +988,44 @@ function difficultyDistance(
 	switch (difficulty) {
 		case "beginner":
 			profilePenalty =
-				features.subsetCount * 120 +
-				features.enumerationCount * 240 +
-				Math.max(0, features.maxRuleCost - 1) * 80 +
-				Math.abs(score - 24) * 0.05;
+				Math.max(0, 1.08 - features.averageRuleCost) * 300 +
+				Math.max(0, features.averageRuleCost - 1.2) * 300 +
+				Math.max(0, 0.04 - features.subsetRatio) * 3_500 +
+				Math.max(0, features.subsetRatio - 0.1) * 2_000 +
+				features.enumerationRatio * 2_400 +
+				Math.max(0, features.maxRuleCost - 3) * 80 +
+				Math.abs(features.subsetRatio - 0.06) * 100 +
+				Math.abs(score - 112.5) * 0.1;
 			break;
 		case "intermediate":
 			profilePenalty =
-				(features.subsetCount === 0 ? 140 : 0) +
-				Math.max(0, features.subsetCount - 3) * 45 +
-				features.enumerationCount * 220 +
+				Math.max(0, 1.2 - features.averageRuleCost) * 300 +
+				Math.max(0, features.averageRuleCost - 1.35) * 300 +
+				Math.max(0, 0.1 - features.subsetRatio) * 3_500 +
+				Math.max(0, features.subsetRatio - 0.175) * 2_000 +
+				features.enumerationRatio * 2_400 +
 				Math.max(0, features.maxRuleCost - 3) * 80 +
-				Math.abs(features.subsetCount - 2) * 8 +
-				Math.abs(score - 58) * 0.05;
+				Math.abs(features.subsetRatio - 0.13) * 100 +
+				Math.abs(score - 125) * 0.1;
 			break;
 		case "advanced":
 			profilePenalty =
-				Math.max(0, 4 - features.subsetCount) * 45 +
-				features.enumerationCount * 240 +
+				Math.max(0, 1.35 - features.averageRuleCost) * 300 +
+				Math.max(0, features.averageRuleCost - 1.6) * 300 +
+				Math.max(0, 0.175 - features.subsetRatio) * 3_500 +
+				features.enumerationRatio * 2_400 +
 				Math.max(0, features.maxRuleCost - 3) * 100 +
-				Math.max(0, 2 - features.maxHardStepStreak) * 55 +
-				Math.max(0, 2 - features.maxHardStepsInWindow) * 25 +
 				Math.max(0, 0.4 - features.scarceStepRatio) * 180 +
-				Math.abs(features.subsetCount - 6) * 2 +
-				Math.abs(score - 92) * 0.05;
+				Math.abs(features.hardStepRatio - 0.22) * 100 +
+				Math.abs(score - 145) * 0.1;
 			break;
 		case "expert":
 			profilePenalty =
-				(features.enumerationCount === 0 ? 280 : 0) +
-				Math.max(0, 8 - features.maxEnumerationConstraintSize) * 45 +
-				Math.abs(score - 145) * 0.05;
+				Math.max(0, 0.04 - features.enumerationRatio) * 9_000 +
+				Math.max(0, 1.6 - features.averageRuleCost) * 300 +
+				Math.max(0, 9 - features.maxEnumerationConstraintSize) * 45 +
+				Math.abs(features.enumerationRatio - 0.06) * 100 +
+				Math.abs(score - 175) * 0.1;
 			break;
 	}
 	return unsolvedPenalty + profilePenalty + mineCountPenalty;
