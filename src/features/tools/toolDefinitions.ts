@@ -16,8 +16,7 @@ export const toolDefinitions: ToolDefinition[] = [
 		slug: "minesweeper",
 		href: "/apps/minesweeper",
 		title: "完全論理的マインスイーパー",
-		description:
-			"最後まで推測無しでクリアできるマインスイーパーです。",
+		description: "最後まで推測無しでクリアできるマインスイーパーです。",
 		requiresAuth: false,
 		badges: [
 			{
