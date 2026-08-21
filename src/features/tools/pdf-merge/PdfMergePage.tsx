@@ -40,7 +40,7 @@ export default function PdfMergePage() {
 		>
 			{isDragging && <DropOverlay isDraggingPDF={isDraggingPDF} />}
 			<section
-				aria-label="PDF結合アプリ"
+				aria-label="PDF結合ツール"
 				className="relative z-20 flex flex-col gap-7 rounded-lg border border-ctp-surface1 bg-ctp-base p-4 sm:p-6"
 			>
 				<InfoModal />

@@ -1,67 +1,30 @@
 "use client";
 
-import { authClient } from "@/features/auth/client/authClient";
+import { startRegistration } from "@simplewebauthn/browser";
 import {
-	cleanupIncompleteRegistration,
-	completePasskeyRegistration,
-	updateRegistrationDisplayName,
-} from "@/features/auth/server/actions";
-import { validateDisplayName } from "@/features/auth/shared/displayName";
+	generateRegistrationData,
+	verifyRegistrationData,
+} from "@/features/auth/server/registration";
 import type { Result } from "@/shared/types/result";
 
 export default async function register(
-	displayName: string,
+	userName: string,
 ): Promise<Result<string, string>> {
-	const validated = validateDisplayName(displayName);
-	if (!validated.ok) {
-		return validated;
-	}
-
-	let provisionalSessionCreated = false;
-
 	try {
-		const anonymousResult = await authClient.signIn.anonymous();
-		if (anonymousResult.error || !anonymousResult.data) {
-			return { ok: false, error: "登録を開始できませんでした。" };
-		}
-		provisionalSessionCreated = true;
+		// チャレンジとユーザーIDを取得
+		const options = await generateRegistrationData(userName);
 
-		const displayNameResult = await updateRegistrationDisplayName(
-			validated.value,
-		);
-		if (!displayNameResult.ok) {
-			throw new Error(displayNameResult.error);
-		}
+		// パスキーの作成を開始
+		const response = await startRegistration({ optionsJSON: options });
 
-		const passkeyResult = await authClient.passkey.addPasskey({
-			name: validated.value,
-		});
-		if (passkeyResult.error || !passkeyResult.data) {
-			const cancelled =
-				passkeyResult.error &&
-				"code" in passkeyResult.error &&
-				passkeyResult.error.code === "ERROR_CEREMONY_ABORTED";
-			throw new Error(cancelled ? "REGISTRATION_CANCELLED" : "PASSKEY_ERROR");
-		}
-
-		const completionResult = await completePasskeyRegistration();
-		if (!completionResult.ok) {
-			throw new Error(completionResult.error);
-		}
+		// パスキーを検証
+		await verifyRegistrationData(response);
 
 		return { ok: true, value: "登録に成功しました。" };
 	} catch (error) {
-		if (provisionalSessionCreated) {
-			await cleanupIncompleteRegistration();
-			await authClient.signOut();
+		if (error instanceof Error && error.name === "NotAllowedError") {
+			return { ok: false, error: "登録がキャンセルされました" };
 		}
-
-		return {
-			ok: false,
-			error:
-				error instanceof Error && error.message === "REGISTRATION_CANCELLED"
-					? "登録がキャンセルされました。"
-					: "登録中にエラーが発生しました。",
-		};
+		return { ok: false, error: "登録中にエラーが発生しました" };
 	}
 }
