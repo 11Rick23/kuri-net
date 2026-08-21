@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import ToolsIndexScreen from "@/features/tools/ToolsIndexScreen";
 
 export const metadata: Metadata = {
-	title: "ツール",
+	title: "Apps",
 };
 
-export default function ToolsPage() {
+export default function AppsPage() {
 	return <ToolsIndexScreen />;
 }

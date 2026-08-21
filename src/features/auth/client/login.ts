@@ -1,42 +1,28 @@
 "use client";
 
-import { startAuthentication } from "@simplewebauthn/browser";
-import {
-	generateLoginOptions,
-	verifyLoginData,
-} from "@/features/auth/server/login";
+import { authClient } from "@/features/auth/client/authClient";
+import { getPostLoginPath } from "@/features/auth/server/actions";
 import type { Result } from "@/shared/types/result";
 
-export default async function login(): Promise<Result<string, string>> {
-	const optionsJSON = await generateLoginOptions();
+export default async function login(): Promise<Result<"/", string>> {
+	const result = await authClient.signIn.passkey();
 
-	try {
-		const authRes = await startAuthentication({ optionsJSON });
-
-		const veriRes = await verifyLoginData(authRes);
-
-		if (!veriRes) {
-			return {
-				ok: false,
-				error: "認証に失敗しました。",
-			};
-		} else {
-			return {
-				ok: true,
-				value: "認証に成功しました。",
-			};
-		}
-	} catch (error) {
-		const name = error instanceof Error ? error.name : "";
-		if (name === "NotAllowedError") {
-			return {
-				ok: false,
-				error: "認証がキャンセルされました。",
-			};
-		}
+	if (result.error) {
+		const errorCode = "code" in result.error ? result.error.code : undefined;
 		return {
 			ok: false,
-			error: "認証中に予期しないエラーが発生しました。",
+			error:
+				errorCode === "AUTH_CANCELLED"
+					? "認証がキャンセルされました。"
+					: "パスキーで認証できませんでした。",
 		};
 	}
+
+	const path = await getPostLoginPath();
+	if (!path) {
+		await authClient.signOut();
+		return { ok: false, error: "このアカウントは利用できません。" };
+	}
+
+	return { ok: true, value: path };
 }

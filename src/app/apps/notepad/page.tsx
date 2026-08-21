@@ -1,24 +1,24 @@
 import type { Metadata } from "next";
 import AuthRequired from "@/features/auth/components/AuthRequired";
-import { verifySession } from "@/features/auth/server/verifySession";
+import { getAuthenticatedSession } from "@/features/auth/server/session";
 import NotepadScreen from "@/features/tools/notepad/NotepadScreen";
 import { getCurrentUserNotepad } from "@/features/tools/notepad/server/notepad";
 import { getToolDefinitionBySlug } from "@/features/tools/toolDefinitions";
 
-const tool = getToolDefinitionBySlug("notepad");
+const app = getToolDefinitionBySlug("notepad");
 
 export const metadata: Metadata = {
-	title: tool?.title ?? "notepad",
+	title: app?.title ?? "notepad",
 };
 
 export default async function NotepadPage() {
-	const session = await verifySession();
+	const session = await getAuthenticatedSession();
 
-	if (!session?.userID) {
+	if (!session) {
 		return <AuthRequired fullscreen={false} />;
 	}
 
-	const initialNotepad = await getCurrentUserNotepad(session.userID);
+	const initialNotepad = await getCurrentUserNotepad();
 
 	return (
 		<NotepadScreen

@@ -1,6 +1,6 @@
 "use server";
 
-import { verifySession } from "@/features/auth/server/verifySession";
+import { getAuthenticatedSession } from "@/features/auth/server/session";
 import ColorModeButton from "./ColorModeButton";
 import HomeButton from "./HomeButton";
 import LogInButton from "./LoginButton";
@@ -16,7 +16,7 @@ function Border() {
 }
 
 export default async function Header() {
-	const session = await verifySession();
+	const session = await getAuthenticatedSession();
 
 	return (
 		<div className="fixed top-0 left-0 w-full flex items-center justify-center z-70">
@@ -33,10 +33,10 @@ export default async function Header() {
 				<Border />
 				<PageButton url="/profile" display="Profile" />
 				<PageButton url="/works" display="Works" />
-				<PageButton url="/tools" display="Tools" match="prefix" />
+				<PageButton url="/apps" display="Apps" match="prefix" />
 				<Border />
 				<ColorModeButton />
-				{session?.userID ? <LogOutButton /> : <LogInButton />}
+				{session ? <LogOutButton /> : <LogInButton />}
 			</div>
 		</div>
 	);

@@ -1,16 +1,16 @@
 import Link from "next/link";
-import { verifySession } from "@/features/auth/server/verifySession";
+import { getAuthenticatedSession } from "@/features/auth/server/session";
 import LiveClock from "@/shared/components/LiveClock";
 import FullscreenMessage from "@/shared/components/layout/FullscreenMessage";
 
 const homeLinks = [
 	{ href: "/profile", label: "Profile" },
 	{ href: "/works", label: "Works" },
-	{ href: "/tools", label: "Tools" },
+	{ href: "/apps", label: "Apps" },
 ];
 
 export default async function HomeScreen() {
-	const session = await verifySession();
+	const session = await getAuthenticatedSession();
 
 	const loggedOutContent = {
 		title: "こんにちは",
@@ -31,11 +31,9 @@ export default async function HomeScreen() {
 	return (
 		<main>
 			<FullscreenMessage
-				title={session?.userID ? loggedInContent.title : loggedOutContent.title}
+				title={session ? loggedInContent.title : loggedOutContent.title}
 				description={
-					session?.userID
-						? loggedInContent.description
-						: loggedOutContent.description
+					session ? loggedInContent.description : loggedOutContent.description
 				}
 				actions={homeLinks.map((link) => (
 					<Link
