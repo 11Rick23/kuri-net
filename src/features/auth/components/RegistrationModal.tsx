@@ -1,34 +1,26 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaCheck } from "react-icons/fa";
 import register from "@/features/auth/client/registration";
-import { validateDisplayName } from "@/features/auth/shared/displayName";
 import { useModal } from "@/shared/components/modal/ModalProvider";
 
 export default function RegistrationModalContent() {
 	const [agreed, setAgreed] = useState(false);
-	const [displayName, setDisplayName] = useState("");
-	const [isRegistering, setIsRegistering] = useState(false);
+	const [username, setUsername] = useState("");
 	const [errorMessage, setErrorMessage] = useState("");
 	const { closeModal } = useModal();
-	const router = useRouter();
-	const displayNameIsValid = validateDisplayName(displayName).ok;
 
 	async function onRegisterButtonPress() {
 		setErrorMessage("");
-		setIsRegistering(true);
 
-		const res = await register(displayName);
+		const res = await register(username);
 
 		if (res.ok) {
 			closeModal();
-			router.refresh();
 		} else {
 			setErrorMessage(res.error);
 		}
-		setIsRegistering(false);
 	}
 
 	return (
@@ -75,18 +67,14 @@ export default function RegistrationModalContent() {
 					<span>上記注意事項を読み、同意します</span>
 				</label>
 
-				<label htmlFor="display-name" className="mt-7 text-sm font-medium">
-					表示名
-				</label>
 				<input
-					id="display-name"
+					id="username"
 					type="text"
-					value={displayName}
-					onChange={(e) => setDisplayName(e.target.value)}
-					placeholder="表示名を入力"
-					maxLength={200}
+					value={username}
+					onChange={(e) => setUsername(e.target.value)}
+					placeholder="パスキーの名称"
 					className="
-							w-full max-w-72 mt-2 mb-7 px-3 py-2
+                        w-full max-w-50 my-7 px-3 py-2
                         border border-ctp-overlay0 rounded-md text-center
                         font-bold placeholder:font-medium
                         placeholder:text-xs placeholder:text-ctp-text/80
@@ -95,7 +83,7 @@ export default function RegistrationModalContent() {
 
 				<button
 					type="button"
-					disabled={!agreed || !displayNameIsValid || isRegistering}
+					disabled={!agreed}
 					onClick={async () => {
 						await onRegisterButtonPress();
 					}}
@@ -103,12 +91,12 @@ export default function RegistrationModalContent() {
                         rounded-md
                         px-5 py-2 font-medium
 						${
-							agreed && displayNameIsValid && !isRegistering
+							agreed
 								? "cursor-pointer bg-ctp-blue text-ctp-crust hover:opacity-90"
 								: "cursor-not-allowed bg-ctp-surface1 text-ctp-text/50"
 						}`}
 				>
-					{isRegistering ? "登録中…" : "登録"}
+					登録
 				</button>
 
 				{errorMessage && (

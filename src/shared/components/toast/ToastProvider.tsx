@@ -1,5 +1,6 @@
 "use client";
 
+import { nanoid } from "nanoid";
 import type React from "react";
 import {
 	createContext,
@@ -73,7 +74,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 	// トーストを作成
 	const toast = useCallback(
 		(message: React.ReactNode, options?: ToastOptions) => {
-			const id = options?.id ?? crypto.randomUUID();
+			const id = options?.id ?? nanoid();
 			const type = options?.type ?? "info";
 			const durationMs = options?.durationMs ?? 5000;
 

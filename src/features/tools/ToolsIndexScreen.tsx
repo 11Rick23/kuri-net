@@ -5,8 +5,8 @@ import { toolDefinitions } from "@/features/tools/toolDefinitions";
 export default function ToolsIndexScreen() {
 	return (
 		<ToolsPageFrame
-			title="アプリ一覧"
-			description="ちょっとした便利なウェブアプリを提供しています。随時追加予定です。"
+			title="ツール一覧"
+			description="ちょっとした便利ツールを提供しています。随時追加予定です。"
 		>
 			<div className="grid gap-4 md:grid-cols-2">
 				{toolDefinitions.map((tool) => (
@@ -26,7 +26,7 @@ export default function ToolsIndexScreen() {
 							</div>
 
 							<div className="mt-auto pt-2 text-sm font-semibold text-ctp-blue transition group-hover:translate-x-1">
-								アプリを開く →
+								ツールを開く →
 							</div>
 						</div>
 					</Link>

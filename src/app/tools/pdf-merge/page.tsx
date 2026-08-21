@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import PdfMergePage from "@/features/tools/pdf-merge/PdfMergePage";
 import { getToolDefinitionBySlug } from "@/features/tools/toolDefinitions";
 
-const app = getToolDefinitionBySlug("pdf-merge");
+const tool = getToolDefinitionBySlug("pdf-merge");
 
 export const metadata: Metadata = {
-	title: app?.title ?? "pdf-merge",
+	title: tool?.title ?? "pdf-merge",
 };
 
 export default function PdfMerge() {

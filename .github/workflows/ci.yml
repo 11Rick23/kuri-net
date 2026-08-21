@@ -13,8 +13,6 @@ jobs:
     env:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/kuri_net
       NEXT_PUBLIC_ASSET_BASE_URL: https://example.com
-      BETTER_AUTH_SECRET: ci-only-7qfY1mP9vL3xN8kR2sW6cA4dH0jT5uB
-      BETTER_AUTH_URL: http://localhost:3000
     steps:
       - name: Checkout
         uses: actions/checkout@v7

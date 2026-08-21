@@ -1,3 +1,4 @@
+import { nanoid } from "nanoid";
 import { PDFDocument } from "pdf-lib";
 import { useState } from "react";
 import type { FileEntry } from "@/features/tools/pdf-merge/types";
@@ -15,7 +16,7 @@ export function usePdfMerge() {
 		setFiles((prev) => [
 			...prev,
 			...pdfFiles.map((file) => ({
-				id: crypto.randomUUID(),
+				id: nanoid(),
 				file,
 			})),
 		]);

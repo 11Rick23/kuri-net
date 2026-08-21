@@ -12,48 +12,34 @@ export type ToolDefinition = {
 
 export const toolDefinitions: ToolDefinition[] = [
 	{
-		id: "minesweeper",
-		slug: "minesweeper",
-		href: "/apps/minesweeper",
-		title: "完全論理的マインスイーパー",
-		description: "最後まで推測無しでクリアできるマインスイーパーです。",
-		requiresAuth: false,
-		badges: [
-			{
-				kind: "local",
-				description: "このアプリは端末内で動作します。",
-			},
-		],
-	},
-	{
 		id: "pdf-merge",
 		slug: "pdf-merge",
-		href: "/apps/pdf-merge",
+		href: "/tools/pdf-merge",
 		title: "PDF統合",
 		description: "複数のPDFファイルを1つのPDFファイルに結合します。",
 		requiresAuth: false,
 		badges: [
 			{
 				kind: "local",
-				description: "このアプリは端末内で動作します。",
+				description: "このツールは端末内で動作します。",
 			},
 		],
 	},
 	{
 		id: "notepad",
 		slug: "notepad",
-		href: "/apps/notepad",
+		href: "/tools/notepad",
 		title: "ちょこっとメモ",
 		description: "超シンプルなメモ帳です。",
 		requiresAuth: true,
 		badges: [
 			{
 				kind: "requiresAuth",
-				description: "このアプリを使うにはログインが必要です。",
+				description: "このツールを使うにはログインが必要です。",
 			},
 			{
 				kind: "database",
-				description: "このアプリはサーバー上にデータを保存します。",
+				description: "このツールはサーバー上にデータを保存します。",
 			},
 		],
 	},

@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 	openGraph: {
 		title: "kuri-net",
 		description:
-			"kuri-kuriの制作実績、プロフィール、ウェブアプリをまとめた個人サイト",
+			"kuri-kuriの制作実績、プロフィール、便利ツールをまとめた個人サイト",
 		siteName: "kuri-net",
 		type: "website",
 		images: [
