@@ -5,10 +5,10 @@ import NotepadScreen from "@/features/tools/notepad/NotepadScreen";
 import { getCurrentUserNotepad } from "@/features/tools/notepad/server/notepad";
 import { getToolDefinitionBySlug } from "@/features/tools/toolDefinitions";
 
-const tool = getToolDefinitionBySlug("notepad");
+const app = getToolDefinitionBySlug("notepad");
 
 export const metadata: Metadata = {
-	title: tool?.title ?? "notepad",
+	title: app?.title ?? "notepad",
 };
 
 export default async function NotepadPage() {

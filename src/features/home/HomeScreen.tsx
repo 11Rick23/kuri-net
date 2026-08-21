@@ -6,7 +6,7 @@ import FullscreenMessage from "@/shared/components/layout/FullscreenMessage";
 const homeLinks = [
 	{ href: "/profile", label: "Profile" },
 	{ href: "/works", label: "Works" },
-	{ href: "/tools", label: "Tools" },
+	{ href: "/apps", label: "Apps" },
 ];
 
 export default async function HomeScreen() {

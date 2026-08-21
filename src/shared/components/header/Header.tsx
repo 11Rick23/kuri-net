@@ -33,7 +33,7 @@ export default async function Header() {
 				<Border />
 				<PageButton url="/profile" display="Profile" />
 				<PageButton url="/works" display="Works" />
-				<PageButton url="/tools" display="Tools" match="prefix" />
+				<PageButton url="/apps" display="Apps" match="prefix" />
 				<Border />
 				<ColorModeButton />
 				{session ? <LogOutButton /> : <LogInButton />}
