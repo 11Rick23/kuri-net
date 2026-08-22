@@ -1,41 +1,91 @@
+import { useState } from "react";
 import { MdOutlineDragIndicator } from "react-icons/md";
+import {
+	formatFileSize,
+	PDF_REORDER_DATA_TYPE,
+	parseReorderIndex,
+	reorderFileEntries,
+} from "@/features/tools/pdf-merge/domain/pdfFiles";
 import type { FileEntry } from "@/features/tools/pdf-merge/types";
 
 type Props = {
 	files: FileEntry[];
+	disabled?: boolean;
 	onRemove: (id: string) => void;
 	onReorder: (files: FileEntry[]) => void;
 };
 
-export function FileList({ files, onRemove, onReorder }: Props) {
+export function FileList({
+	files,
+	disabled = false,
+	onRemove,
+	onReorder,
+}: Props) {
+	const [reorderAnnouncement, setReorderAnnouncement] = useState("");
+
+	const commitReorder = (fromIndex: number, toIndex: number) => {
+		if (disabled) {
+			return;
+		}
+
+		const movedEntry = files[fromIndex];
+		const reordered = reorderFileEntries(files, fromIndex, toIndex);
+
+		if (!movedEntry || !reordered) {
+			return;
+		}
+
+		onReorder(reordered);
+		setReorderAnnouncement(
+			`${movedEntry.file.name}を${toIndex + 1}番目に移動しました。`,
+		);
+	};
+
 	const handleDragStart = (
 		e: React.DragEvent<HTMLLIElement>,
 		index: number,
 	) => {
+		if (disabled) {
+			return;
+		}
+
 		e.dataTransfer.effectAllowed = "move";
-		e.dataTransfer.setData("text/plain", index.toString());
+		e.dataTransfer.setData(PDF_REORDER_DATA_TYPE, index.toString());
 	};
 
 	const handleDragOver = (e: React.DragEvent<HTMLLIElement>) => {
+		if (
+			disabled ||
+			!Array.from(e.dataTransfer.types).includes(PDF_REORDER_DATA_TYPE)
+		) {
+			return;
+		}
+
 		e.preventDefault();
 		e.dataTransfer.dropEffect = "move";
 	};
 
 	const handleDrop = (e: React.DragEvent<HTMLLIElement>, dropIndex: number) => {
+		if (
+			disabled ||
+			!Array.from(e.dataTransfer.types).includes(PDF_REORDER_DATA_TYPE)
+		) {
+			return;
+		}
+
 		e.preventDefault();
-		const dragIndex = Number(e.dataTransfer.getData("text/plain"));
-		if (Number.isNaN(dragIndex) || dragIndex === dropIndex) return;
+		e.stopPropagation();
+		const dragIndex = parseReorderIndex(
+			e.dataTransfer.getData(PDF_REORDER_DATA_TYPE),
+			files.length,
+		);
 
-		const updated = [...files];
-		const [moved] = updated.splice(dragIndex, 1);
-		updated.splice(dropIndex, 0, moved);
-		onReorder(updated);
+		if (dragIndex === null) {
+			return;
+		}
+
+		commitReorder(dragIndex, dropIndex);
 	};
-
-	const formatFileSize = (size: number) =>
-		size > 1024 * 1024
-			? `${(size / 1024 / 1024).toFixed(2)} MB`
-			: `${(size / 1024).toFixed(2)} KB`;
 
 	if (files.length === 0) {
 		return (
@@ -52,6 +102,9 @@ export function FileList({ files, onRemove, onReorder }: Props) {
 
 	return (
 		<div className="space-y-3">
+			<p aria-live="polite" aria-atomic="true" className="sr-only">
+				{reorderAnnouncement}
+			</p>
 			<div className="flex items-end justify-between gap-3">
 				<h2 className="text-lg font-semibold tracking-tight text-ctp-text">
 					選択されたファイル
@@ -64,16 +117,18 @@ export function FileList({ files, onRemove, onReorder }: Props) {
 				{files.map(({ id, file }, index) => (
 					<li
 						key={id}
-						draggable
+						draggable={!disabled}
+						aria-disabled={disabled}
 						onDragStart={(e) => handleDragStart(e, index)}
 						onDragOver={handleDragOver}
 						onDrop={(e) => handleDrop(e, index)}
-						className="
-                        flex cursor-move items-center justify-between gap-3
-                        rounded-lg border border-ctp-surface1 bg-ctp-mantle
-                        px-3 py-3 transition duration-200
-                        hover:border-ctp-overlay0 hover:bg-ctp-surface0
-                        "
+						className={`
+						flex items-center justify-between gap-3
+						rounded-lg border border-ctp-surface1 bg-ctp-mantle
+						px-3 py-3 transition duration-200
+						hover:border-ctp-overlay0 hover:bg-ctp-surface0
+						${disabled ? "cursor-not-allowed opacity-60" : "cursor-move"}
+						`}
 					>
 						<div className="flex min-w-0 items-center gap-3">
 							<MdOutlineDragIndicator
@@ -93,18 +148,42 @@ export function FileList({ files, onRemove, onReorder }: Props) {
 								</p>
 							</div>
 						</div>
-						<button
-							type="button"
-							onClick={() => onRemove(id)}
-							className="
+						<div className="flex shrink-0 items-center gap-1">
+							<button
+								type="button"
+								onClick={() => commitReorder(index, index - 1)}
+								disabled={disabled || index === 0}
+								aria-label={`${file.name}を上へ移動`}
+								className="min-h-9 min-w-9 rounded-md text-sm font-semibold text-ctp-subtext1 transition hover:bg-ctp-surface0 hover:text-ctp-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ctp-blue disabled:cursor-not-allowed disabled:opacity-35"
+							>
+								↑
+							</button>
+							<button
+								type="button"
+								onClick={() => commitReorder(index, index + 1)}
+								disabled={disabled || index === files.length - 1}
+								aria-label={`${file.name}を下へ移動`}
+								className="min-h-9 min-w-9 rounded-md text-sm font-semibold text-ctp-subtext1 transition hover:bg-ctp-surface0 hover:text-ctp-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ctp-blue disabled:cursor-not-allowed disabled:opacity-35"
+							>
+								↓
+							</button>
+							<button
+								type="button"
+								onClick={() => onRemove(id)}
+								disabled={disabled}
+								className="
                             min-h-9 shrink-0 cursor-pointer rounded-md px-3 py-2 text-sm
                             font-semibold text-ctp-red transition duration-200
                             hover:bg-ctp-red/10 hover:text-ctp-maroon
                             active:scale-[0.98]
+                            focus-visible:outline-2 focus-visible:outline-offset-2
+                            focus-visible:outline-ctp-blue
+							disabled:cursor-not-allowed disabled:opacity-40
                             "
-						>
-							削除
-						</button>
+							>
+								削除
+							</button>
+						</div>
 					</li>
 				))}
 			</ul>
