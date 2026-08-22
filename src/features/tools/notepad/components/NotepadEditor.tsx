@@ -2,6 +2,7 @@
 
 import CopyButton from "@/features/tools/notepad/components/CopyButton";
 import PasteButton from "@/features/tools/notepad/components/PasteButton";
+import { countUnicodeCodePoints } from "@/features/tools/notepad/domain/content";
 import type { SaveState } from "@/features/tools/notepad/hooks/useNotepadEditor";
 import { useNotepadEditor } from "@/features/tools/notepad/hooks/useNotepadEditor";
 import {
@@ -30,6 +31,7 @@ export default function NotepadEditor({
 		textareaRef,
 		handleBlur,
 		handleContentChange,
+		retrySave,
 		handleCopy,
 		handlePaste,
 	} = useNotepadEditor({
@@ -38,6 +40,7 @@ export default function NotepadEditor({
 	});
 
 	const lineCount = content.length === 0 ? 0 : content.split("\n").length;
+	const characterCount = countUnicodeCodePoints(content);
 
 	return (
 		<section
@@ -59,6 +62,15 @@ export default function NotepadEditor({
 						>
 							{getSaveStatusMessage(saveState, lastSavedAt)}
 						</p>
+						{saveState === "error" && (
+							<button
+								type="button"
+								onClick={retrySave}
+								className="rounded-md px-2 py-1 text-xs font-semibold text-ctp-red underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ctp-blue"
+							>
+								再試行
+							</button>
+						)}
 					</div>
 				</div>
 				<div className="flex flex-wrap gap-2 sm:justify-end">
@@ -76,7 +88,7 @@ export default function NotepadEditor({
 						メモ本文
 					</label>
 					<p className="shrink-0 text-xs font-semibold text-ctp-subtext0">
-						{content.length}文字 / {lineCount}行
+						{characterCount}文字 / {lineCount}行
 					</p>
 				</div>
 				<textarea
