@@ -20,15 +20,22 @@ export default function RegistrationModalContent() {
 		setErrorMessage("");
 		setIsRegistering(true);
 
-		const res = await register(displayName);
+		try {
+			const result = await register(displayName);
 
-		if (res.ok) {
-			closeModal();
-			router.refresh();
-		} else {
-			setErrorMessage(res.error);
+			if (result.ok) {
+				closeModal();
+				router.refresh();
+			} else {
+				setErrorMessage(result.error);
+			}
+		} catch {
+			setErrorMessage(
+				"アカウント登録に失敗しました。しばらくしてから再度お試しください。",
+			);
+		} finally {
+			setIsRegistering(false);
 		}
-		setIsRegistering(false);
 	}
 
 	return (
@@ -68,7 +75,11 @@ export default function RegistrationModalContent() {
                         w-4 h-4 rounded-sm border
                         border-ctp-overlay0
                         peer-checked:bg-ctp-blue
-                        peer-checked:border-ctp-blue-300"
+						peer-checked:border-ctp-blue
+						peer-focus-visible:ring-2
+						peer-focus-visible:ring-app-accent
+						peer-focus-visible:ring-offset-2
+						peer-focus-visible:ring-offset-ctp-surface0"
 					>
 						{agreed && <FaCheck className="text-[10px] text-ctp-crust" />}
 					</span>

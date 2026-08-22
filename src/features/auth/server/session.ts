@@ -1,7 +1,5 @@
-import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
-import { db } from "@/database";
-import { users } from "@/database/schema";
+import { getAuthUserStateByID } from "@/features/auth/data/repository";
 import { auth } from "@/features/auth/server/auth";
 import { isAuthenticatedUserState } from "@/features/auth/shared/policy";
 
@@ -15,15 +13,7 @@ export async function getAuthenticatedSession() {
 		return null;
 	}
 
-	const [currentUser] = await db
-		.select({
-			status: users.status,
-			isAnonymous: users.isAnonymous,
-			profileCompleted: users.profileCompleted,
-		})
-		.from(users)
-		.where(eq(users.id, session.user.id))
-		.limit(1);
+	const currentUser = await getAuthUserStateByID(session.user.id);
 
 	if (!isAuthenticatedUserState(currentUser)) {
 		return null;
