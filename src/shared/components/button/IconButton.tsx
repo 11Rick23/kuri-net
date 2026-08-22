@@ -3,7 +3,7 @@
 type Props = {
 	children: React.ReactNode;
 	ariaLabel: string;
-	onClick?: () => void;
+	onClick?: React.MouseEventHandler<HTMLButtonElement>;
 	className?: string;
 	disabled?: boolean;
 	size?: "sm" | "md";

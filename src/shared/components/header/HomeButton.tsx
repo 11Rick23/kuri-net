@@ -11,8 +11,8 @@ export default function HomeButton() {
 	return (
 		<Link
 			href="/"
-			type="button"
 			aria-label="ホームページへ"
+			aria-current={isActive ? "page" : undefined}
 			className={`
                 w-7 h-7
                 flex items-center justify-center

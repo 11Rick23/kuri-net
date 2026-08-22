@@ -5,6 +5,7 @@ import {
 	createContext,
 	useCallback,
 	useContext,
+	useEffect,
 	useMemo,
 	useRef,
 	useState,
@@ -32,6 +33,17 @@ export function useToast() {
 export function ToastProvider({ children }: { children: React.ReactNode }) {
 	const [items, setItems] = useState<ToastItem[]>([]);
 	const timers = useRef(new Map<string, TimerInfo>());
+
+	useEffect(() => {
+		const activeTimers = timers.current;
+
+		return () => {
+			for (const timer of activeTimers.values()) {
+				window.clearTimeout(timer.timeoutId);
+			}
+			activeTimers.clear();
+		};
+	}, []);
 
 	const clearTimer = useCallback((id: string) => {
 		const timer = timers.current.get(id);

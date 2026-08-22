@@ -1,7 +1,9 @@
 export type ModalOpenOptions = {
+	ariaLabel: string;
 	closeOnBackdrop?: boolean;
 	closeOnEsc?: boolean;
 	paddingSize?: number;
+	returnFocusFallback?: () => HTMLElement | null;
 };
 
 export type ModalState =
@@ -13,11 +15,11 @@ export type ModalState =
 	| {
 			isOpen: false;
 			content: null;
-			options: Required<ModalOpenOptions>;
+			options: null;
 	  };
 
 export type ModalContextValue = {
 	isOpen: boolean;
-	openModal: (content: React.ReactNode, options?: ModalOpenOptions) => void;
+	openModal: (content: React.ReactNode, options: ModalOpenOptions) => void;
 	closeModal: () => void;
 };

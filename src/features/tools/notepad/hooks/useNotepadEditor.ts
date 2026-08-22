@@ -162,6 +162,7 @@ export function useNotepadEditor({
 		openModal(
 			createElement(PasteConfirmModal, { onConfirm: pasteFromClipboard }),
 			{
+				ariaLabel: "メモ内容の置き換え確認",
 				closeOnBackdrop: true,
 				paddingSize: 6,
 			},
