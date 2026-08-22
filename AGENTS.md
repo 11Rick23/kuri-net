@@ -44,3 +44,13 @@ kuri-net の作業では、内容に応じて `.agents/skills` の専門スキ�
 - `.agents/skills` を共有スキルの正本とする。
 - `AGENTS.md` は常時読む入口、`.agents/README.md` はチーム向けのスキル一覧と保守方法に限定する。
 - スキルを追加・削除・改名・責務変更した場合は、`$kuri-net-skill-maintenance` に従い、関連する一覧とメタデータも更新する。
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
