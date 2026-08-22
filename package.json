@@ -2,8 +2,10 @@
 	"name": "kuri-net",
 	"version": "0.1.0",
 	"private": true,
+	"packageManager": "bun@1.3.11",
 	"scripts": {
 		"dev": "next dev",
+		"db:generate": "drizzle-kit generate",
 		"db:migrate": "bun run src/database/migrate.ts",
 		"build": "next build",
 		"start": "next start",
@@ -11,7 +13,9 @@
 		"test:e2e": "node node_modules/.bin/playwright test",
 		"lint": "biome lint .",
 		"format": "biome format --write .",
-		"check": "biome check ."
+		"format:check": "biome format .",
+		"typecheck": "tsc --noEmit",
+		"check": "biome check . && tsc --noEmit && bun test"
 	},
 	"dependencies": {
 		"@better-auth/drizzle-adapter": "1.7.1",
