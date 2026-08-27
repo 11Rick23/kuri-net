@@ -14,9 +14,9 @@
 		"check": "biome check ."
 	},
 	"dependencies": {
-		"@better-auth/drizzle-adapter": "1.7.1",
-		"@better-auth/passkey": "1.7.1",
-		"better-auth": "1.7.1",
+		"@better-auth/drizzle-adapter": "1.7.2",
+		"@better-auth/passkey": "1.7.2",
+		"better-auth": "1.7.2",
 		"dotenv": "^17.4.1",
 		"drizzle-orm": "^0.45.2",
 		"next": "16.3.3",
