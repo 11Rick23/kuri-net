@@ -2,7 +2,6 @@ import { drizzleAdapter } from "@better-auth/drizzle-adapter";
 import { passkey } from "@better-auth/passkey";
 import { APIError, betterAuth } from "better-auth";
 import { anonymous } from "better-auth/plugins";
-import { eq } from "drizzle-orm";
 import { db } from "@/database";
 import {
 	authAccounts,
@@ -13,9 +12,10 @@ import {
 	users,
 } from "@/database/schema";
 import {
-	DEFAULT_DISPLAY_NAME,
-	validateDisplayName,
-} from "@/features/auth/shared/displayName";
+	getAuthUserStateByID,
+	synchronizePasskeyOwnerAfterAuthentication,
+} from "@/features/auth/data/repository";
+import { validateDisplayName } from "@/features/auth/shared/displayName";
 import { hasRequiredUserVerification } from "@/features/auth/shared/policy";
 
 const secret = process.env.BETTER_AUTH_SECRET;
@@ -117,11 +117,7 @@ export const auth = betterAuth({
 		session: {
 			create: {
 				before: async (session) => {
-					const [user] = await db
-						.select({ status: users.status })
-						.from(users)
-						.where(eq(users.id, session.userId))
-						.limit(1);
+					const user = await getAuthUserStateByID(session.userId);
 
 					if (!user || user.status === "SUSPENDED") {
 						throw new APIError("FORBIDDEN", {
@@ -153,59 +149,7 @@ export const auth = betterAuth({
 			authentication: {
 				afterVerification: async ({ verification, clientData }) => {
 					requireUserVerification(verification.authenticationInfo.userVerified);
-
-					const [passkeyOwner] = await db
-						.select({
-							id: users.id,
-							name: users.name,
-							status: users.status,
-							isAnonymous: users.isAnonymous,
-							profileCompleted: users.profileCompleted,
-						})
-						.from(authPasskeys)
-						.innerJoin(users, eq(users.id, authPasskeys.userId))
-						.where(eq(authPasskeys.credentialID, clientData.id))
-						.limit(1);
-
-					if (!passkeyOwner) {
-						return;
-					}
-
-					if (
-						passkeyOwner.status === "ACTIVE" &&
-						!passkeyOwner.isAnonymous &&
-						!passkeyOwner.profileCompleted
-					) {
-						await db
-							.update(users)
-							.set({
-								name: DEFAULT_DISPLAY_NAME,
-								profileCompleted: true,
-								updatedAt: new Date(),
-							})
-							.where(eq(users.id, passkeyOwner.id));
-						return;
-					}
-
-					if (passkeyOwner.status !== "REGISTERING") {
-						return;
-					}
-
-					const displayName = validateDisplayName(passkeyOwner.name);
-					if (!displayName.ok) {
-						return;
-					}
-
-					await db
-						.update(users)
-						.set({
-							name: displayName.value,
-							status: "ACTIVE",
-							isAnonymous: false,
-							profileCompleted: true,
-							updatedAt: new Date(),
-						})
-						.where(eq(users.id, passkeyOwner.id));
+					await synchronizePasskeyOwnerAfterAuthentication(clientData.id);
 				},
 			},
 		}),

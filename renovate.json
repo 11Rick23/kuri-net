@@ -1,12 +1,51 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
-	"extends": ["config:recommended"],
+	"extends": ["config:recommended", ":dependencyDashboard"],
+	"labels": ["dependencies"],
+	"minimumReleaseAge": "3 days",
+	"rangeStrategy": "bump",
+	"separateMajorMinor": true,
+	"separateMinorPatch": true,
+	"automergeType": "pr",
+	"platformAutomerge": true,
+	"lockFileMaintenance": {
+		"enabled": true,
+		"schedule": ["before 5am on monday"]
+	},
 	"packageRules": [
 		{
-			"matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+			"description": "GitHub Actions の依存更新をまとめる。",
+			"matchManagers": ["github-actions"],
+			"matchUpdateTypes": ["digest", "minor", "patch", "pin"],
+			"groupName": "GitHub Actions"
+		},
+		{
+			"description": "mise で管理しているツール更新をまとめる。",
+			"matchManagers": ["mise"],
+			"matchUpdateTypes": ["digest", "minor", "patch", "pin"],
+			"groupName": "mise tools"
+		},
+		{
+			"description": "CI 通過後、低リスクな更新を自動マージする。",
+			"matchUpdateTypes": ["digest", "patch", "pin"],
 			"automerge": true
+		},
+		{
+			"description": "CI 通過後、定期的な lockfile 更新を自動マージする。",
+			"matchUpdateTypes": ["lockFileMaintenance"],
+			"automerge": true
+		},
+		{
+			"description": "minor 更新は手動レビューを必須にする。",
+			"matchUpdateTypes": ["minor"],
+			"automerge": false
+		},
+		{
+			"description": "major 更新は Dependency Dashboard での承認を必須にする。",
+			"matchUpdateTypes": ["major"],
+			"dependencyDashboardApproval": true
 		}
 	],
-	"semanticCommitType": "chore",
-	"baseBranchPatterns": ["dev"]
+	"baseBranchPatterns": ["dev"],
+	"semanticCommitType": "chore"
 }

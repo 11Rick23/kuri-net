@@ -1,6 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import type { MouseEvent } from "react";
+import { useRef } from "react";
 import login from "@/features/auth/client/login";
 import RegistrationModalContent from "@/features/auth/components/RegistrationModal";
 import { useModal } from "@/shared/components/modal/ModalProvider";
@@ -10,8 +12,11 @@ export default function useLoginHandler() {
 	const { toast, dismiss } = useToast();
 	const { openModal } = useModal();
 	const router = useRouter();
+	const loginButtonRef = useRef<HTMLButtonElement | null>(null);
 
-	async function onLoginButtonPress() {
+	async function onLoginButtonPress(event: MouseEvent<HTMLButtonElement>) {
+		loginButtonRef.current = event.currentTarget;
+
 		// パスキー認証がブラウザでサポートされているか確認
 		if (!("PublicKeyCredential" in window)) {
 			toast(
@@ -30,7 +35,11 @@ export default function useLoginHandler() {
 					className="cursor-pointer font-medium underline hover:text-ctp-blue"
 					onClick={() => {
 						dismiss("sign-up-notice");
-						openModal(<RegistrationModalContent />, { paddingSize: 6 });
+						openModal(<RegistrationModalContent />, {
+							ariaLabel: "アカウント登録",
+							paddingSize: 6,
+							returnFocusFallback: () => loginButtonRef.current,
+						});
 					}}
 				>
 					こちら
@@ -60,8 +69,12 @@ export default function useLoginHandler() {
 			} else {
 				toast(res.error, { type: "error", durationMs: 5000 });
 			}
-		} catch (error) {
-			console.error("Login failed:", error);
+		} catch {
+			toast("ログインに失敗しました。しばらくしてから再度お試しください。", {
+				type: "error",
+				durationMs: 5000,
+				id: "login-error",
+			});
 		}
 	}
 

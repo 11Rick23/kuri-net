@@ -1,9 +1,93 @@
 [tools]
-bun = "latest"
-node = "latest"
+bun = "1.3.11"
+node = "25.2.1"
 
-[env]
-DATABASE_URL = { required = true }
-NEXT_PUBLIC_ASSET_BASE_URL = { required = true }
-BETTER_AUTH_SECRET = { required = true }
-BETTER_AUTH_URL = { required = true }
+[tasks.install]
+description = "依存関係を lockfile どおりにインストールする。"
+run = "bun install --frozen-lockfile"
+
+[tasks."env:check:app"]
+description = "アプリの実行に必要な環境変数を確認する。"
+run = """
+missing=0
+for name in DATABASE_URL NEXT_PUBLIC_ASSET_BASE_URL BETTER_AUTH_SECRET BETTER_AUTH_URL; do
+  value="$(printenv "$name" 2>/dev/null || true)"
+  if [ -z "$value" ]; then
+    echo "$name が未設定です。mise.local.toml.example を確認してください。"
+    missing=1
+  fi
+done
+exit "$missing"
+"""
+
+[tasks."env:check:db"]
+description = "DB 操作に必要な環境変数を確認する。"
+run = """
+if [ -z "${DATABASE_URL:-}" ]; then
+  echo "DATABASE_URL が未設定です。mise.local.toml.example を確認してください。"
+  exit 1
+fi
+"""
+
+[tasks.dev]
+description = "Next.js 開発サーバーを起動する。"
+depends = ["install", "env:check:app"]
+run = "bun run dev"
+
+[tasks.build]
+description = "本番用ビルドを作成する。"
+depends = ["install", "env:check:app"]
+run = "bun run build"
+
+[tasks.start]
+description = "作成済みの本番用ビルドを起動する。"
+depends = ["install", "env:check:app"]
+run = "bun run start"
+
+[tasks.test]
+description = "Bun のユニットテストを実行する。"
+depends = ["install"]
+run = "bun run test"
+
+[tasks."test:e2e"]
+description = "実行中のアプリとループバック DB に対して Playwright E2E テストを実行する。"
+depends = ["install", "env:check:app"]
+run = "bun run test:e2e"
+
+[tasks.lint]
+description = "Biome の lint を実行する。"
+depends = ["install"]
+run = "bun run lint"
+
+[tasks.format]
+description = "Biome でコードをフォーマットする。"
+depends = ["install"]
+run = "bun run format"
+
+[tasks."format:check"]
+description = "フォーマット差分がないことを確認する。"
+depends = ["install"]
+run = "bun run format:check"
+
+[tasks.typecheck]
+description = "TypeScript の型チェックを実行する。"
+depends = ["install"]
+run = "bun run typecheck"
+
+[tasks."db:generate"]
+description = "Drizzle のマイグレーションを生成する。例: mise run db:generate -- --name add_table"
+depends = ["install", "env:check:db"]
+run = "bun run db:generate"
+
+[tasks."db:migrate"]
+description = "未適用の Drizzle マイグレーションを適用する。"
+depends = ["install", "env:check:db"]
+run = "bun run db:migrate"
+
+[tasks.check]
+description = "フォーマット・lint・型・テスト・本番ビルドをまとめて検証する。"
+depends = ["install", "env:check:app"]
+run = """
+bun run check
+bun run build
+"""

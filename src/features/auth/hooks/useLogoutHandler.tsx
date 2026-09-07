@@ -21,9 +21,12 @@ export default function useLogoutHandler() {
 			});
 			router.push("/");
 			router.refresh();
-		} catch (error) {
-			console.log("ログアウト中にエラーが発生しました");
-			console.log(error);
+		} catch {
+			toast("ログアウトに失敗しました。しばらくしてから再度お試しください。", {
+				type: "error",
+				durationMs: 5000,
+				id: "logout-error",
+			});
 		}
 	}
 	return { onLogoutButtonPress };

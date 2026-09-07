@@ -5,6 +5,7 @@ import {
 	getNotepadByUserID,
 	saveNotepad,
 } from "@/features/tools/notepad/data/repository";
+import { validateNotepadContent } from "@/features/tools/notepad/domain/content";
 import { InvalidInputError } from "@/shared/errors/base";
 
 export async function getCurrentUserNotepad(): Promise<{
@@ -25,12 +26,14 @@ export async function getCurrentUserNotepad(): Promise<{
 	};
 }
 
-export async function saveCurrentUserNotepad(content: string): Promise<{
+export async function saveCurrentUserNotepad(content: unknown): Promise<{
 	ok: true;
 	updatedAt: string;
 }> {
-	if (typeof content !== "string") {
-		throw new InvalidInputError("指定されたメモ内容が無効です。");
+	const validated = validateNotepadContent(content);
+
+	if (!validated.ok) {
+		throw new InvalidInputError(validated.error);
 	}
 
 	const session = await getAuthenticatedSession();
@@ -39,7 +42,7 @@ export async function saveCurrentUserNotepad(content: string): Promise<{
 		throw new Error("Authentication required.");
 	}
 
-	const saved = await saveNotepad(session.user.id, content);
+	const saved = await saveNotepad(session.user.id, validated.value);
 
 	return {
 		ok: true,

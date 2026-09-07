@@ -1,0 +1,4 @@
+interface:
+  display_name: "Kuri-net Database"
+  short_description: "kuri-net Drizzle and PostgreSQL conventions"
+  default_prompt: "Use $kuri-net-database-guideline when changing kuri-net schemas, repositories, or migrations."

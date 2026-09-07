@@ -1,0 +1,4 @@
+interface:
+  display_name: "Kuri-net Structure"
+  short_description: "kuri-net project structure and ownership"
+  default_prompt: "Use $kuri-net-structure-guideline to decide where a kuri-net change belongs."

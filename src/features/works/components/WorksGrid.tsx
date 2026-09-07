@@ -15,7 +15,10 @@ export default function WorksGrid({ works }: { works: WorkEntry[] }) {
 					key={work.title}
 					work={work}
 					onOpen={(entry) =>
-						openModal(<WorkDetailModal work={entry} />, { paddingSize: 0 })
+						openModal(<WorkDetailModal work={entry} />, {
+							ariaLabel: `${entry.title}の詳細`,
+							paddingSize: 0,
+						})
 					}
 				/>
 			))}

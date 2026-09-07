@@ -1,5 +1,3 @@
-"use server";
-
 import { getAuthenticatedSession } from "@/features/auth/server/session";
 import ColorModeButton from "./ColorModeButton";
 import HomeButton from "./HomeButton";

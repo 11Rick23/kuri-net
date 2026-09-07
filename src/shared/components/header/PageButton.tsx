@@ -21,8 +21,8 @@ export default function PageButton({
 	return (
 		<Link
 			href={url}
-			type="button"
 			aria-label={`${display}ページへ`}
+			aria-current={isActive ? "page" : undefined}
 			className={`
                 flex items-center justify-center
                 rounded-md px-2 py-1 cursor-pointer
