@@ -32,7 +32,7 @@
 | `kuri-net-ui-guideline` | Catppuccin、コンポーネント、レスポンシブ、アクセシビリティ |
 | `kuri-net-database-guideline` | PostgreSQL、Drizzle、リポジトリ、マイグレーション |
 | `kuri-net-auth-guideline` | Better Auth、パスキー、セッション、認可、保護された処理 |
-| `kuri-net-test-guideline` | 現行配置、要件コメント、Given-When-Then、ケース設計、Bun・Playwright検証 |
+| `kuri-net-test-guideline` | tests/ への分離配置、要件コメント、Given-When-Then、ケース設計、Bun・Playwright検証 |
 | `kuri-net-runtime-guideline` | Bun、mise、環境変数、起動、DB、検証コマンド |
 | `kuri-net-skill-maintenance` | 共有スキルと AI 文書の保守 |
 

@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { createForcedMineBoard } from "@/features/tools/minesweeper/forcedMine";
-import { createTestBoard } from "@/features/tools/minesweeper/testHelpers";
+import { createTestBoard } from "./testHelpers";
 
 describe("未確定マスの強制地雷化", () => {
 	test("安全と証明されていない対象を地雷にした互換盤面を返す", () => {

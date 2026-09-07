@@ -15,7 +15,8 @@ description: Use when locating or placing kuri-net routes, features, shared comp
 - `src/database/`: Drizzle の接続、スキーマ、マイグレーション実行。
 - `src/types/`: DB やライブラリ境界で必要な補助型。
 - `drizzle/`: 生成された SQL マイグレーションとメタデータ。
-- `e2e/`: Playwright によるブラウザ E2E テスト。
+- `tests/unit/`: `src/` 以下の階層を再現する Bun テストとテスト専用ヘルパー。
+- `tests/e2e/`: Playwright によるブラウザ E2E テスト。
 - `public/`: アプリ自身が配信する静的ファイル。Works の外部アセットはここへ重複させない。
 - `.agents/`: AI エージェント向け共有スキルと運用文書。
 

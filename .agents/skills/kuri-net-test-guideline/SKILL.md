@@ -1,6 +1,6 @@
 ---
 name: kuri-net-test-guideline
-description: Use when adding, changing, organizing, diagnosing, or running kuri-net tests, including current co-located Bun test placement, Japanese requirement comments, Given-When-Then style, test case design, module mocks, deterministic domain tests, Playwright E2E, auth tests, or verification coverage.
+description: Use when adding, changing, organizing, diagnosing, or running kuri-net tests, including source-mirrored tests/unit placement, tests/e2e, Japanese requirement comments, Given-When-Then style, test case design, module mocks, deterministic domain tests, auth tests, or verification coverage.
 ---
 
 # kuri-net Test Guideline
@@ -9,12 +9,12 @@ description: Use when adding, changing, organizing, diagnosing, or running kuri-
 
 ## テストの配置
 
-- テスト配置は kuri-net の現在の構造を正本とする。
-- pure logic、policy、server function の Bun テストは対象 module の近くへ `*.test.ts` として置く。
-- browser、route、passkey、実 DB をまたぐ契約は `e2e/*.e2e.ts` に置く。
-- unit / integration の大分類だけを理由に新しいトップレベル test folder を増やさない。
-- production file との1対1対応より、壊れたときにどの契約が失敗したか分かるまとまりを優先する。
-- test helper は複数ファイルで同じ契約を共有するときだけ抽出する。
+- テストは `tests/` に集約し、`src/` にテストやテスト専用ヘルパーを置かない。
+- pure logic、policy、server function の Bun テストは `tests/unit/` 以下へ `src/` と同じ階層で `*.test.ts` として置く。例: `src/features/auth/client/loginCore.ts` → `tests/unit/features/auth/client/login.test.ts`。
+- browser、route、passkey、実 DB をまたぐ契約は `tests/e2e/` 以下に機能・フロー別の `*.e2e.ts` として置く。
+- ファイル名は対象 module または検証する契約を表し、production file との機械的な1対1対応は求めない。
+- 本番 module は `@/` alias で import する。
+- test helper は複数ファイルで同じ契約を共有するときだけ抽出し、利用するテストの近くに置いて相対 import する。
 - 将来用の空 test file や分類だけのディレクトリを作らない。
 
 ## 要件の記述
@@ -94,7 +94,7 @@ test("外部のユーザーIDを無視してセッションのユーザーを取
 
 ## 実行範囲
 
-- 反復中: 対象 test file または `mise run test`。
+- 反復中: `mise exec -- bun test ./tests/unit/<対象パス>.test.ts` または `mise run test`。通常の Bun テスト実行対象は `tests/unit/` に限定する。
 - 通常の最終確認: `mise run check`。
 - auth / DB / browser flow: unit test に加え、環境を安全に用意できる場合だけ `mise run test:e2e`。
 - E2E を実行していない場合は、実行済みと推測せず明記する。

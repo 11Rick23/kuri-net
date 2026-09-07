@@ -13,7 +13,7 @@ import {
 	getLogicalHint,
 	solveBoard,
 } from "@/features/tools/minesweeper/solver";
-import { createTestBoard } from "@/features/tools/minesweeper/testHelpers";
+import { createTestBoard } from "./testHelpers";
 
 describe("論理解法とヒント", () => {
 	test("既知の地雷を除いた残りの隣接マスを安全と判定する", () => {

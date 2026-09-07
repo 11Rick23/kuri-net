@@ -1,5 +1,8 @@
 import { describe, expect, test } from "bun:test";
-import { formatMediaTime, resolveMediaProgress } from "./videoPlayerHelpers";
+import {
+	formatMediaTime,
+	resolveMediaProgress,
+} from "@/shared/components/media/videoPlayerHelpers";
 
 describe("videoPlayerHelpers", () => {
 	test.each([

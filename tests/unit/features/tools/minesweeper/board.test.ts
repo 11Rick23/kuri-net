@@ -6,7 +6,7 @@ import {
 	getOpeningCells,
 	isBoardWon,
 } from "@/features/tools/minesweeper/board";
-import { createTestBoard } from "@/features/tools/minesweeper/testHelpers";
+import { createTestBoard } from "./testHelpers";
 
 describe("マインスイーパー盤面", () => {
 	test.each([

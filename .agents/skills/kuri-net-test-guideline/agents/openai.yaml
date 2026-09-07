@@ -1,4 +1,4 @@
 interface:
   display_name: "Kuri-net Tests"
   short_description: "kuri-net Bun test structure and Given-When-Then rules"
-  default_prompt: "Use $kuri-net-test-guideline to add a kuri-net test with the current placement, requirement comments, and Given-When-Then style."
+  default_prompt: "Use $kuri-net-test-guideline to add a kuri-net test under tests/unit or tests/e2e with requirement comments and Given-When-Then style."

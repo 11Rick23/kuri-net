@@ -80,11 +80,37 @@ src/shared/    複数機能で共有する UI、型、エラー、utility
 src/database/  Drizzle の接続、スキーマ、マイグレーション実行
 src/types/     DB・ライブラリ境界の補助型
 drizzle/       生成された SQL マイグレーションとメタデータ
-e2e/           Playwright E2E テスト
+tests/unit/    src/ と同じ階層で配置する Bun テスト
+tests/e2e/     Playwright E2E テスト
 .agents/       AI エージェント向けの共有スキルと運用メモ
 ```
 
 `src/app` はルーティングと機能の接続に留め、機能固有の画面・コンポーネント・ロジックは `src/features` に置きます。複数機能で実際に再利用するものだけを `src/shared` に置きます。
+
+### テストの配置
+
+テストは `tests/` にまとめ、Bun テストは `src/` 以下の階層を `tests/unit/` 以下に再現します。ファイル名は対象モジュールや検証する契約を表す `*.test.ts` とします。
+
+```text
+src/features/auth/client/loginCore.ts
+tests/unit/features/auth/client/login.test.ts
+
+src/features/tools/minesweeper/board.ts
+tests/unit/features/tools/minesweeper/board.test.ts
+
+src/shared/components/modal/dialogAccessibility.ts
+tests/unit/shared/components/modal/dialogAccessibility.test.ts
+
+tests/e2e/auth.e2e.ts
+```
+
+本番コードは `@/` から import し、テスト専用ヘルパーは利用するテストの近くに置いて相対 import します。E2E は `tests/e2e/` 以下に機能・フロー別の `*.e2e.ts` として配置します。
+
+`mise run test` は `tests/unit/`、`mise run test:e2e` は `tests/e2e/` を対象にします。特定のテストだけを実行する場合は、次のようにパスを指定します。
+
+```bash
+mise exec -- bun test ./tests/unit/features/tools/minesweeper/board.test.ts
+```
 
 ## 主な機能
 
