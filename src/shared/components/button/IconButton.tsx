@@ -12,8 +12,8 @@ type Props = {
 };
 
 const sizeClassName: Record<NonNullable<Props["size"]>, string> = {
-	sm: "w-7 h-7",
-	md: "w-9 h-9",
+	sm: "w-11 h-11",
+	md: "w-12 h-12",
 };
 
 const toneClassName: Record<NonNullable<Props["tone"]>, string> = {
@@ -38,7 +38,7 @@ export default function IconButton({
 			onClick={onClick}
 			disabled={disabled}
 			className={[
-				"inline-flex items-center justify-center rounded-full",
+				"inline-flex shrink-0 items-center justify-center rounded-md transition-colors duration-150",
 				sizeClassName[size],
 				toneClassName[tone],
 				disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer",

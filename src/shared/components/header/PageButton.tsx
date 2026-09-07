@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import styles from "./Header.module.css";
 
 export default function PageButton({
 	url,
@@ -23,13 +24,7 @@ export default function PageButton({
 			href={url}
 			aria-label={`${display}ページへ`}
 			aria-current={isActive ? "page" : undefined}
-			className={`
-                flex items-center justify-center
-                rounded-md px-2 py-1 cursor-pointer
-                ${isActive ? "bg-ctp-surface0" : "bg-transparent"}
-                text-xs font-bold text-ctp-text
-                hover:bg-ctp-surface0
-            `}
+			className={styles.pageLink}
 		>
 			{display}
 		</Link>

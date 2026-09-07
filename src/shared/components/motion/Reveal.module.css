@@ -1,0 +1,22 @@
+.reveal {
+	transition:
+		opacity var(--site-duration-reveal) var(--site-ease),
+		transform var(--site-duration-reveal) var(--site-ease);
+}
+
+.reveal[data-reveal="pending"] {
+	opacity: 0;
+	transform: translateY(12px);
+}
+.reveal:focus-within {
+	opacity: 1;
+	transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.reveal[data-reveal] {
+		opacity: 1;
+		transform: none;
+		transition: none;
+	}
+}

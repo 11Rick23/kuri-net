@@ -139,6 +139,10 @@ Drizzle の SQL マイグレーションは `drizzle` に保存されます。Do
 NIXPACKS_START_CMD="bun run db:migrate && bun run start"
 ```
 
+## デザインの調整
+
+配色・書体・余白・動きの設定は `src/shared/styles/tokens.css` に集約しています。フォントの読み込みは `src/app/layout.tsx`、各画面の配置は feature ごとの CSS Module で調整します。設計方針と変更箇所は [デザインガイド](docs/design-system.md) を参照してください。
+
 ## 静的アセット
 
 - Works のアセット URL は `NEXT_PUBLIC_ASSET_BASE_URL` を基準に解決します。

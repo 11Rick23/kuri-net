@@ -48,7 +48,7 @@ export default function RegistrationModalContent() {
 				<p
 					className="
                 text-sm my-4 p-4 rounded-md
-                bg-app-warning/15 text-ctp-subtext1
+                bg-app-warning/15 text-ctp-text
                 border-2 border-app-warning"
 				>
 					本サービスではパスキーによる認証のみを提供しております。

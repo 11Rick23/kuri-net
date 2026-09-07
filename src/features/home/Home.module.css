@@ -1,0 +1,127 @@
+.home {
+	display: flex;
+	align-items: center;
+	min-height: 100dvh;
+	padding: calc(var(--site-header-height) + 72px) var(--site-page-gutter) 88px;
+}
+
+.composition {
+	display: grid;
+	grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+	align-items: center;
+	gap: clamp(48px, 7vw, 96px);
+	padding-block: 32px;
+}
+
+.introduction {
+	padding-bottom: 40px;
+}
+
+.greeting {
+	font-size: clamp(2.8rem, 5.7vw, 5rem);
+	font-weight: 500;
+	line-height: 1.45;
+	letter-spacing: 0.035em;
+	white-space: nowrap;
+}
+
+.description {
+	max-width: 30rem;
+	margin-top: 36px;
+	font-size: 15px;
+	line-height: 2.1;
+	color: var(--site-muted);
+}
+
+.links {
+	border-top: 1px solid var(--site-line);
+}
+
+.link {
+	position: relative;
+	isolation: isolate;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 24px;
+	min-height: 114px;
+	padding: 16px 24px;
+	border-bottom: 1px solid var(--site-line);
+	font-family: var(--font-display);
+	font-size: clamp(2rem, 3.5vw, 3rem);
+	font-weight: 400;
+	letter-spacing: 0.015em;
+	transition: color var(--site-duration-state) var(--site-ease);
+}
+
+.link::before {
+	position: absolute;
+	z-index: -1;
+	content: "";
+	inset: 0;
+	background: var(--site-inverse);
+	transform: scaleX(0);
+	transform-origin: left;
+	transition: transform var(--site-duration-state) var(--site-ease);
+}
+
+.arrow {
+	font-family: var(--font-body);
+	font-size: 22px;
+	transition: transform var(--site-duration-state) var(--site-ease);
+}
+
+.link:focus-visible {
+	color: var(--site-on-inverse);
+}
+.link:focus-visible::before {
+	transform: scaleX(1);
+}
+
+@media (hover: hover) {
+	.link:hover {
+		color: var(--site-on-inverse);
+	}
+	.link:hover::before {
+		transform: scaleX(1);
+	}
+	.link:hover .arrow {
+		transform: translateX(4px);
+	}
+}
+
+@media (max-width: 860px) {
+	.composition {
+		grid-template-columns: 1fr;
+		gap: 64px;
+		padding-block: 0;
+	}
+	.introduction {
+		padding-bottom: 0;
+	}
+	.home {
+		align-items: flex-start;
+		padding-top: calc(var(--site-header-height) + 64px);
+	}
+	.greeting {
+		font-size: clamp(2.5rem, 8vw, 4.5rem);
+	}
+	.description {
+		margin-top: 24px;
+	}
+	.links {
+		max-width: 640px;
+		width: 100%;
+	}
+	.link {
+		min-height: 96px;
+		padding-inline: 16px;
+		font-size: 36px;
+	}
+}
+
+@media (max-width: 399px) {
+	.greeting {
+		font-size: 2.25rem;
+	}
+}

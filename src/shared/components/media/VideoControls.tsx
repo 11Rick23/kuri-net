@@ -102,7 +102,7 @@ export default function VideoControls({
 			onFocusCapture={controller.revealControls}
 			onBlurCapture={controller.handleControlsBlur}
 		>
-			<div className="rounded-lg border border-white/8 bg-ctp-crust/82 px-3 py-3 backdrop-blur-md sm:px-4">
+			<div className="rounded-lg border border-ctp-surface1 bg-ctp-crust px-3 py-3 sm:px-4">
 				<div className="flex items-center gap-2 sm:gap-3">
 					<VideoPlayerButton
 						ariaLabel={controller.isPlaying ? "動画を一時停止" : "動画を再生"}

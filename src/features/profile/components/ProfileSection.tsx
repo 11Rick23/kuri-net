@@ -4,39 +4,39 @@ import type {
 	RichTextLink,
 	Topic,
 } from "@/features/profile/data/profileContent";
+import Reveal from "@/shared/components/motion/Reveal";
+import styles from "../Profile.module.css";
 
 export function ProfileSection({
 	title,
 	description,
 	children,
+	layout = "split",
 }: {
 	title: string;
 	description?: ReactNode;
 	children: ReactNode;
+	layout?: "split" | "wide";
 }) {
 	return (
-		<section className="scroll-mt-24 space-y-5">
-			<div className="space-y-3 px-1">
-				<h2 className="text-2xl font-bold tracking-tight text-ctp-text sm:text-3xl">
-					{title}
-				</h2>
-				{description && (
-					<div className="max-w-3xl text-sm leading-7 text-ctp-subtext1 sm:text-base">
-						{description}
-					</div>
-				)}
-			</div>
-			{children}
-		</section>
+		<Reveal>
+			<section
+				className={`${styles.section} ${layout === "wide" ? styles.sectionWide : ""}`}
+			>
+				<div className={styles.sectionHeader}>
+					<h2 className="section-title">{title}</h2>
+					{description && (
+						<div className={styles.description}>{description}</div>
+					)}
+				</div>
+				<div className={styles.sectionBody}>{children}</div>
+			</section>
+		</Reveal>
 	);
 }
 
 export function TextCard({ children }: { children: ReactNode }) {
-	return (
-		<div className="rounded-lg border border-ctp-surface1 bg-ctp-base p-5 text-sm leading-7 text-ctp-subtext1 sm:p-6 sm:text-base">
-			{children}
-		</div>
-	);
+	return <div className={styles.prose}>{children}</div>;
 }
 
 export function RichText({ content }: { content: RichTextContent }) {
@@ -61,25 +61,28 @@ function InlineLink({ link }: { link: RichTextLink }) {
 			href={link.href}
 			target={isExternal ? "_blank" : undefined}
 			rel={isExternal ? "noopener noreferrer" : undefined}
-			className="font-semibold text-ctp-blue underline decoration-ctp-blue/40 underline-offset-4 transition hover:text-ctp-sapphire hover:decoration-ctp-sapphire"
+			className={styles.inlineLink}
 		>
 			{link.text}
 		</a>
 	);
 }
 
-export function TopicGrid({ topics }: { topics: Topic[] }) {
+export function TopicGrid({
+	topics,
+	layout = "grid",
+}: {
+	topics: Topic[];
+	layout?: "grid" | "rows";
+}) {
 	return (
-		<div className="grid gap-4 md:grid-cols-2">
+		<div
+			className={`${styles.topics} ${layout === "rows" ? styles.topicRows : ""}`}
+		>
 			{topics.map((topic) => (
-				<article
-					key={topic.title}
-					className="rounded-lg border border-ctp-surface1 bg-ctp-base p-5 sm:p-6"
-				>
-					<h3 className="text-xl font-semibold tracking-tight text-ctp-text">
-						{topic.title}
-					</h3>
-					<p className="mt-3 text-sm leading-7 text-ctp-subtext1">
+				<article key={topic.title} className={styles.topic}>
+					<h3>{topic.title}</h3>
+					<p>
 						<RichText content={topic.body} />
 					</p>
 				</article>

@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { getAuthenticatedSession } from "@/features/auth/server/session";
 import LiveClock from "@/shared/components/LiveClock";
-import FullscreenMessage from "@/shared/components/layout/FullscreenMessage";
+import PageContainer from "@/shared/components/layout/PageContainer";
+import styles from "./Home.module.css";
 
 const homeLinks = [
 	{ href: "/profile", label: "Profile" },
@@ -29,22 +30,31 @@ export default async function HomeScreen() {
 	};
 
 	return (
-		<main>
-			<FullscreenMessage
-				title={session ? loggedInContent.title : loggedOutContent.title}
-				description={
-					session ? loggedInContent.description : loggedOutContent.description
-				}
-				actions={homeLinks.map((link) => (
-					<Link
-						key={link.href}
-						href={link.href}
-						className="inline-flex w-24 items-center justify-center rounded-md border border-ctp-surface1 bg-ctp-base/80 px-4 py-2.5 text-sm font-semibold text-ctp-text backdrop-blur-md transition duration-200 hover:border-ctp-blue/50 hover:bg-ctp-mantle active:scale-[0.98]"
-					>
-						{link.label}
-					</Link>
-				))}
-			/>
+		<main className={styles.home}>
+			<PageContainer>
+				<div className={styles.composition}>
+					<div className={styles.introduction}>
+						<h1 className={styles.greeting}>
+							{session ? loggedInContent.title : loggedOutContent.title}
+						</h1>
+						<div className={styles.description}>
+							{session
+								? loggedInContent.description
+								: loggedOutContent.description}
+						</div>
+					</div>
+					<nav className={styles.links} aria-label="ページ一覧">
+						{homeLinks.map((link) => (
+							<Link key={link.href} href={link.href} className={styles.link}>
+								<span>{link.label}</span>
+								<span className={styles.arrow} aria-hidden="true">
+									→
+								</span>
+							</Link>
+						))}
+					</nav>
+				</div>
+			</PageContainer>
 		</main>
 	);
 }

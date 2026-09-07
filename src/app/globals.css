@@ -1,47 +1,126 @@
 @import "tailwindcss";
-@import "@catppuccin/tailwindcss/macchiato.css";
+@import "../shared/styles/tokens.css";
 @custom-variant dark (&:where(.macchiato, .macchiato *));
-
-@layer base {
-	:root,
-	.latte {
-		color-scheme: light;
-	}
-
-	.macchiato {
-		color-scheme: dark;
-	}
-
-	html {
-		background-color: var(--color-ctp-crust);
-		scroll-behavior: smooth;
-	}
-}
 
 @theme {
 	--shadow-light: none;
 	--shadow-dark: none;
-	--animate-float: float-updown 3s ease-in-out infinite;
+	--radius-sm: 2px;
+	--radius-md: 3px;
+	--radius-lg: 6px;
+	--radius-xl: 8px;
 }
 
+/* 既存ツールの色名は互換用。配色の正本は tokens.css に集約する。 */
 @theme inline {
-	--color-app-accent: var(--color-ctp-blue);
-	--color-app-info: var(--color-ctp-sapphire);
-	--color-app-success: var(--color-ctp-green);
-	--color-app-warning: var(--color-ctp-yellow);
-	--color-app-error: var(--color-ctp-red);
+	--color-ctp-crust: var(--site-canvas);
+	--color-ctp-base: var(--site-surface);
+	--color-ctp-mantle: var(--site-surface-muted);
+	--color-ctp-surface0: var(--site-surface-muted);
+	--color-ctp-surface1: var(--site-line);
+	--color-ctp-surface2: var(--site-surface-strong);
+	--color-ctp-overlay0: var(--site-control-line);
+	--color-ctp-overlay1: var(--site-muted);
+	--color-ctp-overlay2: var(--site-muted);
+	--color-ctp-subtext0: var(--site-muted);
+	--color-ctp-subtext1: var(--site-muted);
+	--color-ctp-text: var(--site-ink);
+	--color-ctp-blue: var(--site-action);
+	--color-ctp-sapphire: var(--site-action-hover);
+	--color-ctp-sky: var(--site-info);
+	--color-ctp-green: var(--site-success);
+	--color-ctp-yellow: var(--site-warning);
+	--color-ctp-red: var(--site-error);
+	--color-ctp-maroon: var(--site-error);
+	--color-ctp-peach: var(--site-orange);
+	--color-ctp-mauve: var(--site-purple);
+	--color-ctp-lavender: var(--site-purple);
+	--color-ctp-teal: var(--site-teal);
+	--color-app-accent: var(--site-accent);
+	--color-app-info: var(--site-info);
+	--color-app-success: var(--site-success);
+	--color-app-warning: var(--site-warning);
+	--color-app-error: var(--site-error);
 }
 
-@keyframes float-updown {
-	0% {
-		transform: translateY(0);
+@layer base {
+	html {
+		background: var(--site-canvas);
+		scroll-behavior: smooth;
+		scroll-padding-top: calc(var(--site-header-height) + 24px);
 	}
-	50% {
-		transform: translateY(-15px);
+
+	body {
+		min-height: 100dvh;
+		background: var(--site-canvas);
+		color: var(--site-ink);
+		font-family: var(--font-body);
+		font-variant-numeric: tabular-nums;
+		-webkit-tap-highlight-color: color-mix(
+			in srgb,
+			var(--site-accent) 15%,
+			transparent
+		);
 	}
-	100% {
-		transform: translateY(0);
+}
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+textarea,
+select {
+	border-color: var(--site-control-line);
+}
+
+@layer components {
+	.page-shell {
+		min-height: 100dvh;
+		padding: calc(var(--site-header-height) + clamp(36px, 6vw, 88px))
+			var(--site-page-gutter) var(--site-section-gap);
 	}
+
+	.page-heading {
+		font-family: var(--font-display);
+		font-size: clamp(2rem, 4.6vw, 4rem);
+		font-weight: 500;
+		line-height: 1.35;
+		letter-spacing: 0.06em;
+		text-wrap: balance;
+	}
+
+	.page-intro {
+		max-width: 43rem;
+		margin-top: 24px;
+		font-size: 0.9375rem;
+		line-height: 2;
+		color: var(--site-muted);
+	}
+
+	.section-title {
+		font-size: clamp(1.4rem, 2.4vw, 2rem);
+		font-weight: 500;
+		letter-spacing: 0.05em;
+		line-height: 1.5;
+	}
+
+	.text-link {
+		text-decoration: underline;
+		text-decoration-color: var(--site-control-line);
+		text-underline-offset: 5px;
+		transition: color var(--site-duration-fast);
+	}
+
+	.text-link:hover {
+		color: var(--site-accent);
+	}
+}
+
+::selection {
+	background: color-mix(in srgb, var(--site-accent) 22%, transparent);
+	color: var(--site-ink);
+}
+
+:focus-visible {
+	outline: 2px solid var(--site-accent);
+	outline-offset: 4px;
 }
 
 @keyframes progress-bar {
@@ -53,22 +132,20 @@
 	}
 }
 
-body {
-	min-height: 100dvh;
-	background-color: var(--color-ctp-crust);
-	color: var(--color-ctp-text);
-	font-variant-numeric: tabular-nums;
-}
-
-::selection {
-	background-color: color-mix(
-		in srgb,
-		var(--color-app-accent) 30%,
-		transparent
-	);
-}
-
-:focus-visible {
-	outline: 2px solid var(--color-app-accent);
-	outline-offset: 3px;
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
+	*,
+	*::before,
+	*::after {
+		/* biome-ignore lint/complexity/noImportantStyles: OSのモーション低減を個別アニメーションより優先する */
+		animation-duration: 0.01ms !important;
+		/* biome-ignore lint/complexity/noImportantStyles: OSのモーション低減を個別アニメーションより優先する */
+		animation-iteration-count: 1 !important;
+		/* biome-ignore lint/complexity/noImportantStyles: OSのモーション低減を個別トランジションより優先する */
+		transition-duration: 0.01ms !important;
+		/* biome-ignore lint/complexity/noImportantStyles: OSのモーション低減を個別スクロール指定より優先する */
+		scroll-behavior: auto !important;
+	}
 }
