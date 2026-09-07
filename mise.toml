@@ -1,6 +1,6 @@
 [tools]
 bun = "1.4.2"
-node = "25.2.1"
+node = "25.9.0"
 
 [tasks.install]
 description = "依存関係を lockfile どおりにインストールする。"
