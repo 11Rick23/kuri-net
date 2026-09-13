@@ -28,6 +28,7 @@
 | 使用するフォントの読み込み | `src/app/layout.tsx` の `next/font/google` |
 | ページ幅・外側余白・セクション間隔 | `--site-content-width` / `--site-page-gutter` / `--site-section-gap` |
 | ヘッダーの高さ | `--site-header-height`。モバイル値も同時に調整する |
+| ヘッダーロゴのサイズ・線色 | `--site-logo-size` / `--site-logo-ink` |
 | 動きの長さ・加減速 | `--site-duration-*` / `--site-ease` |
 | 共通見出し・入力境界・フォーカス | `src/app/globals.css` |
 | ページ固有の構図 | 各 feature の CSS Module |
@@ -35,6 +36,15 @@
 配色には用途を表す名前を使う。`--site-canvas` は画面全体、`--site-surface` は操作面、`--site-ink` は本文、`--site-muted` は補助文、`--site-line` は区切り線、`--site-control-line` は入力の境界、`--site-accent` は選択・フォーカス。成功・警告・エラーは専用の意味色を持つ。
 
 既存ツールの `ctp-*` クラスは `globals.css` から新しい変数へ接続する。新規ページでは `site-*` を使い、既存の状態表示やボタンを一括で無関係に書き換えない。`next-themes` の `latte` / `macchiato` クラス名は互換のため維持する。
+
+## ロゴ
+
+縦線と斜線を分けたKを使う。形の間の余白と直線を、サイトの構図に合わせる。
+
+- 通常版は `public/logo.svg`。アクセントは `#F7A481`、輪郭は黒。テーマによらず共用する。
+- ヘッダーは `public/logo-outline.svg` をCSSマスクとして表示する。塗りやアクセントは加えず、ライトは黒、ダークは白。表示サイズは40px、リンクの操作領域は44px以上。
+- `public/logo.png`（512px、共有画像）と `public/favicon.ico`（16 / 32 / 48px）は通常版から書き出したファイル。通常版の形や色を変更した場合は併せて再生成する。
+- アイコンと共有画像の参照先は `src/app/layout.tsx` のmetadataで管理する。
 
 ## ページ構成
 

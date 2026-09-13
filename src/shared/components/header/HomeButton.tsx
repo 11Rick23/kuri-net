@@ -15,7 +15,7 @@ export default function HomeButton() {
 			aria-current={isActive ? "page" : undefined}
 			className={styles.brand}
 		>
-			kuri-net
+			<span className={styles.brandMark} aria-hidden="true" />
 		</Link>
 	);
 }

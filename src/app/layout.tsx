@@ -32,7 +32,9 @@ export const metadata: Metadata = {
 		type: "website",
 		images: [
 			{
-				url: "/favicon/kuri-net-peach-light.webp",
+				url: "/logo.png",
+				width: 512,
+				height: 512,
 				alt: "kuri-net",
 			},
 		],
@@ -40,14 +42,14 @@ export const metadata: Metadata = {
 	icons: {
 		icon: [
 			{
-				url: "/favicon/kuri-net-peach-light.webp",
-				type: "image/webp",
-				media: "(prefers-color-scheme: light)",
+				url: "/favicon.ico",
+				type: "image/x-icon",
+				sizes: "16x16 32x32 48x48",
 			},
 			{
-				url: "/favicon/kuri-net-peach-dark.webp",
-				type: "image/webp",
-				media: "(prefers-color-scheme: dark)",
+				url: "/logo.svg",
+				type: "image/svg+xml",
+				sizes: "any",
 			},
 		],
 	},

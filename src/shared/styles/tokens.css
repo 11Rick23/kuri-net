@@ -5,6 +5,7 @@
 	--site-page-gutter: clamp(20px, 4vw, 64px);
 	--site-section-gap: clamp(48px, 7vw, 104px);
 	--site-header-height: 88px;
+	--site-logo-size: 40px;
 	--site-duration-fast: 160ms;
 	--site-duration-state: 280ms;
 	--site-duration-reveal: 600ms;
@@ -21,6 +22,7 @@
 	--site-surface-muted: #f1f2f4;
 	--site-surface-strong: #e6e8eb;
 	--site-ink: #151619;
+	--site-logo-ink: #000000;
 	--site-muted: #62666e;
 	--site-line: #d9dce1;
 	--site-control-line: #7a7f88;
@@ -46,6 +48,7 @@
 	--site-surface-muted: #24272d;
 	--site-surface-strong: #353940;
 	--site-ink: #f4f4f6;
+	--site-logo-ink: #ffffff;
 	--site-muted: #b0b4bd;
 	--site-line: #3c4049;
 	--site-control-line: #888e99;
