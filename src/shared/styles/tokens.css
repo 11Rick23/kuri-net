@@ -50,7 +50,7 @@
 	--site-surface-strong: #353940;
 	--site-ink: #f4f4f6;
 	--site-logo-ink: #ffffff;
-	--site-intro-background: #000000;
+	--site-intro-background: var(--site-canvas);
 	--site-muted: #b0b4bd;
 	--site-line: #3c4049;
 	--site-control-line: #888e99;
