@@ -11,6 +11,7 @@
 	--site-duration-page: 600ms;
 	--site-duration-reveal: 800ms;
 	--site-ease: cubic-bezier(0.22, 0.7, 0.3, 1);
+	--site-on-accent: #151619;
 	--site-radius-control: 3px;
 	--site-radius-panel: 6px;
 }
@@ -72,7 +73,7 @@
 
 @media (max-width: 639px) {
 	:root {
-		--site-header-height: 108px;
+		--site-header-height: 72px;
 	}
 }
 

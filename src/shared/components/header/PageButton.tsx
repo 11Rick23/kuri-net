@@ -8,10 +8,12 @@ export default function PageButton({
 	url,
 	display,
 	match = "exact",
+	onClick,
 }: {
 	url: string;
 	display: string;
 	match?: "exact" | "prefix";
+	onClick?: () => void;
 }) {
 	const pathname = usePathname();
 	const isActive =
@@ -22,6 +24,7 @@ export default function PageButton({
 	return (
 		<Link
 			href={url}
+			onClick={onClick}
 			aria-label={`${display}ページへ`}
 			aria-current={isActive ? "page" : undefined}
 			className={styles.pageLink}
