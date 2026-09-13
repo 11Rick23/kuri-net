@@ -147,6 +147,8 @@ NIXPACKS_START_CMD="bun run db:migrate && bun run start"
 
 ホームへのアクセス時は、白／黒の全画面背景でロゴを描画し、ヘッダーへ縮小・移動した後に背景をフェードさせます。描画と移動には加速・減速を付け、所要時間は約3.7秒です。時間の調整は `src/features/home/HomeIntroAnimation.tsx`、中央のロゴサイズは同名の CSS Module で行います。Tab／Escape キー、画面サイズ変更時は演出を終了し、「動きを減らす」設定や JavaScript 無効時は本文をすぐに表示します。
 
+ホームの「こんにちは。」は、元の Zen Kaku Gothic New の字形を、ロゴ演出の終了後に約3秒かけて筆順に沿って表示します。筆順マスクと速度は `src/features/home/HandwrittenGreeting.tsx`、表示サイズは同名の CSS Module で調整できます。Tab／Escape キーや「動きを減らす」設定では完成した文字を表示し、JavaScript 無効時も文字を表示します。
+
 ## 静的アセット
 
 - Works のアセット URL は `NEXT_PUBLIC_ASSET_BASE_URL` を基準に解決します。

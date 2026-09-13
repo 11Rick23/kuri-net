@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getAuthenticatedSession } from "@/features/auth/server/session";
 import LiveClock from "@/shared/components/LiveClock";
 import PageContainer from "@/shared/components/layout/PageContainer";
+import HandwrittenGreeting from "./HandwrittenGreeting";
 import styles from "./Home.module.css";
 
 const homeLinks = [
@@ -14,7 +15,7 @@ export default async function HomeScreen() {
 	const session = await getAuthenticatedSession();
 
 	const loggedOutContent = {
-		title: "こんにちは",
+		title: <HandwrittenGreeting />,
 		description: (
 			<>
 				kuri-kuri.net へようこそ。
