@@ -28,10 +28,33 @@
 }
 
 .brandMark {
+	display: block;
 	width: var(--site-logo-size);
 	height: var(--site-logo-size);
-	background: var(--site-logo-ink);
-	mask: url("/logo-outline.svg") center / contain no-repeat;
+	stroke: var(--site-logo-ink);
+	stroke-width: 3;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.brandStem,
+	.brandArms {
+		stroke-dasharray: 1;
+		animation: drawLogo 420ms linear both;
+	}
+
+	.brandArms {
+		animation-duration: 780ms;
+		animation-delay: 420ms;
+	}
+}
+
+@keyframes drawLogo {
+	from {
+		stroke-dashoffset: 1;
+	}
+	to {
+		stroke-dashoffset: 0;
+	}
 }
 
 .navigation,
