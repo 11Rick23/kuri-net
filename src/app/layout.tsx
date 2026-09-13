@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Jost, Zen_Kaku_Gothic_New } from "next/font/google";
 import "./globals.css";
+import HomeIntro from "@/features/home/HomeIntro";
 import Header from "@/shared/components/header/Header";
 import Providers from "./providers";
 
@@ -74,8 +75,10 @@ export default function RootLayout({
 					本文へ移動
 				</a>
 				<Providers>
-					<Header />
-					<div id="main-content">{children}</div>
+					<HomeIntro>
+						<Header />
+						<div id="main-content">{children}</div>
+					</HomeIntro>
 				</Providers>
 			</body>
 		</html>
