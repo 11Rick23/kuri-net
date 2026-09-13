@@ -6,7 +6,7 @@
 
 .reveal[data-reveal="pending"] {
 	opacity: 0;
-	transform: translateY(12px);
+	transform: translateY(24px);
 }
 .reveal:focus-within {
 	opacity: 1;

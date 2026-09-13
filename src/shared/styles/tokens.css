@@ -9,7 +9,7 @@
 	--site-duration-fast: 160ms;
 	--site-duration-state: 280ms;
 	--site-duration-page: 600ms;
-	--site-duration-reveal: 600ms;
+	--site-duration-reveal: 800ms;
 	--site-ease: cubic-bezier(0.22, 0.7, 0.3, 1);
 	--site-radius-control: 3px;
 	--site-radius-panel: 6px;

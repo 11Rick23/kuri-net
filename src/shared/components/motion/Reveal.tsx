@@ -30,7 +30,8 @@ export default function Reveal({
 					observer.disconnect();
 				}
 			},
-			{ threshold: 0.08 },
+			// 長いセクションでも、先頭が画面の下端から96px入れば開始する。
+			{ rootMargin: "0px 0px -96px 0px", threshold: 0 },
 		);
 
 		// SSRやスクリプト失敗時は隠さず、画面外の要素だけ出現を準備する。
