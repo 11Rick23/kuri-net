@@ -3,6 +3,7 @@ import { Jost, Zen_Kaku_Gothic_New } from "next/font/google";
 import "./globals.css";
 import HomeIntro from "@/features/home/HomeIntro";
 import Header from "@/shared/components/header/Header";
+import PageTransition from "@/shared/components/motion/PageTransition";
 import Providers from "./providers";
 
 const jost = Jost({
@@ -77,7 +78,7 @@ export default function RootLayout({
 				<Providers>
 					<HomeIntro>
 						<Header />
-						<div id="main-content">{children}</div>
+						<PageTransition>{children}</PageTransition>
 					</HomeIntro>
 				</Providers>
 			</body>

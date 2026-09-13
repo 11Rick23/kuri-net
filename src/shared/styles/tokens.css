@@ -8,6 +8,7 @@
 	--site-logo-size: 40px;
 	--site-duration-fast: 160ms;
 	--site-duration-state: 280ms;
+	--site-duration-page: 600ms;
 	--site-duration-reveal: 600ms;
 	--site-ease: cubic-bezier(0.22, 0.7, 0.3, 1);
 	--site-radius-control: 3px;
@@ -79,6 +80,7 @@
 	:root {
 		--site-duration-fast: 0ms;
 		--site-duration-state: 0ms;
+		--site-duration-page: 0ms;
 		--site-duration-reveal: 0ms;
 	}
 }

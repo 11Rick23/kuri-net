@@ -1,0 +1,47 @@
+::view-transition {
+	pointer-events: none;
+}
+
+/* 共通ヘッダーやホームの導入演出を、本文の切り替えに巻き込まない。 */
+::view-transition-group(root),
+::view-transition-new(root) {
+	animation: none;
+}
+
+::view-transition-old(root) {
+	display: none;
+}
+
+::view-transition-group(.page-crossfade) {
+	animation: none;
+}
+
+::view-transition-old(.page-crossfade) {
+	animation: page-leave var(--site-duration-fast) ease-out both;
+}
+
+::view-transition-new(.page-crossfade) {
+	animation: page-enter var(--site-duration-page) var(--site-ease) both;
+}
+
+@keyframes page-leave {
+	to {
+		opacity: 0;
+	}
+}
+
+@keyframes page-enter {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	::view-transition-old(.page-crossfade),
+	::view-transition-new(.page-crossfade) {
+		animation: none;
+	}
+}

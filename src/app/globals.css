@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "../shared/styles/tokens.css";
+@import "../shared/styles/pageTransitions.css";
 @custom-variant dark (&:where(.macchiato, .macchiato *));
 
 @theme {

@@ -143,6 +143,8 @@ NIXPACKS_START_CMD="bun run db:migrate && bun run start"
 
 配色・書体・余白・動きの設定は `src/shared/styles/tokens.css` に集約しています。フォントの読み込みは `src/app/layout.tsx`、各画面の配置は feature ごとの CSS Module で調整します。設計方針と変更箇所は [デザインガイド](docs/design-system.md) を参照してください。
 
+ページ遷移では、ヘッダーを固定したまま本文を0.6秒でクロスフェードします。履歴の戻る・進む操作では本文をフェードインさせ、ホームへ戻るときはロゴの導入演出を優先します。「動きを減らす」設定時は演出を省略し、View Transitions 非対応のブラウザでもリンク移動は通常どおり利用できます。遷移のスタイルは `src/shared/styles/pageTransitions.css` で調整できます。
+
 ホームへのアクセス時は、白／黒の全画面背景でロゴを描画し、ヘッダーへ縮小・移動した後に背景をフェードさせます。描画と移動には加速・減速を付け、所要時間は約3.7秒です。時間の調整は `src/features/home/HomeIntroAnimation.tsx`、中央のロゴサイズは同名の CSS Module で行います。Tab／Escape キー、画面サイズ変更時は演出を終了し、「動きを減らす」設定や JavaScript 無効時は本文をすぐに表示します。
 
 ## 静的アセット
