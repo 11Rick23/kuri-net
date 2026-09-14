@@ -16,7 +16,11 @@ export default function HomeButton() {
 			aria-current={isActive ? "page" : undefined}
 			className={styles.brand}
 		>
-			<LogoMark id="site-logo" className={styles.brandMark} />
+			<LogoMark
+				id="site-logo"
+				className={styles.brandMark}
+				variant={isActive ? "color" : "outline"}
+			/>
 		</Link>
 	);
 }

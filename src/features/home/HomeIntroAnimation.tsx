@@ -90,8 +90,10 @@ export default function HomeIntroAnimation({
 		try {
 			const origin = logo.getBoundingClientRect();
 			const destination = target.getBoundingClientRect();
+			const destinationStyle = getComputedStyle(target);
 
 			for (const [index, path] of logo.querySelectorAll("path").entries()) {
+				const initialStyle = getComputedStyle(path);
 				animations.push(
 					path.animate(
 						[
@@ -104,6 +106,28 @@ export default function HomeIntroAnimation({
 							duration: index === 0 ? STEM_DURATION : ARMS_DURATION,
 							delay: index === 0 ? 0 : STEM_DURATION,
 							easing: "cubic-bezier(0.42, 0, 0.58, 1)",
+							fill: "both",
+						},
+					),
+					path.animate(
+						[
+							{
+								fill: destinationStyle.fill,
+								fillOpacity: 0,
+								stroke: initialStyle.stroke,
+								strokeWidth: initialStyle.strokeWidth,
+							},
+							{
+								fill: destinationStyle.fill,
+								fillOpacity: 1,
+								stroke: destinationStyle.stroke,
+								strokeWidth: destinationStyle.strokeWidth,
+							},
+						],
+						{
+							duration: MOVE_DURATION,
+							delay: MOVE_START,
+							easing: "ease-in-out",
 							fill: "both",
 						},
 					),

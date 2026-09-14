@@ -1,9 +1,11 @@
 export default function LogoMark({
 	className,
 	id,
+	variant = "outline",
 }: {
 	className?: string;
 	id?: string;
+	variant?: "outline" | "color";
 }) {
 	// 両方のSVGの合成条件を揃え、切り替え時の細線の描画差を防ぐ。
 	return (
@@ -12,9 +14,9 @@ export default function LogoMark({
 			className={className}
 			style={{ transform: "translateZ(0)" }}
 			viewBox="0 0 100 100"
-			fill="none"
-			stroke="currentColor"
-			strokeWidth="3"
+			fill={variant === "color" ? "var(--site-accent)" : "none"}
+			stroke={variant === "color" ? "#000000" : "currentColor"}
+			strokeWidth={variant === "color" ? "1.5" : "3"}
 			aria-hidden="true"
 			focusable="false"
 		>
