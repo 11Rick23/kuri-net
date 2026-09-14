@@ -21,7 +21,6 @@
 	border-radius: 16px;
 	transform-style: preserve-3d;
 	transform: rotateX(var(--card-tilt-x, 0deg)) rotateY(var(--card-tilt-y, 0deg));
-	transition: transform 500ms cubic-bezier(0.2, 0.75, 0.25, 1);
 	cursor: grab;
 	user-select: none;
 }
@@ -136,13 +135,8 @@
 		0 1px 1px rgb(0 0 0 / 12%);
 }
 
-.card[data-hovering] {
-	transition: transform 180ms ease-out;
-}
-
 .card[data-dragging] {
 	cursor: grabbing;
-	transition: transform 70ms ease-out;
 }
 
 .surface::after {

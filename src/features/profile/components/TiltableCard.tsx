@@ -2,7 +2,7 @@
 
 import { type ReactNode, useEffect, useRef } from "react";
 import { createCardCorners } from "../lib/cardGeometry";
-import { dragAngle } from "../lib/cardMotion";
+import { createCardMotion } from "../lib/cardMotion";
 import styles from "./ProfileBusinessCard.module.css";
 
 const cornerSegments = createCardCorners();
@@ -17,38 +17,52 @@ export default function TiltableCard({ children }: { children: ReactNode }) {
 		if (!area || !card) return;
 		const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 		const hover = window.matchMedia("(any-hover: hover)");
-		let tilt = { x: 0, y: 0 };
-		let drag: {
-			id: number;
-			x: number;
-			y: number;
-			width: number;
-			height: number;
-			tilt: { x: number; y: number };
-		} | null = null;
+		const motion = createCardMotion();
+		let frame = 0;
+		let lastFrame = 0;
+
+		function paint() {
+			if (!card) return;
+			const { x, y } = motion.angle;
+			const lightX = Math.sin((x * Math.PI) / 180);
+			const lightY = Math.sin((y * Math.PI) / 180);
+			card.style.setProperty("--card-tilt-x", `${x}deg`);
+			card.style.setProperty("--card-tilt-y", `${y}deg`);
+			card.style.setProperty("--card-glare-x", `${50 + lightY * 18}%`);
+			card.style.setProperty("--card-glare-y", `${50 - lightX * 18}%`);
+			card.style.setProperty(
+				"--card-light-angle",
+				`${(lightY - lightX) * 12}deg`,
+			);
+		}
+
+		function animate(time: number) {
+			const moving = motion.advance(Math.min(time - lastFrame, 64));
+			lastFrame = time;
+			paint();
+			frame = moving ? requestAnimationFrame(animate) : 0;
+		}
+
+		function schedule() {
+			if (frame) return;
+			lastFrame = performance.now();
+			frame = requestAnimationFrame(animate);
+		}
 
 		function reset() {
 			if (!area || !card) return;
-			const pointerId = drag?.id;
-			drag = null;
-			tilt = { x: 0, y: 0 };
-			delete card.dataset.hovering;
+			const pointerId = motion.pointerId;
+			motion.reset(reducedMotion.matches || document.hidden);
 			delete card.dataset.dragging;
-			card.style.removeProperty("--card-tilt-x");
-			card.style.removeProperty("--card-tilt-y");
-			card.style.removeProperty("--card-glare-x");
-			card.style.removeProperty("--card-glare-y");
-			card.style.removeProperty("--card-light-angle");
-			if (pointerId !== undefined && area.hasPointerCapture(pointerId)) {
+			if (pointerId !== undefined && area.hasPointerCapture(pointerId))
 				area.releasePointerCapture(pointerId);
-			}
+			schedule();
 		}
 
 		function start(event: PointerEvent) {
 			if (
 				!area ||
 				!card ||
-				drag ||
 				!event.isPrimary ||
 				event.button !== 0 ||
 				reducedMotion.matches
@@ -57,50 +71,40 @@ export default function TiltableCard({ children }: { children: ReactNode }) {
 			if (event.target instanceof Element && event.target.closest("a, button"))
 				return;
 			const bounds = area.getBoundingClientRect();
-			drag = {
-				id: event.pointerId,
-				x: event.clientX,
-				y: event.clientY,
-				width: bounds.width,
-				height: bounds.height,
-				tilt,
-			};
+			if (
+				!motion.start(
+					event.pointerId,
+					event.clientX,
+					event.clientY,
+					bounds.width,
+					bounds.height,
+					event.timeStamp,
+				)
+			)
+				return;
 			area.setPointerCapture(event.pointerId);
-			delete card.dataset.hovering;
 			card.dataset.dragging = "true";
-		}
-
-		function paint(x: number, y: number) {
-			if (!card) return;
-			tilt = { x, y };
-			card.style.setProperty("--card-tilt-x", `${x}deg`);
-			card.style.setProperty("--card-tilt-y", `${y}deg`);
-			card.style.setProperty(
-				"--card-glare-x",
-				`${50 + Math.max(-18, Math.min(18, y * 0.4))}%`,
-			);
-			card.style.setProperty(
-				"--card-glare-y",
-				`${50 - Math.max(-18, Math.min(18, x * 0.4))}%`,
-			);
-			card.style.setProperty(
-				"--card-light-angle",
-				`${Math.max(-24, Math.min(24, (y - x) * 0.3))}deg`,
-			);
+			schedule();
 		}
 
 		function move(event: PointerEvent) {
-			if (!card || !area || reducedMotion.matches) return;
-			if (drag) {
-				if (event.pointerId !== drag.id) return;
-				paint(
-					dragAngle(drag.y - event.clientY, drag.height, drag.tilt.x),
-					dragAngle(event.clientX - drag.x, drag.width, drag.tilt.y),
+			if (!area || reducedMotion.matches) return;
+			if (motion.pointerId !== undefined) {
+				motion.move(
+					event.pointerId,
+					event.clientX,
+					event.clientY,
+					event.timeStamp,
 				);
-			} else if (event.pointerType === "mouse" && hover.matches) {
+			} else {
+				if (
+					event.pointerType !== "mouse" ||
+					event.buttons !== 0 ||
+					!hover.matches
+				)
+					return;
 				const bounds = area.getBoundingClientRect();
-				card.dataset.hovering = "true";
-				paint(
+				motion.hover(
 					Math.max(
 						-5,
 						Math.min(
@@ -117,14 +121,24 @@ export default function TiltableCard({ children }: { children: ReactNode }) {
 					),
 				);
 			}
+			schedule();
 		}
 
 		function leave() {
-			if (!drag) reset();
+			if (motion.pointerId === undefined && !motion.settling) reset();
 		}
 
 		function end(event: PointerEvent) {
-			if (event.pointerId === drag?.id) reset();
+			if (event.pointerId !== motion.pointerId) return;
+			if (event.type !== "pointerup" || reducedMotion.matches) {
+				reset();
+				return;
+			}
+			motion.release(event.timeStamp);
+			if (card) delete card.dataset.dragging;
+			if (area?.hasPointerCapture(event.pointerId))
+				area.releasePointerCapture(event.pointerId);
+			schedule();
 		}
 
 		area.addEventListener("pointerenter", move);
@@ -140,6 +154,7 @@ export default function TiltableCard({ children }: { children: ReactNode }) {
 		reducedMotion.addEventListener("change", reset);
 		return () => {
 			reset();
+			cancelAnimationFrame(frame);
 			area.removeEventListener("pointerenter", move);
 			area.removeEventListener("pointerleave", leave);
 			area.removeEventListener("pointerdown", start);
