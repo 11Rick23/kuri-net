@@ -28,6 +28,7 @@ export default function PageButton({
 			aria-label={`${display}ページへ`}
 			aria-current={isActive ? "page" : undefined}
 			className={styles.pageLink}
+			data-click-highlight
 		>
 			{display}
 		</Link>

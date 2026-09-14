@@ -47,6 +47,11 @@
 	transform: scaleX(1);
 }
 
+.card[data-highlight-blinking]::before {
+	transform: scaleX(1);
+	transition: none;
+}
+
 .cardCover {
 	position: relative;
 	aspect-ratio: 16 / 10;

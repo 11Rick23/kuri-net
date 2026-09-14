@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { getAuthenticatedSession } from "@/features/auth/server/session";
 import LiveClock from "@/shared/components/LiveClock";
 import PageContainer from "@/shared/components/layout/PageContainer";
+import HighlightLink from "@/shared/components/motion/HighlightLink";
 import HandwrittenGreeting from "./HandwrittenGreeting";
 import styles from "./Home.module.css";
 
@@ -46,12 +46,16 @@ export default async function HomeScreen() {
 					</div>
 					<nav className={styles.links} aria-label="ページ一覧">
 						{homeLinks.map((link) => (
-							<Link key={link.href} href={link.href} className={styles.link}>
+							<HighlightLink
+								key={link.href}
+								href={link.href}
+								className={styles.link}
+							>
 								<span>{link.label}</span>
 								<span className={styles.arrow} aria-hidden="true">
 									→
 								</span>
-							</Link>
+							</HighlightLink>
 						))}
 					</nav>
 				</div>

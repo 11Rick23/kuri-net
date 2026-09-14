@@ -115,6 +115,19 @@
 	color: var(--site-on-inverse-muted);
 }
 
+.appRow[data-highlight-blinking] {
+	color: var(--site-on-inverse);
+}
+
+.appRow[data-highlight-blinking]::before {
+	transform: scaleX(1);
+	transition: none;
+}
+
+.appRow[data-highlight-blinking] .appCopy p {
+	color: var(--site-on-inverse-muted);
+}
+
 .menuButton,
 .closeButton {
 	display: inline-flex;

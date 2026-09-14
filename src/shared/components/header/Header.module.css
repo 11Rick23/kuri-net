@@ -75,6 +75,7 @@
 	transition: transform var(--site-duration-state) var(--site-ease);
 }
 
+.pageLink[data-highlight-blinking],
 .pageLink[aria-current="page"],
 .pageLink:focus-visible,
 .pageLink:active {
@@ -84,6 +85,11 @@
 .pageLink:focus-visible::before,
 .pageLink:active::before {
 	transform: scaleX(1);
+}
+
+.pageLink[data-highlight-blinking]::before {
+	transform: scaleX(1);
+	transition: none;
 }
 @media (hover: hover) {
 	.pageLink:hover {

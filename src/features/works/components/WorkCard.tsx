@@ -2,6 +2,7 @@
 
 import { MdArrowForward } from "react-icons/md";
 import type { WorkEntry } from "@/features/works/types";
+import { useHighlightAction } from "@/shared/components/motion/ClickHighlight";
 import styles from "../works.module.css";
 import WorkCoverVisual from "./WorkCoverVisual";
 
@@ -13,11 +14,15 @@ export default function WorkCard({
 	onOpen: (work: WorkEntry) => void;
 }) {
 	const hasCover = Boolean(work.coverImageAssetKey && work.coverAlt);
+	const runAfterHighlight = useHighlightAction();
 
 	return (
 		<button
 			type="button"
-			onClick={() => onOpen(work)}
+			onClick={(event) =>
+				runAfterHighlight(event.currentTarget, () => onOpen(work))
+			}
+			data-click-highlight
 			className={[styles.card, !hasCover && styles.withoutCover]
 				.filter(Boolean)
 				.join(" ")}

@@ -71,11 +71,17 @@
 	transition: transform var(--site-duration-state) var(--site-ease);
 }
 
+.link[data-highlight-blinking],
 .link:focus-visible {
 	color: var(--site-on-inverse);
 }
 .link:focus-visible::before {
 	transform: scaleX(1);
+}
+
+.link[data-highlight-blinking]::before {
+	transform: scaleX(1);
+	transition: none;
 }
 
 @media (hover: hover) {
