@@ -15,11 +15,11 @@ import styles from "./Profile.module.css";
 
 export default function ProfileScreen() {
 	return (
-		<main className="page-shell">
+		<main className={`page-shell ${styles.screen}`}>
 			<PageContainer className={styles.page}>
 				<ProfileCard />
 
-				<ProfileSection title="私について">
+				<ProfileSection id="profile-about" title="私について">
 					<TextCard>
 						{profileParagraphs.map((paragraph) => (
 							<p key={paragraph.id}>

@@ -1,9 +1,76 @@
+.screen {
+	padding-top: var(--site-header-height);
+	overflow-x: clip;
+}
+
 .page {
 	gap: var(--site-section-gap);
 }
 
 .cover {
+	--card-arrival-duration: 3000ms;
+	position: relative;
+	display: grid;
+	align-items: center;
+	min-height: calc(100svh - var(--site-header-height));
+	padding-block: 48px;
+	perspective: 1400px;
 	scroll-margin-top: 6rem;
+}
+
+.scrollCue {
+	position: absolute;
+	bottom: 24px;
+	left: 50%;
+	display: grid;
+	place-items: center;
+	width: 44px;
+	height: 44px;
+	border-radius: 50%;
+	color: var(--site-muted);
+	transform: translateX(-50%);
+	animation: scrollCueAppear 600ms ease var(--card-arrival-duration) backwards;
+}
+
+.scrollCue svg {
+	width: 30px;
+	height: 30px;
+	animation: scrollCueFloat 3200ms ease-in-out
+		calc(var(--card-arrival-duration) + 600ms) infinite;
+}
+
+@keyframes scrollCueFloat {
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+
+	50% {
+		transform: translateY(5px);
+	}
+}
+
+.scrollCue:hover {
+	color: var(--site-ink);
+}
+
+.scrollCue:focus-visible {
+	outline: 2px solid var(--site-ink);
+	outline-offset: 4px;
+}
+
+@keyframes scrollCueAppear {
+	from {
+		opacity: 0;
+		visibility: hidden;
+		transform: translate(-50%, -6px);
+	}
+
+	to {
+		opacity: 1;
+		visibility: visible;
+		transform: translate(-50%, 0);
+	}
 }
 
 .section {
@@ -146,7 +213,18 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+	.scrollCue,
+	.scrollCue svg {
+		animation: none;
+	}
+
 	.inlineLink {
 		transition: none;
+	}
+}
+
+@media print {
+	.scrollCue {
+		display: none;
 	}
 }

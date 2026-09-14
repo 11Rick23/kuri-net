@@ -8,11 +8,13 @@ import Reveal from "@/shared/components/motion/Reveal";
 import styles from "../Profile.module.css";
 
 export function ProfileSection({
+	id,
 	title,
 	description,
 	children,
 	layout = "split",
 }: {
+	id?: string;
 	title: string;
 	description?: ReactNode;
 	children: ReactNode;
@@ -21,6 +23,7 @@ export function ProfileSection({
 	return (
 		<Reveal>
 			<section
+				id={id}
 				className={`${styles.section} ${layout === "wide" ? styles.sectionWide : ""}`}
 			>
 				<div className={styles.sectionHeader}>

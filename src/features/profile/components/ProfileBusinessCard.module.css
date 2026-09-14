@@ -1,7 +1,39 @@
 .stage {
+	--arrival-scale: 1.22;
 	width: min(100%, 720px);
 	margin-inline: auto;
-	padding: 24px 16px 40px;
+	padding: 24px 16px;
+	transform-style: preserve-3d;
+	animation: cardArrival var(--card-arrival-duration)
+		cubic-bezier(0.22, 0.8, 0.25, 1) backwards;
+}
+
+@keyframes cardArrival {
+	from {
+		transform: translate3d(0, calc(-50svh - 100%), 0)
+			scale(var(--arrival-scale)) rotateX(12deg) rotateZ(-2deg);
+		pointer-events: none;
+	}
+
+	55%,
+	65% {
+		transform: translate3d(0, 0, 0) scale(var(--arrival-scale)) rotateX(8deg)
+			rotateZ(0deg);
+		animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	99% {
+		pointer-events: none;
+	}
+
+	to {
+		transform: translate3d(0, 0, 0) scale(1) rotateX(0deg) rotateZ(0deg);
+		pointer-events: auto;
+	}
+}
+
+.stage:focus-within {
+	animation: none;
 }
 
 .interaction {
@@ -290,6 +322,12 @@
 	outline-offset: 4px;
 }
 
+@media (max-width: 820px) {
+	.stage {
+		--arrival-scale: 1.12;
+	}
+}
+
 @media (max-width: 479px) {
 	.surface {
 		gap: 28px;
@@ -332,6 +370,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+	.stage {
+		animation: none;
+	}
+
 	.card {
 		transform: none;
 		transition: none;
@@ -346,6 +388,10 @@
 }
 
 @media print {
+	.stage {
+		animation: none;
+	}
+
 	.card,
 	[class~="macchiato"] .card {
 		--site-ink: #303640;

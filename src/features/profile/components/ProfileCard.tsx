@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { MdKeyboardArrowDown } from "react-icons/md";
 import {
 	profileEmail,
 	profileGitHub,
@@ -63,6 +64,13 @@ export default function ProfileCard() {
 					</div>
 				</dl>
 			</TiltableCard>
+			<a
+				href="#profile-about"
+				className={styles.scrollCue}
+				aria-label="自己紹介へスクロール"
+			>
+				<MdKeyboardArrowDown aria-hidden="true" />
+			</a>
 		</section>
 	);
 }
