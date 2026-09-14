@@ -8,13 +8,7 @@ export type ProfileDetail = {
 	icon: IconType;
 };
 
-export const profileTags = [
-	"セキュリティ",
-	"ウェブ開発",
-	"認証・認可",
-	"Python",
-	"TypeScript",
-];
+export const profileInterests = ["認証・認可", "Web開発", "ユーザビリティ"];
 
 export const profileLogo = {
 	light: resolveAssetUrl("profile/logo-white.webp"),
@@ -42,10 +36,10 @@ export const profileDetails: ProfileDetail[] = [
 
 export const profileGitHub = {
 	href: "https://github.com/11Rick23",
-	display: "GitHub",
+	display: "github.com/11Rick23",
 };
 
 export const profileEmail = {
 	href: "mailto:contact@kuri-kuri.net",
-	display: "メール",
+	display: "contact@kuri-kuri.net",
 };

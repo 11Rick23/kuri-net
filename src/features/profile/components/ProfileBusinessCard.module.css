@@ -1,0 +1,324 @@
+.stage {
+	width: min(100%, 720px);
+	margin-inline: auto;
+	padding: 24px 16px 40px;
+}
+
+.interaction {
+	perspective: 1400px;
+	touch-action: pan-y pinch-zoom;
+}
+
+.card {
+	--card-depth: clamp(2.5px, 0.8vw, 6px);
+	--card-metal: #d2d5d9;
+	--site-ink: #303640;
+	--site-muted: #414954;
+	--site-line: #a8aeb7;
+	--site-surface-strong: #b8bec6;
+	position: relative;
+	min-width: 0;
+	border-radius: 16px;
+	transform-style: preserve-3d;
+	transform: rotateX(var(--card-tilt-x, 0deg)) rotateY(var(--card-tilt-y, 0deg));
+	transition: transform 500ms cubic-bezier(0.2, 0.75, 0.25, 1);
+	cursor: grab;
+	user-select: none;
+}
+
+[class~="macchiato"] .card {
+	--card-metal: #393e46;
+	--site-ink: #f7f8fa;
+	--site-muted: #e5e9ee;
+	--site-line: #626b78;
+	--site-surface-strong: #4b535f;
+}
+
+.card::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	transform: translateZ(calc(-1 * var(--card-depth)));
+	background: linear-gradient(
+		115deg,
+		var(--site-surface-strong),
+		var(--card-metal) 45%,
+		var(--site-surface-strong)
+	);
+	border: 1px solid var(--site-line);
+	box-shadow:
+		0 1px 2px rgb(0 0 0 / 12%),
+		2px 6px 10px rgb(0 0 0 / 10%),
+		5px 14px 24px rgb(0 0 0 / 7%);
+	pointer-events: none;
+}
+
+.edge {
+	position: absolute;
+	background: var(--site-line);
+	pointer-events: none;
+	backface-visibility: hidden;
+}
+
+.edgeTop,
+.edgeBottom {
+	left: 16px;
+	width: calc(100% - 32px);
+	height: var(--card-depth);
+}
+.edgeTop {
+	top: calc(var(--card-depth) / -2);
+	transform: translateZ(calc(var(--card-depth) / -2)) rotateX(90deg);
+	background: var(--site-surface-strong);
+}
+.edgeBottom {
+	bottom: calc(var(--card-depth) / -2);
+	transform: translateZ(calc(var(--card-depth) / -2)) rotateX(-90deg);
+}
+.edgeLeft,
+.edgeRight {
+	top: 16px;
+	height: calc(100% - 32px);
+	width: var(--card-depth);
+}
+.edgeLeft {
+	left: calc(var(--card-depth) / -2);
+	transform: translateZ(calc(var(--card-depth) / -2)) rotateY(-90deg);
+	background: var(--site-surface-strong);
+}
+.edgeRight {
+	right: calc(var(--card-depth) / -2);
+	transform: translateZ(calc(var(--card-depth) / -2)) rotateY(90deg);
+}
+.edgeCorner {
+	width: 3.24px;
+	height: var(--card-depth);
+	background: color-mix(
+		in srgb,
+		var(--site-surface-strong) 50%,
+		var(--site-line)
+	);
+}
+
+.surface {
+	position: relative;
+	overflow: hidden;
+	transform: translateZ(0);
+	backface-visibility: hidden;
+	display: flex;
+	flex-direction: column;
+	gap: 34px;
+	min-width: 0;
+	padding: clamp(28px, 5vw, 52px);
+	border: 1px solid color-mix(in srgb, var(--site-line) 65%, var(--card-metal));
+	border-radius: inherit;
+	background:
+		repeating-linear-gradient(
+			0deg,
+			rgb(255 255 255 / 3%) 0 1px,
+			rgb(20 28 40 / 2%) 1px 2px,
+			transparent 2px 4px
+		),
+		linear-gradient(
+			115deg,
+			rgb(25 33 46 / 4%),
+			rgb(255 255 255 / 21%) 24%,
+			transparent 46%,
+			rgb(25 33 46 / 7%) 76%,
+			rgb(255 255 255 / 10%)
+		),
+		var(--card-metal);
+	color: var(--site-ink);
+	box-shadow:
+		inset 0 1px 0 rgb(255 255 255 / 28%),
+		inset 0 -1px 0 color-mix(in srgb, var(--site-line) 55%, transparent),
+		0 1px 1px rgb(0 0 0 / 12%);
+}
+
+.card[data-hovering] {
+	transition: transform 180ms ease-out;
+}
+
+.card[data-dragging] {
+	cursor: grabbing;
+	transition: transform 70ms ease-out;
+}
+
+.surface::after {
+	content: "";
+	position: absolute;
+	inset: -25%;
+	border-radius: inherit;
+	background:
+		radial-gradient(
+			ellipse 140% 110% at 50% 50%,
+			rgb(255 255 255 / 10%),
+			transparent 65%,
+			rgb(20 28 40 / 6%)
+		),
+		conic-gradient(
+			from 115deg,
+			rgb(255 255 255 / 3%),
+			rgb(255 255 255 / 18%) 55deg,
+			transparent 115deg,
+			rgb(20 28 40 / 10%) 190deg,
+			rgb(255 255 255 / 12%) 280deg,
+			rgb(255 255 255 / 3%)
+		);
+	opacity: 0.55;
+	filter: blur(18px);
+	transform: translate(
+			calc(var(--card-glare-x, 50%) - 50%),
+			calc(var(--card-glare-y, 50%) - 50%)
+		)
+		rotate(var(--card-light-angle, 0deg));
+	transition: transform 450ms cubic-bezier(0.2, 0.75, 0.25, 1);
+	pointer-events: none;
+}
+
+.identity {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 16px;
+}
+
+.name {
+	font-family: var(--font-display);
+	font-size: clamp(42px, 7vw, 72px);
+	font-weight: 500;
+	letter-spacing: -0.06em;
+	line-height: 1;
+}
+
+.alias {
+	margin-top: 12px;
+	color: var(--site-muted);
+	font-family: var(--font-display);
+	font-size: clamp(15px, 2vw, 21px);
+	line-height: 1.4;
+}
+
+.logo {
+	position: relative;
+	flex-shrink: 0;
+	width: clamp(58px, 10vw, 108px);
+	aspect-ratio: 1;
+}
+
+.background {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.affiliation {
+	font-size: clamp(15px, 2vw, 20px);
+	font-weight: 500;
+	line-height: 1.7;
+}
+
+.interests {
+	color: var(--site-muted);
+	font-size: clamp(13px, 1.7vw, 17px);
+	line-height: 1.8;
+	text-wrap: pretty;
+}
+
+.contacts {
+	display: flex;
+	flex-direction: column;
+	font-family: var(--font-display);
+}
+
+.contacts > div {
+	display: grid;
+	grid-template-columns: 66px minmax(0, 1fr);
+	align-items: baseline;
+	gap: 12px;
+}
+
+.contacts dt {
+	color: var(--site-muted);
+	font-size: 16px;
+}
+
+.contacts dd {
+	min-width: 0;
+	font-size: clamp(16px, 2.3vw, 23px);
+	line-height: 1.5;
+}
+
+.contacts a {
+	display: inline-flex;
+	min-height: 44px;
+	align-items: center;
+	overflow-wrap: anywhere;
+	cursor: pointer;
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+.contacts a:hover {
+	text-decoration: underline;
+	text-underline-offset: 5px;
+}
+
+.contacts a:focus-visible {
+	outline: 2px solid var(--site-ink);
+	outline-offset: 4px;
+}
+
+@media (max-width: 479px) {
+	.surface {
+		gap: 28px;
+		padding: 28px 22px;
+	}
+
+	.name {
+		font-size: clamp(32px, 10vw, 42px);
+	}
+
+	.contacts > div {
+		grid-template-columns: 48px minmax(0, 1fr);
+		gap: 8px;
+	}
+
+	.contacts dt {
+		font-size: 13px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.card {
+		transform: none;
+		transition: none;
+		cursor: auto;
+	}
+
+	.surface::after {
+		transform: none;
+		transition: none;
+	}
+}
+
+@media print {
+	.card,
+	[class~="macchiato"] .card {
+		--site-ink: #303640;
+		--site-muted: #414954;
+		transform: none;
+	}
+
+	.card::before,
+	.edge,
+	.surface::after {
+		display: none;
+	}
+
+	.surface {
+		background: white;
+		box-shadow: none;
+	}
+}

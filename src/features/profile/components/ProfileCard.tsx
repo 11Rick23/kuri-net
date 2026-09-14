@@ -1,65 +1,73 @@
 import Image from "next/image";
-import { FaGithub } from "react-icons/fa";
-import { MdEmail } from "react-icons/md";
 import {
 	profileDetails,
 	profileEmail,
 	profileGitHub,
+	profileInterests,
 	profileLogo,
-	profileTags,
 } from "@/features/profile/data/profileData";
 import styles from "../Profile.module.css";
+import cardStyles from "./ProfileBusinessCard.module.css";
+import TiltableCard from "./TiltableCard";
 
 export default function ProfileCard() {
 	return (
 		<section aria-labelledby="profile-heading" className={styles.cover}>
-			<div className={styles.identity}>
-				<div className={styles.logo}>
-					<Image
-						src={profileLogo.light}
-						alt={profileLogo.alt}
-						fill
-						sizes="(max-width: 767px) 112px, 224px"
-						className="object-contain dark:hidden"
-					/>
-					<Image
-						src={profileLogo.dark}
-						alt={profileLogo.alt}
-						fill
-						sizes="(max-width: 767px) 112px, 224px"
-						className="hidden object-contain dark:block"
-					/>
-				</div>
-
-				<div className={styles.identityText}>
-					<h1 id="profile-heading" className={styles.name}>
-						kuri-kuri
-					</h1>
-					<p className={styles.alias}>a.k.a. 11Rick23</p>
-
-					<div className={styles.tags}>
-						{profileTags.map((tag) => (
-							<span key={tag}>{tag}</span>
-						))}
+			<TiltableCard>
+				<div className={cardStyles.identity}>
+					<div>
+						<h1 id="profile-heading" className={cardStyles.name}>
+							kuri-kuri
+						</h1>
+						<p className={cardStyles.alias}>a.k.a. 11Rick23</p>
 					</div>
-
-					<div className={styles.contacts}>
-						<a
-							href={profileGitHub.href}
-							target="_blank"
-							rel="noopener noreferrer"
-							className={styles.contactLink}
-						>
-							<FaGithub aria-hidden="true" />
-							<span>{profileGitHub.display}</span>
-						</a>
-						<a href={profileEmail.href} className={styles.contactLink}>
-							<MdEmail aria-hidden="true" />
-							<span>{profileEmail.display}</span>
-						</a>
+					<div className={cardStyles.logo}>
+						<Image
+							src={profileLogo.light}
+							alt={profileLogo.alt}
+							fill
+							sizes="(max-width: 767px) 88px, 108px"
+							className="object-contain dark:hidden"
+							draggable={false}
+						/>
+						<Image
+							src={profileLogo.dark}
+							alt={profileLogo.alt}
+							fill
+							sizes="(max-width: 767px) 88px, 108px"
+							className="hidden object-contain dark:block"
+							draggable={false}
+						/>
 					</div>
 				</div>
-			</div>
+				<div className={cardStyles.background}>
+					<p className={cardStyles.affiliation}>慶應義塾大学 環境情報学部</p>
+					<p className={cardStyles.interests}>{profileInterests.join(" / ")}</p>
+				</div>
+				<dl className={cardStyles.contacts}>
+					<div>
+						<dt>Email</dt>
+						<dd>
+							<a href={profileEmail.href} draggable={false}>
+								{profileEmail.display}
+							</a>
+						</dd>
+					</div>
+					<div>
+						<dt>GitHub</dt>
+						<dd>
+							<a
+								href={profileGitHub.href}
+								draggable={false}
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								{profileGitHub.display}
+							</a>
+						</dd>
+					</div>
+				</dl>
+			</TiltableCard>
 
 			<dl className={styles.details}>
 				{profileDetails.map((detail) => {

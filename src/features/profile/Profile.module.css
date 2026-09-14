@@ -6,87 +6,6 @@
 	scroll-margin-top: 6rem;
 }
 
-.identity {
-	display: grid;
-	grid-template-columns: minmax(160px, 1fr) minmax(0, 3fr);
-	align-items: center;
-	gap: clamp(32px, 5vw, 80px);
-}
-
-.logo {
-	position: relative;
-	width: min(100%, 224px);
-	aspect-ratio: 1;
-}
-
-.identityText {
-	min-width: 0;
-}
-
-.name {
-	color: var(--site-ink);
-	font-family: var(--font-display);
-	font-size: clamp(56px, 8vw, 112px);
-	font-weight: 500;
-	letter-spacing: -0.065em;
-	line-height: 1.05;
-}
-
-.alias {
-	margin-top: 14px;
-	color: var(--site-muted);
-	font-family: var(--font-display);
-	font-size: clamp(18px, 2vw, 24px);
-	line-height: 1.5;
-}
-
-.tags {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 8px 20px;
-	margin-top: 32px;
-	color: var(--site-ink);
-	font-size: 15px;
-	line-height: 1.7;
-}
-
-.contacts {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 12px 32px;
-	margin-top: 20px;
-}
-
-.contactLink {
-	display: inline-flex;
-	min-height: 44px;
-	align-items: center;
-	gap: 10px;
-	border-bottom: 1px solid var(--site-line);
-	color: var(--site-ink);
-	font-size: 16px;
-	font-weight: 500;
-	transition:
-		color var(--site-duration-fast) ease,
-		border-color var(--site-duration-fast) ease;
-}
-
-.contactLink svg {
-	width: 20px;
-	height: 20px;
-}
-
-.contactLink:hover {
-	border-color: var(--site-accent);
-	color: var(--site-accent);
-}
-
-.contactLink:focus-visible,
-.inlineLink:focus-visible {
-	outline: 2px solid var(--site-accent);
-	outline-offset: 5px;
-}
-
 .details {
 	display: grid;
 	grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -176,6 +95,11 @@
 	text-decoration-color: var(--site-accent);
 }
 
+.inlineLink:focus-visible {
+	outline: 2px solid var(--site-accent);
+	outline-offset: 5px;
+}
+
 .topics {
 	display: grid;
 	grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -231,25 +155,6 @@
 }
 
 @media (max-width: 767px) {
-	.identity {
-		grid-template-columns: minmax(0, 1fr);
-		gap: 28px;
-	}
-
-	.logo {
-		width: 112px;
-	}
-
-	.name {
-		font-size: clamp(52px, 13vw, 80px);
-	}
-
-	.tags {
-		gap: 6px 16px;
-		margin-top: 24px;
-		font-size: 14px;
-	}
-
 	.details {
 		grid-template-columns: minmax(0, 1fr);
 		gap: 20px;
@@ -292,7 +197,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.contactLink,
 	.inlineLink {
 		transition: none;
 	}
