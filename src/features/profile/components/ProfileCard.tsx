@@ -1,9 +1,7 @@
 import Image from "next/image";
 import {
-	profileDetails,
 	profileEmail,
 	profileGitHub,
-	profileInterests,
 	profileLogo,
 } from "@/features/profile/data/profileData";
 import styles from "../Profile.module.css";
@@ -26,7 +24,7 @@ export default function ProfileCard() {
 							src={profileLogo.light}
 							alt={profileLogo.alt}
 							fill
-							sizes="(max-width: 767px) 88px, 108px"
+							sizes="(max-width: 479px) 128px, (max-width: 836px) 36vw, 296px"
 							className="object-contain dark:hidden"
 							draggable={false}
 						/>
@@ -34,15 +32,12 @@ export default function ProfileCard() {
 							src={profileLogo.dark}
 							alt={profileLogo.alt}
 							fill
-							sizes="(max-width: 767px) 88px, 108px"
+							sizes="(max-width: 479px) 128px, (max-width: 836px) 36vw, 296px"
 							className="hidden object-contain dark:block"
 							draggable={false}
 						/>
 					</div>
-				</div>
-				<div className={cardStyles.background}>
 					<p className={cardStyles.affiliation}>慶應義塾大学 環境情報学部</p>
-					<p className={cardStyles.interests}>{profileInterests.join(" / ")}</p>
 				</div>
 				<dl className={cardStyles.contacts}>
 					<div>
@@ -68,22 +63,6 @@ export default function ProfileCard() {
 					</div>
 				</dl>
 			</TiltableCard>
-
-			<dl className={styles.details}>
-				{profileDetails.map((detail) => {
-					const Icon = detail.icon;
-
-					return (
-						<div key={detail.label} className={styles.detail}>
-							<dt>
-								<Icon aria-hidden="true" />
-								{detail.label}
-							</dt>
-							<dd>{detail.value}</dd>
-						</div>
-					);
-				})}
-			</dl>
 		</section>
 	);
 }

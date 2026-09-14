@@ -1,6 +1,7 @@
 "use client";
 
 import { type ReactNode, useEffect, useRef } from "react";
+import LogoMark from "@/shared/components/brand/LogoMark";
 import { createCardCorners } from "../lib/cardGeometry";
 import { createCardMotion } from "../lib/cardMotion";
 import styles from "./ProfileBusinessCard.module.css";
@@ -173,6 +174,9 @@ export default function TiltableCard({ children }: { children: ReactNode }) {
 		<div className={styles.stage}>
 			<div ref={areaRef} className={styles.interaction}>
 				<div ref={cardRef} className={styles.card}>
+					<div className={styles.back} aria-hidden="true">
+						<LogoMark className={styles.backLogo} />
+					</div>
 					<span
 						aria-hidden="true"
 						className={`${styles.edge} ${styles.edgeTop}`}

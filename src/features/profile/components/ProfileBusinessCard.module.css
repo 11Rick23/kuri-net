@@ -53,6 +53,27 @@
 	pointer-events: none;
 }
 
+.back {
+	position: absolute;
+	inset: 0;
+	display: grid;
+	place-items: center;
+	border-radius: inherit;
+	transform: translateZ(calc(-1 * var(--card-depth) - 0.1px)) rotateY(180deg);
+	backface-visibility: hidden;
+	pointer-events: none;
+}
+
+.backLogo {
+	width: clamp(100px, 24vw, 180px);
+	aspect-ratio: 1;
+	color: color-mix(in srgb, var(--card-metal) 85%, #000);
+	fill: currentColor;
+	stroke: color-mix(in srgb, var(--card-metal) 68%, #000);
+	stroke-width: 0.8;
+	filter: drop-shadow(0 1px 0.5px rgb(255 255 255 / 28%));
+}
+
 .edge {
 	position: absolute;
 	background: var(--site-line);
@@ -107,9 +128,9 @@
 	backface-visibility: hidden;
 	display: flex;
 	flex-direction: column;
-	gap: 34px;
+	gap: 30px;
 	min-width: 0;
-	padding: clamp(28px, 5vw, 52px);
+	padding: clamp(24px, 4vw, 40px);
 	border: 1px solid color-mix(in srgb, var(--site-line) 65%, var(--card-metal));
 	border-radius: inherit;
 	background:
@@ -118,14 +139,6 @@
 			rgb(255 255 255 / 3%) 0 1px,
 			rgb(20 28 40 / 2%) 1px 2px,
 			transparent 2px 4px
-		),
-		linear-gradient(
-			115deg,
-			rgb(25 33 46 / 4%),
-			rgb(255 255 255 / 21%) 24%,
-			transparent 46%,
-			rgb(25 33 46 / 7%) 76%,
-			rgb(255 255 255 / 10%)
 		),
 		var(--card-metal);
 	color: var(--site-ink);
@@ -139,11 +152,39 @@
 	cursor: grabbing;
 }
 
+.surface::before,
 .surface::after {
 	content: "";
 	position: absolute;
 	inset: -25%;
 	border-radius: inherit;
+	transform: translate(
+			calc(var(--card-glare-x, 50%) - 50%),
+			calc(var(--card-glare-y, 50%) - 50%)
+		)
+		rotate(var(--card-light-angle, 0deg));
+	transition: transform 450ms cubic-bezier(0.2, 0.75, 0.25, 1);
+	pointer-events: none;
+}
+
+.surface > * {
+	position: relative;
+	z-index: 1;
+}
+
+.surface::before {
+	background: linear-gradient(
+		115deg,
+		rgb(25 33 46 / 4%),
+		rgb(255 255 255 / 21%) 33%,
+		transparent 47%,
+		rgb(25 33 46 / 7%) 67%,
+		rgb(255 255 255 / 10%)
+	);
+	filter: blur(12px);
+}
+
+.surface::after {
 	background:
 		radial-gradient(
 			ellipse 140% 110% at 50% 50%,
@@ -162,20 +203,12 @@
 		);
 	opacity: 0.55;
 	filter: blur(18px);
-	transform: translate(
-			calc(var(--card-glare-x, 50%) - 50%),
-			calc(var(--card-glare-y, 50%) - 50%)
-		)
-		rotate(var(--card-light-angle, 0deg));
-	transition: transform 450ms cubic-bezier(0.2, 0.75, 0.25, 1);
-	pointer-events: none;
 }
 
 .identity {
-	display: flex;
-	align-items: flex-start;
-	justify-content: space-between;
-	gap: 16px;
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) clamp(80px, 22vw, 184px);
+	gap: 30px 20px;
 }
 
 .name {
@@ -196,51 +229,44 @@
 
 .logo {
 	position: relative;
-	flex-shrink: 0;
-	width: clamp(58px, 10vw, 108px);
-	aspect-ratio: 1;
+	grid-column: 2;
+	grid-row: 1 / 3;
 }
 
-.background {
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
+.logo img {
+	transform: scale(1.6);
 }
 
 .affiliation {
+	grid-column: 1;
 	font-size: clamp(15px, 2vw, 20px);
 	font-weight: 500;
 	line-height: 1.7;
 }
 
-.interests {
-	color: var(--site-muted);
-	font-size: clamp(13px, 1.7vw, 17px);
-	line-height: 1.8;
-	text-wrap: pretty;
-}
-
 .contacts {
-	display: flex;
-	flex-direction: column;
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 24px;
 	font-family: var(--font-display);
 }
 
 .contacts > div {
-	display: grid;
-	grid-template-columns: 66px minmax(0, 1fr);
-	align-items: baseline;
-	gap: 12px;
+	min-width: 0;
+}
+
+.contacts > div:last-child {
+	justify-self: end;
 }
 
 .contacts dt {
 	color: var(--site-muted);
-	font-size: 16px;
+	font-size: 14px;
 }
 
 .contacts dd {
 	min-width: 0;
-	font-size: clamp(16px, 2.3vw, 23px);
+	font-size: clamp(14px, 2.5vw, 18px);
 	line-height: 1.5;
 }
 
@@ -274,13 +300,34 @@
 		font-size: clamp(32px, 10vw, 42px);
 	}
 
-	.contacts > div {
-		grid-template-columns: 48px minmax(0, 1fr);
-		gap: 8px;
+	.identity {
+		grid-template-columns: minmax(0, 1fr) 80px;
+		gap: 28px 12px;
+	}
+
+	.logo {
+		grid-row: 1;
+	}
+
+	.affiliation {
+		grid-column: 1 / -1;
+	}
+
+	.contacts {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 12px;
+	}
+
+	.contacts > div:last-child {
+		justify-self: stretch;
 	}
 
 	.contacts dt {
 		font-size: 13px;
+	}
+
+	.contacts dd {
+		font-size: 16px;
 	}
 }
 
@@ -291,6 +338,7 @@
 		cursor: auto;
 	}
 
+	.surface::before,
 	.surface::after {
 		transform: none;
 		transition: none;
@@ -306,7 +354,9 @@
 	}
 
 	.card::before,
+	.back,
 	.edge,
+	.surface::before,
 	.surface::after {
 		display: none;
 	}
