@@ -4,7 +4,7 @@
 	overflow: clip;
 	border-top: 1px solid var(--site-line);
 	margin-top: var(--site-section-gap);
-	padding-block: 48px 64px;
+	padding-block: 48px clamp(200px, 28svh, 360px);
 	scroll-margin-top: calc(var(--site-header-height) + 28px);
 	color: var(--site-ink);
 }
@@ -88,7 +88,7 @@
 }
 @media (max-width: 767px) {
 	.story {
-		padding-block: 32px;
+		padding-block-start: 32px;
 	}
 	.prose {
 		font-size: 18px;

@@ -1,6 +1,7 @@
 .screen {
 	padding-top: var(--site-header-height);
 	padding-inline: 0;
+	padding-bottom: 0;
 	overflow-x: clip;
 }
 
