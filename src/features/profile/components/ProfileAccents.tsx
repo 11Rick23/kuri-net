@@ -13,67 +13,148 @@ const shapes = [
 ];
 type Placement = {
 	shape: number;
-	x: number;
+	edge: "left" | "right";
+	bleed: number;
 	y: number;
 	size: number;
 	rotation: number;
-	color: "peach" | "blue" | "green" | "purple" | "yellow" | "rose";
+	color:
+		| "peach"
+		| "blue"
+		| "green"
+		| "purple"
+		| "yellow"
+		| "rose"
+		| "mint"
+		| "orange";
 };
 const placements: Placement[] = [
 	{
 		shape: 0,
-		x: -24,
+		edge: "left",
+		bleed: 0.36,
 		y: -180,
-		size: 1040,
+		size: 1260,
 		rotation: -12,
 		color: "peach",
 	},
 	{
 		shape: 4,
-		x: 55,
+		edge: "right",
+		bleed: 0.38,
 		y: 40,
-		size: 900,
+		size: 1160,
 		rotation: -18,
 		color: "purple",
 	},
 	{
 		shape: 2,
-		x: 71,
-		y: 700,
-		size: 1000,
+		edge: "right",
+		bleed: 0.42,
+		y: 610,
+		size: 1200,
 		rotation: 17,
 		color: "green",
 	},
 	{
 		shape: 1,
-		x: -18,
-		y: 1250,
-		size: 880,
+		edge: "left",
+		bleed: 0.36,
+		y: 1130,
+		size: 1180,
 		rotation: 18,
 		color: "yellow",
 	},
 	{
 		shape: 5,
-		x: 43,
-		y: 1850,
-		size: 960,
+		edge: "right",
+		bleed: 0.4,
+		y: 1690,
+		size: 1240,
 		rotation: -42,
 		color: "blue",
 	},
 	{
 		shape: 3,
-		x: -27,
-		y: 2500,
-		size: 920,
+		edge: "left",
+		bleed: 0.38,
+		y: 2270,
+		size: 1220,
 		rotation: 9,
 		color: "rose",
 	},
-	{ shape: 1, x: 64, y: 3150, size: 1040, rotation: -26, color: "green" },
-	{ shape: 2, x: -20, y: 3800, size: 900, rotation: 22, color: "purple" },
-	{ shape: 4, x: 47, y: 4500, size: 980, rotation: 15, color: "peach" },
-	{ shape: 0, x: -31, y: 5200, size: 920, rotation: 0, color: "blue" },
-	{ shape: 3, x: 62, y: 5900, size: 1000, rotation: -18, color: "yellow" },
-	{ shape: 5, x: 4, y: 6600, size: 960, rotation: 32, color: "rose" },
+	{
+		shape: 1,
+		edge: "right",
+		bleed: 0.36,
+		y: 2820,
+		size: 1300,
+		rotation: -26,
+		color: "mint",
+	},
+	{
+		shape: 2,
+		edge: "left",
+		bleed: 0.4,
+		y: 3380,
+		size: 1160,
+		rotation: 22,
+		color: "purple",
+	},
+	{
+		shape: 4,
+		edge: "right",
+		bleed: 0.38,
+		y: 3950,
+		size: 1260,
+		rotation: 15,
+		color: "orange",
+	},
+	{
+		shape: 0,
+		edge: "left",
+		bleed: 0.36,
+		y: 4520,
+		size: 1220,
+		rotation: 0,
+		color: "blue",
+	},
+	{
+		shape: 3,
+		edge: "right",
+		bleed: 0.4,
+		y: 5100,
+		size: 1280,
+		rotation: -18,
+		color: "yellow",
+	},
+	{
+		shape: 5,
+		edge: "left",
+		bleed: 0.38,
+		y: 5680,
+		size: 1240,
+		rotation: 32,
+		color: "rose",
+	},
+	{
+		shape: 0,
+		edge: "right",
+		bleed: 0.36,
+		y: 6250,
+		size: 1180,
+		rotation: -12,
+		color: "mint",
+	},
+	{
+		shape: 2,
+		edge: "left",
+		bleed: 0.42,
+		y: 6840,
+		size: 1260,
+		rotation: -17,
+		color: "peach",
+	},
 ];
 
 export default function ProfileAccents() {
@@ -120,7 +201,7 @@ export default function ProfileAccents() {
 					"--size": string;
 					"--depth": number;
 				} = {
-					left: `${placement.x}%`,
+					[placement.edge]: `calc(var(--shape-size) * -${placement.bleed})`,
 					top: `${placement.y}px`,
 					rotate: `${placement.rotation}deg`,
 					"--size": `${placement.size}px`,
@@ -129,7 +210,7 @@ export default function ProfileAccents() {
 				return (
 					<svg
 						aria-hidden="true"
-						key={`${placement.shape}-${placement.x}-${placement.y}`}
+						key={`${placement.shape}-${placement.edge}-${placement.y}`}
 						viewBox="0 0 32 32"
 						className={styles.shape}
 						style={style}

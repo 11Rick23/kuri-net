@@ -7,11 +7,13 @@
 	pointer-events: none;
 }
 .shape {
+	--shape-size: max(calc(var(--size) * var(--shape-scale)), 88vw);
 	position: absolute;
-	width: calc(var(--size) * var(--shape-scale));
-	height: calc(var(--size) * var(--shape-scale));
+	width: var(--shape-size);
+	height: var(--shape-size);
 	fill: currentColor;
 	opacity: 1;
+	filter: blur(3px);
 	translate: calc(var(--pointer-x, 0px) * var(--depth))
 		calc(var(--pointer-y, 0px) * var(--depth));
 	transition: translate 400ms var(--site-ease);
@@ -33,6 +35,12 @@
 }
 .shape[data-color="rose"] {
 	color: color-mix(in srgb, var(--site-error) 12%, var(--site-canvas));
+}
+.shape[data-color="mint"] {
+	color: color-mix(in srgb, var(--site-success) 12%, var(--site-canvas));
+}
+.shape[data-color="orange"] {
+	color: color-mix(in srgb, var(--site-orange) 12%, var(--site-canvas));
 }
 
 @media (max-width: 1100px) {
