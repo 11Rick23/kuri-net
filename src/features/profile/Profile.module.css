@@ -95,14 +95,14 @@
 .description {
 	margin-top: 20px;
 	color: var(--site-ink);
-	font-size: 16px;
+	font-size: 18px;
 	line-height: 1.9;
 }
 
 .prose {
 	max-width: 680px;
 	color: var(--site-ink);
-	font-size: 17px;
+	font-size: 18px;
 	line-height: 2;
 	overflow-wrap: anywhere;
 }
@@ -152,7 +152,7 @@
 .topic p {
 	margin-top: 18px;
 	color: var(--site-ink);
-	font-size: 16px;
+	font-size: 18px;
 	line-height: 1.95;
 	overflow-wrap: anywhere;
 }
@@ -164,8 +164,8 @@
 
 .topicRows .topic {
 	display: grid;
-	grid-template-columns: minmax(0, 1fr) minmax(0, 2.3fr);
-	gap: 24px;
+	grid-template-columns: minmax(0, 1fr);
+	gap: 14px;
 	padding-bottom: 32px;
 }
 
@@ -183,6 +183,7 @@
 }
 
 .topicRows .topic p {
+	max-width: 800px;
 	margin-top: 0;
 }
 
@@ -193,8 +194,10 @@
 		padding-top: 28px;
 	}
 
-	.prose {
-		font-size: 16px;
+	.description,
+	.prose,
+	.topic p {
+		font-size: 17px;
 	}
 
 	.topics {
@@ -204,11 +207,6 @@
 
 	.topicRows {
 		gap: 0;
-	}
-
-	.topicRows .topic {
-		grid-template-columns: minmax(0, 1fr);
-		gap: 14px;
 	}
 }
 
