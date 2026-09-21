@@ -9,9 +9,8 @@ export default function ProfileScreen() {
 		<main className={`page-shell ${styles.screen}`}>
 			<PageContainer className={styles.page}>
 				<ProfileCard />
-
-				<ProfileStory age={getProfileAge(new Date())} />
 			</PageContainer>
+			<ProfileStory age={getProfileAge(new Date())} />
 		</main>
 	);
 }

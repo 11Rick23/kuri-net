@@ -13,7 +13,7 @@ export const profileNotes = {
 	},
 	birth: {
 		title: "2005年11月23日生まれ",
-		paragraphs: ["誕生日は、勤労感謝の日です。"],
+		paragraphs: ["2005年11月23日、勤労感謝の日に生まれました。"],
 	},
 	spain: {
 		title: "スペイン・マドリード",
@@ -45,7 +45,9 @@ export const profileNotes = {
 	},
 	faculty: {
 		title: "慶應義塾大学 環境情報学部",
-		paragraphs: [],
+		paragraphs: [
+			"プログラミングに興味を持ったことから、情報系の学部である環境情報学部へ進学しました。",
+		],
 		links: [
 			{
 				text: "湘南藤沢キャンパス（SFC）",
@@ -62,11 +64,13 @@ export const profileNotes = {
 		paragraphs: [
 			"韓国で通っていた Dwight School Seoul はIT教育に力を入れており、授業でも Google Classroom などを積極的に使っていました。",
 			"入学時に各家庭で MacBook を購入する必要があり、両親に MacBook Pro（Retina, 13-inch, Early 2015）を買ってもらいました。",
+			"このMacBookを使ううちに、コンピューターへの関心が一気に強まりました。",
 		],
 	},
 	education: {
 		title: "学校でのIT教育",
 		paragraphs: [
+			"学校での学習を通じて、コンピューターやソフトウェアに関するさまざまな経験を積むことができました。",
 			"3年間で、コンピューターの操作、インターネットでの情報収集、メールやクラウドの使い方を学びました。Google Document や Google Slide でレポート・プレゼンテーションも制作しました。",
 			"GarageBand での音楽制作、Canva などでのデジタルアート、カメラや動画編集アプリを使った映像制作にも取り組みました。",
 			"Sketch や Python によるプログラミング入門、Fusion 360 での3Dモデル作成など、多様なIT技術に触れることができました。",
@@ -125,27 +129,26 @@ export const profileNotes = {
 			"大学ではスキーサークルのリーゼンスキークラブに所属しています。高校のスキー部から続ける形で、競技スキーに取り組んでいます。",
 		],
 	},
+	overseas: {
+		title: "海外生活",
+		paragraphs: [
+			"海外生活を通じて多種多様な人・環境・価値観に触れてきたことは、私の大きな強みです。",
+		],
+	},
+	highSchool: {
+		title: "高校への進学",
+		paragraphs: [
+			"米国への移住後は、コロナウイルスの流行と高校受験の時期が重なり、受験勉強に注力しました。その結果、帰国子女受験で慶應義塾高等学校へ入学しました。",
+		],
+	},
 } satisfies Record<string, ProfileNote>;
 
 export type ProfileNoteId = keyof typeof profileNotes;
 type StoryPart = string | { text: string; note: ProfileNoteId };
-export type ProfileObjectKind = "macbook" | "ski" | "notebook";
 type StoryChapter = {
 	id: string;
 	paragraphs: StoryPart[][];
-	object?: { kind: ProfileObjectKind; note: ProfileNoteId; label: string };
 };
-
-export const profilePlaces: {
-	code: string;
-	name: string;
-	note: ProfileNoteId;
-}[] = [
-	{ code: "ES", name: "スペイン", note: "spain" },
-	{ code: "JP", name: "日本", note: "japan" },
-	{ code: "KR", name: "韓国", note: "korea" },
-	{ code: "US", name: "米国", note: "usa" },
-];
 
 export function createProfileStory(age: number): StoryChapter[] {
 	return [
@@ -157,71 +160,70 @@ export function createProfileStory(age: number): StoryChapter[] {
 					{ text: "kuri-kuri", note: "nickname" },
 					"と申します。",
 				],
+				["私は", { text: "2005年生まれ", note: "birth" }, `の${age}歳です。`],
 				[
-					"私は",
-					{ text: "2005年生まれ", note: "birth" },
-					`の${age}歳です。生まれはスペインで、学生時代を日本、韓国、米国で過ごしました。`,
+					{ text: "スペイン", note: "spain" },
+					"生まれで、",
+					{ text: "日本", note: "japan" },
+					"、",
+					{ text: "韓国", note: "korea" },
+					"、",
+					{ text: "米国", note: "usa" },
+					"で育ちました。",
 				],
 				[
-					"海外生活を通じて多種多様な人・環境・価値観に触れてきたことは、私の大きな強みです。現在は慶應義塾大学の",
-					{ text: "環境情報学部", note: "faculty" },
-					"に在籍しています。",
+					{ text: "海外生活", note: "overseas" },
+					"が、自分の強みにつながっています。",
 				],
 			],
 		},
 		{
 			id: "computers",
-			object: {
-				kind: "macbook",
-				note: "schoolPolicy",
-				label: "MacBook Pro · 2015",
-			},
 			paragraphs: [
-				["私がコンピューターに興味を持ったのは、小学生の頃でした。"],
 				[
-					"韓国へ移住した際、学校の方針で両親にMacBookを買ってもらいました。これをきっかけに、コンピューターへの関心が一気に強まりました。",
+					"小学生の頃に手にした",
+					{ text: "MacBook", note: "schoolPolicy" },
+					"をきっかけに、コンピューターに興味を持ちました。",
 				],
 				[
 					{ text: "学校でのIT教育", note: "education" },
 					"や",
 					{ text: "コンピューターでの遊び", note: "tinkering" },
-					"を通じて、コンピューターやソフトウェアに関するさまざまな経験を積むことができました。",
+					"を通じて、学びを広げてきました。",
 				],
 			],
 		},
 		{
 			id: "high-school",
-			object: { kind: "ski", note: "ski", label: "アルペンスキー" },
 			paragraphs: [
 				[
-					"米国への移住後は、コロナウイルスの流行と高校受験の時期が重なり、受験勉強に注力しました。その結果、帰国子女受験で慶應義塾高等学校へ入学しました。",
-				],
-				[
-					"高校では、スキー部や",
+					{ text: "高校", note: "highSchool" },
+					"では、",
+					{ text: "スキー部", note: "ski" },
+					"や",
 					{ text: "文化祭の実行委員会", note: "festival" },
 					"に所属していました。",
 				],
 				[
-					"高校時代にプログラミングに興味を持ち、独学でPythonを学び、初めて",
-					{ text: "ウェブアプリの開発", note: "development" },
-					"に取り組みました。",
+					"また、プログラミングに興味を持ち、Pythonを独学して初めて",
+					{ text: "ウェブアプリを開発", note: "development" },
+					"しました。",
 				],
 			],
 		},
 		{
 			id: "university",
-			object: { kind: "notebook", note: "research", label: "SFC-RG / Delight" },
 			paragraphs: [
 				[
-					"プログラミングに興味を持ったことから、情報系の学部である環境情報学部へ進学しました。",
+					"現在は慶應義塾大学の",
+					{ text: "環境情報学部", note: "faculty" },
+					"で",
+					{ text: "情報技術を学び", note: "study" },
+					"、",
+					{ text: "研究室", note: "research" },
+					"にも所属しています。",
 				],
 				[
-					"大学では",
-					{ text: "情報技術関連の学習", note: "study" },
-					"に取り組み、研究室にも所属しています。",
-				],
-				[
-					"また、",
 					{ text: "サークル", note: "skiClub" },
 					"で趣味のスキーも続けています。",
 				],

@@ -1,0 +1,58 @@
+.accents {
+	--shape-scale: 1;
+	position: absolute;
+	inset: 0;
+	overflow: clip;
+	z-index: 0;
+	pointer-events: none;
+}
+.shape {
+	position: absolute;
+	width: calc(var(--size) * var(--shape-scale));
+	height: calc(var(--size) * var(--shape-scale));
+	fill: currentColor;
+	opacity: 1;
+	translate: calc(var(--pointer-x, 0px) * var(--depth))
+		calc(var(--pointer-y, 0px) * var(--depth));
+	transition: translate 400ms var(--site-ease);
+}
+.shape[data-color="peach"] {
+	color: color-mix(in srgb, var(--site-accent) 12%, var(--site-canvas));
+}
+.shape[data-color="blue"] {
+	color: color-mix(in srgb, var(--site-info) 12%, var(--site-canvas));
+}
+.shape[data-color="green"] {
+	color: color-mix(in srgb, var(--site-teal) 12%, var(--site-canvas));
+}
+.shape[data-color="purple"] {
+	color: color-mix(in srgb, var(--site-purple) 12%, var(--site-canvas));
+}
+.shape[data-color="yellow"] {
+	color: color-mix(in srgb, var(--site-warning) 12%, var(--site-canvas));
+}
+.shape[data-color="rose"] {
+	color: color-mix(in srgb, var(--site-error) 12%, var(--site-canvas));
+}
+
+@media (max-width: 1100px) {
+	.accents {
+		--shape-scale: 0.8;
+	}
+}
+@media (max-width: 767px) {
+	.accents {
+		--shape-scale: 0.68;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.shape {
+		translate: none;
+		transition: none;
+	}
+}
+@media print {
+	.accents {
+		display: none;
+	}
+}
