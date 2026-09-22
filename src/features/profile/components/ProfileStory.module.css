@@ -23,11 +23,15 @@
 .chapter + .chapter {
 	margin-top: 64px;
 }
-.chapter:first-child > p:first-child {
+.paragraph {
+	overflow: clip;
+	overflow-clip-margin: 8px;
+}
+.chapter:first-child > .paragraph:first-child {
 	font-size: clamp(24px, 2.4vw, 32px);
 	line-height: 1.8;
 }
-.chapter > p + p {
+.paragraph + .paragraph {
 	margin-top: 16px;
 }
 .word {
@@ -58,10 +62,23 @@
 	color: color-mix(in srgb, var(--site-ink) 80%, var(--site-canvas));
 	line-height: 1.9;
 }
+.detailVisible {
+	border-radius: 2px;
+	box-decoration-break: clone;
+	transition: background-color var(--site-duration-fast) ease;
+}
+.detail[data-highlighted="true"] .detailVisible,
+.detail:focus-within .detailVisible {
+	background-color: color-mix(in srgb, var(--site-accent) 18%, transparent);
+}
+.pendingText {
+	visibility: hidden;
+	pointer-events: none;
+}
 .prose .detail {
 	font-size: 0.95em;
 }
-.chapter:first-child > p:first-child .detail {
+.chapter:first-child > .paragraph:first-child .detail {
 	font-size: 20px;
 }
 .detail a {
@@ -93,15 +110,16 @@
 	.prose {
 		font-size: 18px;
 	}
-	.chapter:first-child > p:first-child {
+	.chapter:first-child > .paragraph:first-child {
 		font-size: 24px;
 	}
-	.chapter:first-child > p:first-child .detail {
+	.chapter:first-child > .paragraph:first-child .detail {
 		font-size: 18px;
 	}
 }
 @media (prefers-reduced-motion: reduce) {
-	.word {
+	.word,
+	.detailVisible {
 		transition: none;
 	}
 }

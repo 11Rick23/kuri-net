@@ -7,11 +7,15 @@ import {
 	profileNotes,
 } from "../data/profileStory";
 import ProfileAccents from "./ProfileAccents";
+import ProfileDetail from "./ProfileDetail";
+import ProfileParagraph from "./ProfileParagraph";
 import styles from "./ProfileStory.module.css";
 
 export default function ProfileStory({ age }: { age: number }) {
 	const chapters = createProfileStory(age);
 	const [expanded, setExpanded] = useState<ProfileNoteId[]>([]);
+	const [hovered, setHovered] = useState<ProfileNoteId | null>(null);
+	const [focused, setFocused] = useState<ProfileNoteId | null>(null);
 
 	function toggle(id: ProfileNoteId) {
 		setExpanded((current) =>
@@ -29,7 +33,7 @@ export default function ProfileStory({ age }: { age: number }) {
 					{chapters.map((chapter) => (
 						<div key={chapter.id} className={styles.chapter}>
 							{chapter.paragraphs.map((parts) => (
-								<p key={JSON.stringify(parts)}>
+								<ProfileParagraph key={JSON.stringify(parts)}>
 									{parts.map((part) =>
 										typeof part === "string" ? (
 											part
@@ -41,6 +45,19 @@ export default function ProfileStory({ age }: { age: number }) {
 												aria-expanded={expanded.includes(part.note)}
 												aria-controls={`profile-detail-${part.note}`}
 												onClick={() => toggle(part.note)}
+												onPointerEnter={(event) => {
+													if (event.pointerType === "mouse")
+														setHovered(part.note);
+												}}
+												onPointerLeave={() => setHovered(null)}
+												onFocus={(event) =>
+													setFocused(
+														event.currentTarget.matches(":focus-visible")
+															? part.note
+															: null,
+													)
+												}
+												onBlur={() => setFocused(null)}
 											>
 												{part.text}
 											</button>
@@ -48,27 +65,18 @@ export default function ProfileStory({ age }: { age: number }) {
 									)}
 									{parts.map((part) => {
 										if (typeof part === "string") return null;
-										const detail = profileNotes[part.note];
 										return (
-											<span
+											<ProfileDetail
 												key={part.note}
-												id={`profile-detail-${part.note}`}
-												className={styles.detail}
-												hidden={!expanded.includes(part.note)}
-											>
-												{" "}
-												{detail.paragraphs.join(" ")}
-												{"links" in detail &&
-													detail.links.map((link) => (
-														<span key={link.href}>
-															{" "}
-															<a href={link.href}>{link.text}</a>
-														</span>
-													))}
-											</span>
+												id={part.note}
+												expanded={expanded.includes(part.note)}
+												highlighted={
+													hovered === part.note || focused === part.note
+												}
+											/>
 										);
 									})}
-								</p>
+								</ProfileParagraph>
 							))}
 						</div>
 					))}
