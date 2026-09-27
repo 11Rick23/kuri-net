@@ -1,232 +1,399 @@
-type ProfileNote = {
-	title: string;
-	paragraphs: string[];
-	links?: { text: string; href: string }[];
-};
+export type ProfileTextPart = string | { text: string; href: string };
+export type ProfileInlinePart = ProfileTextPart | { text: string; note: true };
 
-export const profileNotes = {
-	nickname: {
-		title: "kuri-kuri",
-		paragraphs: [
-			"幼い頃に友達に冗談で呼ばれたあだ名「くりっくりー」が元になっています。11Rick23 というハンドルネームを使うこともあります。",
-		],
-	},
-	birth: {
-		title: "2005年11月23日生まれ",
-		paragraphs: ["2005年11月23日、勤労感謝の日に生まれました。"],
-	},
-	spain: {
-		title: "スペイン・マドリード",
-		paragraphs: [
-			"父の仕事の都合で、スペインのマドリードに生まれました。1歳になる前に日本へ帰国したため、スペインでの記憶はありません。",
-		],
-	},
-	japan: {
-		title: "日本での生活",
-		paragraphs: [
-			"2016年8月までと、2020年12月以降は日本で暮らしています。",
-			"スペインからの帰国後、小学5年生までは日本の幼稚園・区立小学校に通っていました。韓国・米国を経て、高校入学をきっかけに帰国し、以降は日本に住んでいます。",
-		],
-	},
-	korea: {
-		title: "韓国での生活",
-		paragraphs: [
-			"2016年8月から2019年8月まで、韓国で暮らしていました。父の仕事の都合で、小学5年生の夏に移住しました。",
-			"Dwight School Seoul というインターナショナルスクールに通い、中学1年生の夏頃に米国へ移りました。",
-		],
-	},
-	usa: {
-		title: "米国での生活",
-		paragraphs: [
-			"2019年8月から2020年12月まで、米国で暮らしていました。父の仕事の都合で、中学1年生の夏に韓国から移住しました。",
-			"メリーランド州の公立中学校 Thomas W. Pyle Middle School に1年ほど、同州の公立高校 Walt Whitman High School に半年ほど通い、高校受験をきっかけに帰国しました。",
-			"当時はコロナ禍の真っ只中。途中から学校がすべてオンラインになるなど、大変な時期だったことが印象に残っています。",
-		],
-	},
-	faculty: {
-		title: "慶應義塾大学 環境情報学部",
-		paragraphs: [
-			"プログラミングに興味を持ったことから、情報系の学部である環境情報学部へ進学しました。",
-		],
-		links: [
-			{
-				text: "湘南藤沢キャンパス（SFC）",
-				href: "https://www.keio.ac.jp/ja/sfc/",
-			},
-			{
-				text: "総合政策学部・環境情報学部",
-				href: "https://www.keio.ac.jp/ja/sfc-pem/pmei/",
-			},
-		],
-	},
-	schoolPolicy: {
-		title: "最初のMacBook",
-		paragraphs: [
-			"韓国で通っていた Dwight School Seoul はIT教育に力を入れており、授業でも Google Classroom などを積極的に使っていました。",
-			"入学時に各家庭で MacBook を購入する必要があり、両親に MacBook Pro（Retina, 13-inch, Early 2015）を買ってもらいました。",
-			"このMacBookを使ううちに、コンピューターへの関心が一気に強まりました。",
-		],
-	},
-	education: {
-		title: "学校でのIT教育",
-		paragraphs: [
-			"学校での学習を通じて、コンピューターやソフトウェアに関するさまざまな経験を積むことができました。",
-			"3年間で、コンピューターの操作、インターネットでの情報収集、メールやクラウドの使い方を学びました。Google Document や Google Slide でレポート・プレゼンテーションも制作しました。",
-			"GarageBand での音楽制作、Canva などでのデジタルアート、カメラや動画編集アプリを使った映像制作にも取り組みました。",
-			"Sketch や Python によるプログラミング入門、Fusion 360 での3Dモデル作成など、多様なIT技術に触れることができました。",
-		],
-	},
-	tinkering: {
-		title: "コンピューターでの遊び",
-		paragraphs: [
-			"当時はスマホを持っておらず、MacBook が初めて手に入れた自分のデジタル機器でした。OSやアプリの設定を変えたり、ファイルを整理したり、便利なアプリを入れたりすることを楽しんでいました。",
-			"より便利なツールや設定を探して、ブログやまとめ記事を読み、新しい機能やアプリを積極的に試していました。",
-			"この遊びで得た知識が、今でも開発や技術の理解に役立っていると感じています。",
-		],
-	},
-	ski: {
-		title: "高校のスキー部",
-		paragraphs: [
-			"「回転」「大回転」などのアルペンスキーに取り組んでいました。毎年県大会に出場し、関東大会やインターハイを目指して練習に励みました。",
-			"2・3年次には関東大会への進出を果たしました。",
-		],
-	},
-	festival: {
-		title: "日吉祭実行委員会",
-		paragraphs: [
-			"慶應義塾高等学校の文化祭「日吉祭」の実行委員会に所属し、主に動画編集やポスター・パンフレット制作を担当しました。",
-			"3年次には副実行委員長を務め、委員会全体や文化祭を取りまとめる経験をしました。",
-		],
-	},
-	development: {
-		title: "Discord BOTの開発",
-		paragraphs: [
-			"コロナ禍の外出自粛中、オンラインの友人に誘われて Discord コミュニティに参加しました。その後、管理者メンバーの一員になりました。",
-			"管理に使っていた既存の自動化アプリケーション（Discord BOT）がコミュニティのニーズを満たしておらず、不便さを感じたことから、専用BOTの自作に挑戦しました。",
-			"このBOTは、現在まで継続して開発・運用しています。",
-		],
-	},
-	study: {
-		title: "大学での学習",
-		paragraphs: [
-			"特定の分野に限定せず、多様な講義を受講しています。インターネット、ソフトウェアアーキテクチャ、アルゴリズム、セキュリティ、ユビキタスシステム、電子回路など、情報系の分野を幅広く学びました。",
-		],
-	},
-	research: {
-		title: "SFC-RG・Delightグループ",
-		paragraphs: [
-			"SFC-RG合同研究室の Delight グループに所属しています。研究室では分散システムやデジタルアイデンティティに関する研究を行っています。",
-			"私は特にデジタルアイデンティティに興味があり、現在はセキュリティやユーザビリティに着目して学習しています。",
-		],
-		links: [
-			{ text: "SFC-RG合同研究室", href: "https://rg.sfc.keio.ac.jp/ja" },
-			{ text: "Delightグループ", href: "https://delight.sfc.wide.ad.jp/ja" },
-		],
-	},
-	skiClub: {
-		title: "リーゼンスキークラブ",
-		paragraphs: [
-			"大学ではスキーサークルのリーゼンスキークラブに所属しています。高校のスキー部から続ける形で、競技スキーに取り組んでいます。",
-		],
-	},
-	overseas: {
-		title: "海外生活",
-		paragraphs: [
-			"海外生活を通じて多種多様な人・環境・価値観に触れてきたことは、私の大きな強みです。",
-		],
-	},
-	highSchool: {
-		title: "高校への進学",
-		paragraphs: [
-			"米国への移住後は、コロナウイルスの流行と高校受験の時期が重なり、受験勉強に注力しました。その結果、帰国子女受験で慶應義塾高等学校へ入学しました。",
-		],
-	},
-} satisfies Record<string, ProfileNote>;
-
-export type ProfileNoteId = keyof typeof profileNotes;
-type StoryPart = string | { text: string; note: ProfileNoteId };
-type StoryChapter = {
+export type ProfilePassage = {
 	id: string;
-	paragraphs: StoryPart[][];
+	title: string;
+	summary: ProfileInlinePart[];
+	preview: string;
+	detail: ProfileTextPart[][];
 };
+
+type StoryChapter = { id: string; paragraphs: ProfilePassage[][] };
+const word = (text: string): { text: string; note: true } => ({
+	text,
+	note: true,
+});
+const link = (text: string, href: string) => ({ text, href });
 
 export function createProfileStory(age: number): StoryChapter[] {
-	return [
-		{
-			id: "background",
-			paragraphs: [
+	const passages = {
+		nickname: {
+			id: "nickname",
+			title: "名前の由来",
+			summary: ["初めまして、", word("kuri-kuri"), "と申します。"],
+			preview: "幼い頃に友達に呼ばれた「くりっくりー」が由来です。",
+			detail: [
 				[
-					"初めまして、",
-					{ text: "kuri-kuri", note: "nickname" },
-					"と申します。",
-				],
-				["私は", { text: "2005年生まれ", note: "birth" }, `の${age}歳です。`],
-				[
-					{ text: "スペイン", note: "spain" },
-					"生まれで、",
-					{ text: "日本", note: "japan" },
-					"、",
-					{ text: "韓国", note: "korea" },
-					"、",
-					{ text: "米国", note: "usa" },
-					"で育ちました。",
-				],
-				[
-					{ text: "海外生活", note: "overseas" },
-					"が、自分の強みにつながっています。",
+					"幼い頃に友達に呼ばれた「くりっくりー」が、kuri-kuriという名前の由来です。11Rick23というハンドルネームも使っています。",
 				],
 			],
 		},
+		faculty: {
+			id: "faculty",
+			title: "大学への進学",
+			summary: ["慶應義塾大学の", word("環境情報学部"), "に在籍しています。"],
+			preview:
+				"高校で深まったプログラミングへの関心から、情報技術を学べる学部へ進みました。",
+			detail: [
+				[
+					"高校でプログラミングに取り組むうちに、情報技術をさらに学びたいと考え、慶應義塾大学の",
+					link("環境情報学部", "https://www.keio.ac.jp/ja/sfc-pem/pmei/"),
+					"へ進学しました。",
+				],
+			],
+		},
+		birth: {
+			id: "birth",
+			title: "誕生日",
+			summary: [word("2005年生まれ"), `の${age}歳です。`],
+			preview: "誕生日は11月23日。勤労感謝の日に生まれました。",
+			detail: [
+				[`2005年11月23日生まれの${age}歳です。誕生日は勤労感謝の日です。`],
+			],
+		},
+		spain: {
+			id: "spain",
+			title: "スペインで生まれて",
+			summary: [word("スペイン"), "で生まれ、幼少期は日本で過ごしました。"],
+			preview:
+				"父の仕事の都合でマドリードで生まれ、1歳になる前に日本へ戻りました。",
+			detail: [
+				[
+					"父の仕事の都合で、スペインのマドリードで生まれました。1歳になる前に帰国し、幼少期は日本で過ごしたため、スペインでの記憶はありません。",
+				],
+			],
+		},
+		korea: {
+			id: "korea",
+			title: "韓国での学校生活",
+			summary: [
+				"小学5年生の夏に",
+				word("韓国へ移り"),
+				"、インターナショナルスクールに通いました。",
+			],
+			preview:
+				"2016年8月から2019年8月まで、Dwight School Seoulに通っていました。",
+			detail: [
+				[
+					"小学5年生だった2016年8月に、父の仕事の都合で韓国へ移りました。2019年8月まで、インターナショナルスクールの",
+					link("Dwight School Seoul", "https://dwight.or.kr/"),
+					"に通っていました。",
+				],
+			],
+		},
+		computer: {
+			id: "computer",
+			title: "初めてのMacBook",
+			summary: [
+				"韓国の学校で使い始めた",
+				word("MacBook"),
+				"をきっかけに、コンピューターに興味を持ちました。",
+			],
+			preview:
+				"授業用に買ってもらった一台で、設定や便利なアプリを試すことに夢中になりました。",
+			detail: [
+				[
+					"韓国の学校では授業用にMacBookが必要で、両親に買ってもらいました。初めての自分のデジタル機器でした。",
+				],
+				[
+					"設定を変えたり、便利なアプリを探して試したりするうちに、コンピューターでできることを知るのが楽しくなりました。",
+				],
+			],
+		},
+		education: {
+			id: "education",
+			title: "韓国の学校での学び",
+			summary: [
+				"授業では、",
+				word("デジタル制作やプログラミング"),
+				"にも触れました。",
+			],
+			preview:
+				"音楽・映像・3Dモデルなどを制作し、ScratchやPythonでプログラミングの入口に触れました。",
+			detail: [
+				[
+					"韓国の学校では、レポートや発表資料の作成に加え、音楽・映像・デジタルアート・3Dモデルの制作に取り組みました。",
+				],
+				[
+					"プログラミング入門用のWebサービス「Scratch」やPythonにも触れました。この授業での経験が、高校でPythonを本格的に独学する入口になりました。",
+				],
+			],
+		},
+		usa: {
+			id: "usa",
+			title: "米国での学校生活",
+			summary: [
+				"2019年8月に",
+				word("米国へ移り"),
+				"、現地の学校に通いました。",
+			],
+			preview:
+				"メリーランド州の公立中学校と高校に通い、途中からはコロナ禍でオンライン授業になりました。",
+			detail: [
+				[
+					"2019年8月に米国へ移り、メリーランド州の公立中学校 ",
+					link(
+						"Thomas W. Pyle Middle School",
+						"https://www.montgomeryschoolsmd.org/schools/pylems/",
+					),
+					" に約1年、公立高校 ",
+					link(
+						"Walt Whitman High School",
+						"https://www.montgomeryschoolsmd.org/schools/whitmanhs/",
+					),
+					" に約半年通いました。",
+				],
+				[
+					"途中からコロナ禍で授業がオンラインになり、米国での生活の後半は日本の高校を受験するための勉強に力を入れました。",
+				],
+			],
+		},
+		highSchool: {
+			id: "highSchool",
+			title: "日本の高校への進学",
+			summary: [
+				"2020年12月に高校受験のため帰国し、",
+				word("慶應義塾高等学校へ進学"),
+				"しました。",
+			],
+			preview:
+				"米国で受験勉強を進め、帰国子女受験で慶應義塾高等学校へ。以降は日本で暮らしています。",
+			detail: [
+				[
+					"米国で受験勉強を進め、2020年12月に帰国しました。帰国子女受験で",
+					link("慶應義塾高等学校", "https://www.hs.keio.ac.jp/"),
+					"へ進学し、以降は日本で暮らしています。",
+				],
+			],
+		},
+		overseas: {
+			id: "overseas",
+			title: "海外生活から得た視点",
+			summary: [
+				"こうした",
+				word("海外での経験"),
+				"は、異なる考え方を受け止め、物事を別の角度から考える土台になっています。",
+			],
+			preview:
+				"さまざまな文化や価値観に触れた経験が、アイデアを出すときや問題の解決に役立っています。",
+			detail: [
+				[
+					"海外でさまざまな文化や価値観に触れた経験は、アイデアを出したり、問題を別の角度から捉えたりするときに役立っています。",
+				],
+				[
+					"自分と異なる考え方を受け止めることは、新しい環境に適応したり、慣れない問題に柔軟に対応したりする力にもつながったと感じています。",
+				],
+			],
+		},
+		ski: {
+			id: "ski",
+			title: "高校で始めた競技スキー",
+			summary: ["高校では", word("スキー部"), "に所属していました。"],
+			preview:
+				"回転・大回転などのアルペンスキーに取り組み、高校2・3年次には関東大会へ進出しました。",
+			detail: [
+				[
+					"高校のスキー部では、回転・大回転などのアルペンスキーに取り組みました。毎年県大会に出場し、高校2・3年次には関東大会へ進出しました。",
+				],
+			],
+		},
+		festival: {
+			id: "festival",
+			title: "日吉祭の制作活動",
+			summary: [word("文化祭の実行委員会"), "でも活動していました。"],
+			preview:
+				"日吉祭の実行委員会で、動画編集やポスター・パンフレット制作を担当しました。",
+			detail: [
+				[
+					"慶應義塾高等学校の文化祭「日吉祭」の実行委員会で、動画編集やポスター・パンフレット制作を担当しました。",
+				],
+				[
+					"制作した",
+					link("パンフレット", "/works"),
+					"はWorksで紹介しています。",
+				],
+			],
+		},
+		coordination: {
+			id: "coordination",
+			title: "副実行委員長として",
+			summary: ["高校3年次には", word("副実行委員長"), "を務めました。"],
+			preview:
+				"委員会の取りまとめと、ブース企画者・外部業者・学校事務との調整を担当しました。",
+			detail: [
+				[
+					"日吉祭の副実行委員長として、実行委員会の内部を取りまとめました。ブース企画者や外部業者との連絡・対応、学校事務との協議・交渉も担当しました。",
+				],
+				[
+					"生徒の企画をできる限り実現しながら、安全面を重視する学校側にも納得してもらえるよう、関係者の間で調整を重ねました。",
+				],
+			],
+		},
+		festivalRules: {
+			id: "festivalRules",
+			title: "文化祭の開催ルールを決める",
+			summary: [
+				"生徒と学校の間に立ち、",
+				word("開催ルールの調整"),
+				"にも取り組みました。",
+			],
+			preview:
+				"入場・飲食・金銭管理・警備。生徒の希望と学校が求める安全対策を両立できるルールを話し合いました。",
+			detail: [
+				[
+					"日吉祭では、生徒が実現したい企画と、学校が求める感染症対策の両立が課題でした。野球部の甲子園優勝によって多くの来場者が訪れる可能性もあり、入場制限や警備の方法を検討する必要がありました。",
+				],
+				[
+					"一般の来場者を受け入れる範囲、飲食の制限、企画にかかる費用と売上の扱い、警備の費用などについて、実行委員会と学校事務で協議を重ねました。",
+				],
+				[
+					"生徒の要望をできる限り取り入れながら学校の許可を得られるルールを実行委員会で決め、大きな不満や問題なく文化祭を終えることができました。",
+				],
+			],
+		},
+		bot: {
+			id: "bot",
+			title: "初めて作ったBOTアプリ",
+			summary: [
+				"高校時代には、授業で触れたPythonを独学で本格的に学び、初めて",
+				word("BOTアプリ"),
+				"を作りました。",
+			],
+			preview:
+				"Discord上で応答や管理を自動化するアプリです。Pythonを独学しながら開発しました。",
+			detail: [
+				[
+					"初めて作ったのは、チャット・通話サービスの",
+					link("Discord", "https://discord.com/"),
+					"上で動くBOTです。投稿への応答やコミュニティの管理を自動化します。",
+				],
+				[
+					"Discordを操作の窓口に、インターネット経由でサービスと連携して動くため、広い意味でウェブアプリの一種と捉えています。学校で触れたPythonを高校で本格的に独学し、開発に使いました。",
+				],
+			],
+		},
+		development: {
+			id: "development",
+			title: "BOT開発を続ける理由",
+			summary: [
+				"コミュニティの運営を支えるために始めた",
+				word("開発・運用"),
+				"を、現在も続けています。",
+			],
+			preview:
+				"友人に誘われたコミュニティの運営で感じた不便さが、自作BOTの出発点です。",
+			detail: [
+				[
+					"友人に誘われて参加したDiscordコミュニティで運営に携わるうちに、既存のBOTに不便さを感じ、自作を始めました。現在も開発・運用を続けています。",
+				],
+				[
+					"機能や担当範囲は",
+					link("Worksの「小惑星」", "/works"),
+					"で紹介しています。",
+				],
+			],
+		},
+		study: {
+			id: "study",
+			title: "大学での学びと開発",
+			summary: [
+				"大学では",
+				word("情報技術"),
+				"を幅広く学び、このサイトの開発にも生かしています。",
+			],
+			preview:
+				"インターネット、ソフトウェア設計、アルゴリズム、セキュリティ、電子回路などを学んでいます。",
+			detail: [
+				[
+					"大学では、インターネットの仕組み、ソフトウェアの設計、アルゴリズム、セキュリティ、電子回路などを学んでいます。",
+				],
+				[
+					"このサイトも、学んだことを実際の開発に結びつける取り組みの一つです。",
+				],
+			],
+		},
+		research: {
+			id: "research",
+			title: "所属する研究室",
+			summary: [word("研究室"), "にも所属し、"],
+			preview: "SFC-RG合同研究室のDelightグループに所属しています。",
+			detail: [
+				[
+					link("SFC-RG合同研究室", "https://rg.sfc.keio.ac.jp/ja/"),
+					"の",
+					link("Delightグループ", "https://delight.sfc.wide.ad.jp/ja/"),
+					"に所属しています。",
+				],
+				[
+					"グループでは、複数のコンピューターが連携して動く分散システムや、オンライン上の利用者を識別するデジタルアイデンティティを研究しています。",
+				],
+			],
+		},
+		identity: {
+			id: "identity",
+			title: "デジタルアイデンティティへの関心",
+			summary: [
+				"特に",
+				word("デジタルアイデンティティ"),
+				"に関心を持ち、セキュリティと使いやすさについて学習しています。",
+			],
+			preview:
+				"本人かどうかを確かめる「認証」と、利用できる範囲を管理する「認可」に関心があります。",
+			detail: [
+				[
+					"デジタルアイデンティティは、オンライン上の利用者を識別するための情報です。",
+				],
+				[
+					"私は、本人かどうかを確かめる「認証」や、何を利用できるかを管理する「認可」に関心を持っています。安全性と使いやすさの両面から学習しています。",
+				],
+			],
+		},
+		skiClub: {
+			id: "skiClub",
+			title: "大学でも続けるスキー",
+			summary: [
+				"大学でも",
+				word("スキー"),
+				"を続け、趣味として楽しんでいます。",
+			],
+			preview:
+				"リーゼンスキークラブに所属し、高校で始めた競技スキーを続けています。",
+			detail: [
+				[
+					"大学ではリーゼンスキークラブに所属し、高校で始めた競技スキーを趣味として続けています。",
+				],
+			],
+		},
+	} satisfies Record<string, ProfilePassage>;
+	return [
 		{
-			id: "computers",
+			id: "intro",
+			paragraphs: [[passages.nickname], [passages.faculty, passages.birth]],
+		},
+		{
+			id: "childhood",
 			paragraphs: [
-				[
-					"小学生の頃に手にした",
-					{ text: "MacBook", note: "schoolPolicy" },
-					"をきっかけに、コンピューターに興味を持ちました。",
-				],
-				[
-					{ text: "学校でのIT教育", note: "education" },
-					"や",
-					{ text: "コンピューターでの遊び", note: "tinkering" },
-					"を通じて、学びを広げてきました。",
-				],
+				[passages.spain, passages.korea],
+				[passages.computer, passages.education],
+				[passages.usa, passages.highSchool],
+				[passages.overseas],
 			],
 		},
 		{
 			id: "high-school",
 			paragraphs: [
-				[
-					{ text: "高校", note: "highSchool" },
-					"では、",
-					{ text: "スキー部", note: "ski" },
-					"や",
-					{ text: "文化祭の実行委員会", note: "festival" },
-					"に所属していました。",
-				],
-				[
-					"また、プログラミングに興味を持ち、Pythonを独学して初めて",
-					{ text: "ウェブアプリを開発", note: "development" },
-					"しました。",
-				],
+				[passages.ski, passages.festival],
+				[passages.coordination, passages.festivalRules],
 			],
 		},
+		{ id: "development", paragraphs: [[passages.bot, passages.development]] },
 		{
 			id: "university",
 			paragraphs: [
-				[
-					"現在は慶應義塾大学の",
-					{ text: "環境情報学部", note: "faculty" },
-					"で",
-					{ text: "情報技術を学び", note: "study" },
-					"、",
-					{ text: "研究室", note: "research" },
-					"にも所属しています。",
-				],
-				[
-					{ text: "サークル", note: "skiClub" },
-					"で趣味のスキーも続けています。",
-				],
+				[passages.study],
+				[passages.research, passages.identity],
+				[passages.skiClub],
 			],
 		},
 	];
