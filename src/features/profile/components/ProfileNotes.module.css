@@ -1,9 +1,30 @@
 .note,
 .fullNote {
-	--note-paper: color-mix(in srgb, var(--site-warning) 15%, var(--site-canvas));
+	--note-paper: #f2f2f2;
 	color: var(--site-ink);
 	background: var(--note-paper);
-	border-top: 4px solid var(--site-accent);
+	border-top: 4px solid var(--site-muted);
+}
+[class~="macchiato"] .note,
+[class~="macchiato"] .fullNote {
+	--note-paper: color-mix(in srgb, var(--site-ink) 4%, var(--site-canvas));
+}
+[role="dialog"]:has(.fullNote) {
+	--site-accent: var(--site-ink);
+}
+.note,
+[role="dialog"]:has(.fullNote) {
+	animation: noteAppear var(--site-duration-state) var(--site-ease);
+}
+@keyframes noteAppear {
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 .note {
 	position: absolute;
@@ -124,7 +145,7 @@
 }
 @media (hover: hover) {
 	.note button:hover {
-		background: color-mix(in srgb, var(--site-accent) 15%, transparent);
+		background: color-mix(in srgb, var(--site-ink) 8%, transparent);
 	}
 }
 @media (min-width: 768px) {
@@ -135,5 +156,11 @@
 @media print {
 	.note {
 		display: none;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.note,
+	[role="dialog"]:has(.fullNote) {
+		animation: none;
 	}
 }

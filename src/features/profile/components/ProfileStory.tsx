@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useModal } from "@/shared/components/modal/ModalProvider";
+import Reveal from "@/shared/components/motion/Reveal";
 import { createProfileStory, type ProfilePassage } from "../data/profileStory";
 import { constrainNote, placeNote } from "../lib/profileNotePosition";
 import ProfileAccents from "./ProfileAccents";
@@ -119,7 +120,7 @@ export default function ProfileStory({ age }: { age: number }) {
 			<div ref={layout} className={styles.layout}>
 				<div className={`${styles.prose} ${styles.interactive}`}>
 					{chapters.map((chapter) => (
-						<div key={chapter.id} className={styles.chapter}>
+						<Reveal key={chapter.id} className={styles.chapter}>
 							{chapter.paragraphs.map((passages) => (
 								<p
 									className={styles.paragraph}
@@ -174,7 +175,7 @@ export default function ProfileStory({ age }: { age: number }) {
 									))}
 								</p>
 							))}
-						</div>
+						</Reveal>
 					))}
 				</div>
 				<noscript>
