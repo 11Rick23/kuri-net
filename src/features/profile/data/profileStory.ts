@@ -20,26 +20,12 @@ export function createProfileStory(age: number): StoryChapter[] {
 	const passages = {
 		nickname: {
 			id: "nickname",
-			title: "名前の由来",
+			title: "ハンドルネームの由来",
 			summary: ["初めまして、", word("kuri-kuri"), "と申します。"],
-			preview: "幼い頃に友達に呼ばれた「くりっくりー」が由来です。",
+			preview: "あだ名「くりっくりー」が由来です。",
 			detail: [
 				[
-					"幼い頃に友達に呼ばれた「くりっくりー」が、kuri-kuriという名前の由来です。11Rick23というハンドルネームも使っています。",
-				],
-			],
-		},
-		faculty: {
-			id: "faculty",
-			title: "大学への進学",
-			summary: ["慶應義塾大学の", word("環境情報学部"), "に在籍しています。"],
-			preview:
-				"高校で深まったプログラミングへの関心から、情報技術を学べる学部へ進みました。",
-			detail: [
-				[
-					"高校でプログラミングに取り組むうちに、情報技術をさらに学びたいと考え、慶應義塾大学の",
-					link("環境情報学部", "https://www.keio.ac.jp/ja/sfc-pem/pmei/"),
-					"へ進学しました。",
+					"kuri-kuriというハンドルネームは、幼い頃に友達から「くりっくりー」と呼ばれたことに由来します。ゲームなどのユーザー名では、「くりっくりー」「くり」「kuri」「11Rick23」といった名前を使用しています。",
 				],
 			],
 		},
@@ -47,38 +33,55 @@ export function createProfileStory(age: number): StoryChapter[] {
 			id: "birth",
 			title: "誕生日",
 			summary: [word("2005年生まれ"), `の${age}歳です。`],
-			preview: "誕生日は11月23日。勤労感謝の日に生まれました。",
+			preview: "2005/11/23 生まれ",
 			detail: [
-				[`2005年11月23日生まれの${age}歳です。誕生日は勤労感謝の日です。`],
+				["2005年の11月23日、勤労感謝の日に生まれました。毎年休日です。"],
+			],
+		},
+		faculty: {
+			id: "faculty",
+			title: "大学",
+			summary: ["慶應義塾大学の", word("環境情報学部"), "に在籍しています。"],
+			preview:
+				"高校でプログラミングへ興味を持ち、情報技術を学べる学部へ進学しました。",
+			detail: [
+				[
+					"高校時代に趣味としてプログラミングを始めたことがきっかけで、情報技術に関心を持ちました。情報技術を学びたいという思いから、慶應義塾大学の",
+					link("環境情報学部", "https://www.keio.ac.jp/ja/sfc-pem/pmei/"),
+					"へ進学しました。",
+				],
 			],
 		},
 		spain: {
 			id: "spain",
-			title: "スペインで生まれて",
-			summary: [word("スペイン"), "で生まれ、幼少期は日本で過ごしました。"],
-			preview:
-				"父の仕事の都合でマドリードで生まれ、1歳になる前に日本へ戻りました。",
+			title: "出生地",
+			summary: [
+				"私の生まれは",
+				word("スペイン"),
+				"ですが、幼少期は主に日本で過ごしました。",
+			],
+			preview: "親の仕事の都合でマドリードで生まれ、すぐに日本へ帰国しました。",
 			detail: [
 				[
-					"父の仕事の都合で、スペインのマドリードで生まれました。1歳になる前に帰国し、幼少期は日本で過ごしたため、スペインでの記憶はありません。",
+					"両親が仕事の都合でスペインへ赴任していたことにより、スペインのマドリードで生まれました。1歳になる前に帰国し、幼少期は日本で過ごしたため、スペインで生活した記憶はありません。",
 				],
 			],
 		},
 		korea: {
 			id: "korea",
-			title: "韓国での学校生活",
+			title: "韓国生活",
 			summary: [
 				"小学5年生の夏に",
-				word("韓国へ移り"),
-				"、インターナショナルスクールに通いました。",
+				word("韓国"),
+				"へ移り、インターナショナルスクールに通いました。",
 			],
 			preview:
 				"2016年8月から2019年8月まで、Dwight School Seoulに通っていました。",
 			detail: [
 				[
-					"小学5年生だった2016年8月に、父の仕事の都合で韓国へ移りました。2019年8月まで、インターナショナルスクールの",
+					"小学5年生だった2016年8月に、父の仕事の都合で韓国へ移住しました。2019年8月まで、インターナショナルスクール「",
 					link("Dwight School Seoul", "https://dwight.or.kr/"),
-					"に通っていました。",
+					"」に通っていました。",
 				],
 			],
 		},
@@ -91,7 +94,7 @@ export function createProfileStory(age: number): StoryChapter[] {
 				"をきっかけに、コンピューターに興味を持ちました。",
 			],
 			preview:
-				"授業用に買ってもらった一台で、設定や便利なアプリを試すことに夢中になりました。",
+				"授業用に買ってもらった一台のMacBookで、設定を変えたり便利なアプリを試したりすることに夢中になりました。",
 			detail: [
 				[
 					"韓国の学校では授業用にMacBookが必要で、両親に買ってもらいました。初めての自分のデジタル機器でした。",
@@ -105,18 +108,18 @@ export function createProfileStory(age: number): StoryChapter[] {
 			id: "education",
 			title: "韓国の学校での学び",
 			summary: [
-				"授業では、",
+				"授業では",
 				word("デジタル制作やプログラミング"),
 				"にも触れました。",
 			],
 			preview:
-				"音楽・映像・3Dモデルなどを制作し、ScratchやPythonでプログラミングの入口に触れました。",
+				"音楽・映像・3Dモデルなどを制作し、ScratchやPythonでプログラミングの初歩を学びました。",
 			detail: [
 				[
 					"韓国の学校では、レポートや発表資料の作成に加え、音楽・映像・デジタルアート・3Dモデルの制作に取り組みました。",
 				],
 				[
-					"プログラミング入門用のWebサービス「Scratch」やPythonにも触れました。この授業での経験が、高校でPythonを本格的に独学する入口になりました。",
+					"プログラミング入門用のWebサービス「Scratch」やPythonにも触れました。この授業での経験をきっかけに、高校ではPythonを本格的に独学しました。",
 				],
 			],
 		},
@@ -158,7 +161,7 @@ export function createProfileStory(age: number): StoryChapter[] {
 				"しました。",
 			],
 			preview:
-				"米国で受験勉強を進め、帰国子女受験で慶應義塾高等学校へ。以降は日本で暮らしています。",
+				"米国で受験勉強を進め、帰国子女受験で慶應義塾高等学校へ進学しました。以降は日本で暮らしています。",
 			detail: [
 				[
 					"米国で受験勉強を進め、2020年12月に帰国しました。帰国子女受験で",
@@ -217,7 +220,7 @@ export function createProfileStory(age: number): StoryChapter[] {
 		},
 		coordination: {
 			id: "coordination",
-			title: "副実行委員長として",
+			title: "副実行委員長の役割",
 			summary: ["高校3年次には", word("副実行委員長"), "を務めました。"],
 			preview:
 				"委員会の取りまとめと、ブース企画者・外部業者・学校事務との調整を担当しました。",
@@ -239,7 +242,7 @@ export function createProfileStory(age: number): StoryChapter[] {
 				"にも取り組みました。",
 			],
 			preview:
-				"入場・飲食・金銭管理・警備。生徒の希望と学校が求める安全対策を両立できるルールを話し合いました。",
+				"入場・飲食・金銭管理・警備のルールについて、生徒の希望と学校が求める安全対策を両立できるよう話し合いました。",
 			detail: [
 				[
 					"日吉祭では、生徒が実現したい企画と、学校が求める感染症対策の両立が課題でした。野球部の甲子園優勝によって多くの来場者が訪れる可能性もあり、入場制限や警備の方法を検討する必要がありました。",
@@ -256,7 +259,7 @@ export function createProfileStory(age: number): StoryChapter[] {
 			id: "bot",
 			title: "初めて作ったBOTアプリ",
 			summary: [
-				"高校時代には、授業で触れたPythonを独学で本格的に学び、初めて",
+				"高校時代には、授業で触れたPythonを本格的に独学し、初めて",
 				word("BOTアプリ"),
 				"を作りました。",
 			],
@@ -279,10 +282,10 @@ export function createProfileStory(age: number): StoryChapter[] {
 			summary: [
 				"コミュニティの運営を支えるために始めた",
 				word("開発・運用"),
-				"を、現在も続けています。",
+				"を現在も続けています。",
 			],
 			preview:
-				"友人に誘われたコミュニティの運営で感じた不便さが、自作BOTの出発点です。",
+				"友人に誘われて参加したコミュニティで、運営中に不便さを感じたことがBOTを自作するきっかけでした。",
 			detail: [
 				[
 					"友人に誘われて参加したDiscordコミュニティで運営に携わるうちに、既存のBOTに不便さを感じ、自作を始めました。現在も開発・運用を続けています。",
@@ -308,9 +311,7 @@ export function createProfileStory(age: number): StoryChapter[] {
 				[
 					"大学では、インターネットの仕組み、ソフトウェアの設計、アルゴリズム、セキュリティ、電子回路などを学んでいます。",
 				],
-				[
-					"このサイトも、学んだことを実際の開発に結びつける取り組みの一つです。",
-				],
+				["このサイトも、学んだことを実際の開発に生かす取り組みの一つです。"],
 			],
 		},
 		research: {
@@ -336,7 +337,7 @@ export function createProfileStory(age: number): StoryChapter[] {
 			summary: [
 				"特に",
 				word("デジタルアイデンティティ"),
-				"に関心を持ち、セキュリティと使いやすさについて学習しています。",
+				"に関心があり、セキュリティと使いやすさについて学んでいます。",
 			],
 			preview:
 				"本人かどうかを確かめる「認証」と、利用できる範囲を管理する「認可」に関心があります。",
@@ -345,7 +346,7 @@ export function createProfileStory(age: number): StoryChapter[] {
 					"デジタルアイデンティティは、オンライン上の利用者を識別するための情報です。",
 				],
 				[
-					"私は、本人かどうかを確かめる「認証」や、何を利用できるかを管理する「認可」に関心を持っています。安全性と使いやすさの両面から学習しています。",
+					"私は本人かどうかを確かめる「認証」や、何を利用できるかを管理する「認可」に関心があります。安全性と使いやすさの両面から学んでいます。",
 				],
 			],
 		},
@@ -369,7 +370,7 @@ export function createProfileStory(age: number): StoryChapter[] {
 	return [
 		{
 			id: "intro",
-			paragraphs: [[passages.nickname], [passages.faculty, passages.birth]],
+			paragraphs: [[passages.nickname], [passages.birth, passages.faculty]],
 		},
 		{
 			id: "childhood",
