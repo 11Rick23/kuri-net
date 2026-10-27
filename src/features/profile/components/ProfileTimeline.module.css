@@ -231,10 +231,10 @@
 }
 
 .event {
-	--event-rail: 24px;
+	--event-rail: 48px;
 	position: relative;
 	display: grid;
-	grid-template-columns: 48px minmax(0, 1fr);
+	grid-template-columns: 96px minmax(0, 1fr);
 	gap: 20px;
 	padding-bottom: 24px;
 }
@@ -254,26 +254,25 @@
 }
 
 .event:last-child::before {
-	bottom: calc(100% - 48px);
+	bottom: calc(100% - 36px);
 }
 
-.eventIcon {
+.eventDate {
 	position: relative;
-	display: grid;
-	place-items: center;
-	width: 48px;
-	height: 48px;
-	margin-top: 18px;
-	border: 1px solid var(--site-line);
-	border-radius: 50%;
+	align-self: start;
+	justify-self: center;
+	margin-top: 20px;
+	padding-block: 4px;
 	background: var(--site-canvas);
-	color: var(--site-ink);
+	color: var(--site-muted);
+	font-size: 13px;
+	line-height: 1.6;
+	text-align: center;
+	white-space: pre;
 }
 
-.eventIcon svg {
-	width: 24px;
-	height: 24px;
-	stroke-width: 1.5;
+.eventDate > span {
+	display: inline-block;
 }
 
 .eventCard {
@@ -285,14 +284,7 @@
 	background: var(--event-paper);
 }
 
-.eventDate {
-	color: var(--site-muted);
-	font-size: 13px;
-	line-height: 1.6;
-}
-
 .eventCard h5 {
-	margin-top: 8px;
 	font-size: 21px;
 	font-weight: 500;
 	line-height: 1.6;
@@ -370,21 +362,14 @@
 	}
 
 	.event {
-		--event-rail: 16px;
-		grid-template-columns: 32px minmax(0, 1fr);
+		--event-rail: 36px;
+		grid-template-columns: 72px minmax(0, 1fr);
 		gap: 12px;
 		padding-bottom: 20px;
 	}
 
-	.eventIcon {
-		width: 32px;
-		height: 32px;
-		margin-top: 20px;
-	}
-
-	.eventIcon svg {
-		width: 18px;
-		height: 18px;
+	.eventDate {
+		font-size: 12px;
 	}
 
 	.eventCard {

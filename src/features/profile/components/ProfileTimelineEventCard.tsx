@@ -1,35 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import type { IconType } from "react-icons";
-import {
-	TbCalendarEvent,
-	TbChevronDown,
-	TbChevronUp,
-	TbCode,
-	TbDeviceLaptop,
-	TbFingerprint,
-	TbFlag,
-	TbMapPin,
-	TbPlaneArrival,
-	TbSchool,
-	TbUser,
-} from "react-icons/tb";
+import { TbChevronDown, TbChevronUp } from "react-icons/tb";
 import type { ProfileTimelineEvent } from "../data/profileData";
 import ProfileInlineLink from "./ProfileInlineLink";
 import styles from "./ProfileTimeline.module.css";
-
-const eventIcons: Record<string, IconType> = {
-	birth: TbMapPin,
-	nickname: TbUser,
-	"school-in-korea": TbSchool,
-	"first-computer": TbDeviceLaptop,
-	"school-in-usa": TbSchool,
-	"return-to-japan": TbPlaneArrival,
-	"high-school-start": TbSchool,
-	"first-development": TbCode,
-	"school-festival": TbFlag,
-	"university-start": TbSchool,
-	research: TbFingerprint,
-};
 
 export default function ProfileTimelineEventCard({
 	event,
@@ -39,7 +12,6 @@ export default function ProfileTimelineEventCard({
 	const content = useRef<HTMLDivElement>(null);
 	const [expanded, setExpanded] = useState(false);
 	const [preview, setPreview] = useState({ height: 0, overflows: false });
-	const Icon = eventIcons[event.id] ?? TbCalendarEvent;
 	const contentId = `profile-event-content-${event.id}`;
 	const collapsed = preview.overflows && !expanded;
 
@@ -65,15 +37,14 @@ export default function ProfileTimelineEventCard({
 
 	return (
 		<li className={styles.event}>
-			<span className={styles.eventIcon} aria-hidden="true">
-				<Icon />
-			</span>
+			<p className={styles.eventDate}>
+				<span>{event.date}</span>
+			</p>
 			<article
 				className={styles.eventCard}
 				aria-labelledby={`profile-event-${event.id}`}
 			>
 				<header>
-					<p className={styles.eventDate}>{event.date}</p>
 					<h5 id={`profile-event-${event.id}`}>{event.title}</h5>
 				</header>
 				<div className={styles.copyLayout}>

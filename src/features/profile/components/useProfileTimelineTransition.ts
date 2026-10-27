@@ -31,7 +31,7 @@ function animatePeriod(
 	};
 	const animations = Array.from(
 		panel.querySelectorAll<HTMLElement>(
-			`.${styles.eventDate}, .${styles.eventCard} h5, .${styles.eventText}, .${styles.range}`,
+			`.${styles.eventDate} > span, .${styles.eventCard} h5, .${styles.eventText}, .${styles.range}`,
 		),
 		(element) => {
 			const current = getComputedStyle(element);

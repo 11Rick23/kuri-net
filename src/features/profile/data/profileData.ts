@@ -241,7 +241,7 @@ export const profileTimeline: ProfileTimelinePeriod[] = [
 		events: [
 			{
 				id: "birth",
-				date: "2005年11月23日",
+				date: "2005年\n11月23日",
 				title: "出生",
 				detail: [
 					["2005年の11月23日、勤労感謝の日に生まれました。"],
@@ -275,7 +275,7 @@ export const profileTimeline: ProfileTimelinePeriod[] = [
 		events: [
 			{
 				id: "school-in-korea",
-				date: "2016年8月",
+				date: "2016年\n8月",
 				title: "韓国のインターナショナルスクールへ",
 				detail: [
 					[
@@ -311,7 +311,7 @@ export const profileTimeline: ProfileTimelinePeriod[] = [
 		events: [
 			{
 				id: "school-in-usa",
-				date: "2019年8月",
+				date: "2019年\n8月",
 				title: "米国の現地校へ",
 				detail: [
 					[
@@ -340,7 +340,7 @@ export const profileTimeline: ProfileTimelinePeriod[] = [
 			},
 			{
 				id: "return-to-japan",
-				date: "2020年12月",
+				date: "2020年\n12月",
 				title: "高校受験のため、日本へ帰国",
 				detail: [
 					[
@@ -361,7 +361,7 @@ export const profileTimeline: ProfileTimelinePeriod[] = [
 		events: [
 			{
 				id: "high-school-start",
-				date: "2021年4月",
+				date: "2021年\n4月",
 				title: "塾高へ進学",
 				detail: [
 					[
@@ -439,7 +439,7 @@ export const profileTimeline: ProfileTimelinePeriod[] = [
 		events: [
 			{
 				id: "university-start",
-				date: "2024年4月",
+				date: "2024年\n4月",
 				title: "環境情報学部へ進学",
 				detail: [
 					[
