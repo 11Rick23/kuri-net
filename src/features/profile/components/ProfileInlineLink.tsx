@@ -1,6 +1,7 @@
-import Link from "next/link";
 import type { ReactNode } from "react";
 import { FiArrowRight, FiExternalLink } from "react-icons/fi";
+import HighlightLink from "@/shared/components/motion/HighlightLink";
+import linkStyles from "./ProfileLink.module.css";
 import styles from "./ProfileStory.module.css";
 
 export default function ProfileInlineLink({
@@ -22,25 +23,18 @@ export default function ProfileInlineLink({
 		</>
 	);
 
-	return external ? (
-		<a
+	return (
+		<HighlightLink
 			href={href}
-			className={styles.inlineLink}
-			target="_blank"
-			rel="noopener noreferrer"
-			aria-label={`${label}（外部サイト、新しいタブで開く）`}
-			title="外部サイトを新しいタブで開く"
+			className={`${styles.inlineLink} ${linkStyles.link}`}
+			target={external ? "_blank" : undefined}
+			rel={external ? "noopener noreferrer" : undefined}
+			aria-label={`${label}（${external ? "外部サイト、新しいタブで開く" : "サイト内のページへ移動"}）`}
+			title={
+				external ? "外部サイトを新しいタブで開く" : "サイト内のページへ移動"
+			}
 		>
 			{content}
-		</a>
-	) : (
-		<Link
-			href={href}
-			className={styles.inlineLink}
-			aria-label={`${label}（サイト内のページへ移動）`}
-			title="サイト内のページへ移動"
-		>
-			{content}
-		</Link>
+		</HighlightLink>
 	);
 }

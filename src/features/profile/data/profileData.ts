@@ -58,7 +58,7 @@ export const profileDevices: ProfileDevice[] = [
 		icon: "desktop",
 		group: "computers",
 		details: [
-			{ label: "チップ", value: "Apple M1 Max" },
+			{ label: "チップ", value: "Apple M1 Maxチップ" },
 			{ label: "メモリ", value: "32GB ユニファイドメモリ" },
 		],
 	},
@@ -68,7 +68,7 @@ export const profileDevices: ProfileDevice[] = [
 		icon: "laptop",
 		group: "computers",
 		details: [
-			{ label: "チップ", value: "Apple M2" },
+			{ label: "チップ", value: "Apple M2チップ" },
 			{ label: "メモリ", value: "16GB ユニファイドメモリ" },
 			{ label: "ディスプレイ", value: "13.6インチ Liquid Retina" },
 		],
@@ -81,7 +81,7 @@ export const profileDevices: ProfileDevice[] = [
 		details: [
 			{ label: "CPU", value: "AMD Ryzen 7 5700X（8コア / 16スレッド）" },
 			{ label: "GPU", value: "NVIDIA GeForce RTX 4060 Ti" },
-			{ label: "メモリ", value: "32GB" },
+			{ label: "メモリ", value: "32GB メモリ" },
 		],
 	},
 	{
@@ -90,7 +90,7 @@ export const profileDevices: ProfileDevice[] = [
 		icon: "phone",
 		group: "mobile",
 		details: [
-			{ label: "チップ", value: "A17 Pro" },
+			{ label: "チップ", value: "A17 Proチップ" },
 			{ label: "ディスプレイ", value: "6.1インチ Super Retina XDR" },
 		],
 	},
@@ -101,15 +101,16 @@ export const profileDevices: ProfileDevice[] = [
 		group: "mobile",
 		details: [
 			{ label: "ケース", value: "49mm チタニウム" },
-			{ label: "チップ", value: "S10" },
+			{ label: "チップ", value: "S10チップ" },
 		],
 	},
 	{
 		id: "sony-earbuds",
-		name: "Sony WF-1000XM6",
+		name: "WF-1000XM6",
 		icon: "earbuds",
 		group: "audio",
 		details: [
+			{ label: "ブランド", value: "Sony" },
 			{ label: "タイプ", value: "完全ワイヤレスイヤホン" },
 			{ label: "機能", value: "ノイズキャンセリング" },
 		],
@@ -129,10 +130,7 @@ export const profileDevices: ProfileDevice[] = [
 		name: "Nintendo Switch",
 		icon: "gamepad",
 		group: "gaming",
-		details: [
-			{ label: "シリーズ", value: "Nintendo Switch（初代）" },
-			{ label: "プレイモード", value: "TV・テーブル・携帯モード" },
-		],
+		details: [{ label: "シリーズ", value: "初代Switch" }],
 	},
 ];
 
@@ -406,7 +404,6 @@ export const profileTimeline: ProfileTimelinePeriod[] = [
 					[
 						"3年次に、所属していた塾校の文化祭実行委員会「日吉祭実行委員会」の副委員長を担当しました。",
 					],
-					["詳しくは、", link("Works", "/works"), "ページの"],
 					[
 						"私は日吉祭の副委員長として、実行委員会の内部を取りまとめました。",
 						"さらに、ブース企画者や外部業者との連絡・対応、学校事務との協議・交渉も担当しました。",

@@ -31,14 +31,12 @@
 }
 
 .inlineLink {
+	display: inline-block;
+	max-width: 100%;
 	color: inherit;
 	text-decoration: underline;
 	text-decoration-color: var(--site-control-line);
 	text-underline-offset: 4px;
-}
-
-.inlineLink:hover {
-	text-decoration-color: var(--site-ink);
 }
 
 .linkMarker {

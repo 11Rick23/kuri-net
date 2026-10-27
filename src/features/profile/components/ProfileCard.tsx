@@ -6,8 +6,10 @@ import {
 	profileIdentity,
 	profileLogo,
 } from "@/features/profile/data/profileData";
+import HighlightLink from "@/shared/components/motion/HighlightLink";
 import styles from "../Profile.module.css";
 import cardStyles from "./ProfileBusinessCard.module.css";
+import linkStyles from "./ProfileLink.module.css";
 import TiltableCard from "./TiltableCard";
 
 export default function ProfileCard() {
@@ -47,7 +49,12 @@ export default function ProfileCard() {
 					<div>
 						<dt>Email</dt>
 						<dd>
-							<a href={profileEmail.href} draggable={false}>
+							<a
+								href={profileEmail.href}
+								draggable={false}
+								className={linkStyles.link}
+								data-click-highlight
+							>
 								{profileEmail.display}
 							</a>
 						</dd>
@@ -55,14 +62,15 @@ export default function ProfileCard() {
 					<div>
 						<dt>GitHub</dt>
 						<dd>
-							<a
+							<HighlightLink
 								href={profileGitHub.href}
+								className={linkStyles.link}
 								draggable={false}
 								target="_blank"
 								rel="noopener noreferrer"
 							>
 								{profileGitHub.display}
-							</a>
+							</HighlightLink>
 						</dd>
 					</div>
 				</dl>

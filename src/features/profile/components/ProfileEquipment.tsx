@@ -16,14 +16,15 @@ import {
 	TbMessageCircle,
 	TbShield,
 	TbTerminal2,
-	TbX,
 } from "react-icons/tb";
+import HighlightLink from "@/shared/components/motion/HighlightLink";
 import {
 	type ProfileEquipmentIcon,
 	profileApplications,
 	profileDevices,
 } from "../data/profileData";
 import styles from "./ProfileEquipment.module.css";
+import linkStyles from "./ProfileLink.module.css";
 
 const icons: Record<ProfileEquipmentIcon, IconType> = {
 	desktop: TbDeviceDesktop,
@@ -73,7 +74,7 @@ export default function ProfileEquipment() {
 									<>
 										<button
 											type="button"
-											className={styles.row}
+											className={`${styles.row} ${linkStyles.link} ${styles.deviceButton}`}
 											popoverTarget={detailsId}
 											aria-controls={detailsId}
 											aria-label={`${device.name}の詳細`}
@@ -86,22 +87,13 @@ export default function ProfileEquipment() {
 											className={styles.deviceDetails}
 											aria-labelledby={titleId}
 										>
-											<div className={styles.detailsHeader}>
-												<h4 id={titleId}>{device.name}</h4>
-												<button
-													type="button"
-													className={styles.closeButton}
-													popoverTarget={detailsId}
-													popoverTargetAction="hide"
-													aria-label="詳細を閉じる"
-												>
-													<TbX aria-hidden="true" />
-												</button>
-											</div>
+											<h4 id={titleId} className="sr-only">
+												{device.name}
+											</h4>
 											<dl>
 												{device.details?.map(({ label, value }) => (
 													<div key={label}>
-														<dt>{label}</dt>
+														<dt className="sr-only">{label}</dt>
 														<dd>{value}</dd>
 													</div>
 												))}
@@ -130,16 +122,16 @@ export default function ProfileEquipment() {
 									app.group !== profileApplications[index - 1]?.group
 								}
 							>
-								<a
+								<HighlightLink
 									href={app.href}
-									className={styles.row}
+									className={`${styles.row} ${linkStyles.link}`}
 									target="_blank"
 									rel="noopener noreferrer"
 									aria-label={`${app.name}（公式サイトを新しいタブで開く）`}
 								>
 									<Icon className={styles.icon} aria-hidden="true" />
 									<span>{app.name}</span>
-								</a>
+								</HighlightLink>
 							</li>
 						);
 					})}

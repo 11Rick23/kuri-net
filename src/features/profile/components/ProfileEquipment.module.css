@@ -50,11 +50,6 @@ a.row {
 	cursor: pointer;
 }
 
-button.row:hover,
-a.row:hover {
-	color: var(--site-ink);
-}
-
 button.row:hover span,
 a.row:hover span {
 	text-decoration: underline;
@@ -67,65 +62,54 @@ a.row:hover span {
 	height: 15px;
 }
 
+.deviceButton {
+	transition: color var(--site-duration-state) var(--site-ease);
+}
+
+.item:has(> .deviceDetails:popover-open) > .deviceButton {
+	color: var(--site-on-inverse);
+}
+
+.item:has(> .deviceDetails:popover-open) > .deviceButton::before {
+	transform: scaleX(1);
+}
+
 .deviceDetails {
 	position: fixed;
 	inset: 0;
-	width: min(320px, calc(100vw - 32px));
+	width: max-content;
+	max-width: min(320px, calc(100vw - 32px));
 	height: fit-content;
 	max-height: calc(100dvh - 32px);
 	margin: auto;
 	border: 1px solid var(--site-control-line);
 	border-radius: var(--site-radius-panel);
-	padding: 16px;
+	padding: 12px 14px;
 	overflow: auto;
 	background: var(--site-canvas);
 	color: var(--site-ink);
+	clip-path: inset(0 100% 0 0);
+	pointer-events: none;
+	transition:
+		clip-path var(--site-duration-state) var(--site-ease),
+		display var(--site-duration-state) allow-discrete,
+		overlay var(--site-duration-state) allow-discrete;
 }
 
-.detailsHeader {
-	display: flex;
-	align-items: start;
-	justify-content: space-between;
-	gap: 12px;
-	margin-bottom: 12px;
+.deviceDetails:popover-open {
+	clip-path: inset(0);
+	pointer-events: auto;
 }
 
-.detailsHeader h4 {
-	padding-top: 2px;
-	font-size: 14px;
-	font-weight: 500;
-	line-height: 1.5;
-}
-
-.closeButton {
-	display: grid;
-	flex-shrink: 0;
-	place-items: center;
-	width: 24px;
-	height: 24px;
-	color: var(--site-muted);
-	cursor: pointer;
-}
-
-.closeButton:hover {
-	color: var(--site-ink);
-}
-
-.closeButton svg {
-	width: 16px;
-	height: 16px;
+@starting-style {
+	.deviceDetails:popover-open {
+		clip-path: inset(0 100% 0 0);
+	}
 }
 
 .deviceDetails dl {
 	display: grid;
-	gap: 10px;
-}
-
-.deviceDetails dt {
-	margin-bottom: 2px;
-	color: var(--site-muted);
-	font-size: 11px;
-	line-height: 1.5;
+	gap: 4px;
 }
 
 .deviceDetails dd {
@@ -134,15 +118,19 @@ a.row:hover span {
 	overflow-wrap: anywhere;
 }
 
-@supports (position-area: bottom) {
+@supports (position-area: right) {
 	.deviceDetails {
 		inset: auto;
-		position-area: bottom span-right;
+		position-area: right;
 		position-try-fallbacks:
 			flip-inline,
 			flip-block,
-			flip-block flip-inline;
-		margin: 8px 0;
+			flip-block flip-inline,
+			bottom span-right,
+			bottom span-left,
+			top span-right,
+			top span-left;
+		margin: 8px 12px;
 	}
 }
 
@@ -157,15 +145,11 @@ a.row:hover span {
 	.row {
 		min-height: 32px;
 	}
-
-	.closeButton {
-		width: 32px;
-		height: 32px;
-	}
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.row {
+	.row,
+	.deviceDetails {
 		transition: none;
 	}
 }
