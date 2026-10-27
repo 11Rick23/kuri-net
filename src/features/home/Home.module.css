@@ -14,6 +14,7 @@
 }
 
 .introduction {
+	min-width: 0;
 	padding-bottom: 40px;
 }
 

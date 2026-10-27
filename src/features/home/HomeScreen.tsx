@@ -4,6 +4,7 @@ import PageContainer from "@/shared/components/layout/PageContainer";
 import HighlightLink from "@/shared/components/motion/HighlightLink";
 import HandwrittenGreeting from "./HandwrittenGreeting";
 import styles from "./Home.module.css";
+import HomeAnnouncements from "./HomeAnnouncements";
 
 const homeLinks = [
 	{ href: "/profile", label: "Profile" },
@@ -14,35 +15,20 @@ const homeLinks = [
 export default async function HomeScreen() {
 	const session = await getAuthenticatedSession();
 
-	const loggedOutContent = {
-		title: <HandwrittenGreeting />,
-		description: (
-			<>
-				kuri-kuri.net へようこそ。
-				<br />
-				プロフィール、制作実績、ウェブアプリなどをまとめています。
-			</>
-		),
-	};
-
-	const loggedInContent = {
-		title: "お帰りなさい",
-		description: <LiveClock />,
-	};
-
 	return (
 		<main className={styles.home}>
 			<PageContainer>
 				<div className={styles.composition}>
 					<div className={styles.introduction}>
 						<h1 className={styles.greeting}>
-							{session ? loggedInContent.title : loggedOutContent.title}
+							{session ? "お帰りなさい" : <HandwrittenGreeting />}
 						</h1>
-						<div className={styles.description}>
-							{session
-								? loggedInContent.description
-								: loggedOutContent.description}
-						</div>
+						{session && (
+							<div className={styles.description}>
+								<LiveClock />
+							</div>
+						)}
+						<HomeAnnouncements />
 					</div>
 					<nav className={styles.links} aria-label="ページ一覧">
 						{homeLinks.map((link) => (
