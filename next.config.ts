@@ -18,6 +18,7 @@ const assetRemotePattern: NonNullable<
 };
 
 const nextConfig: NextConfig = {
+	output: process.env.NEXT_OUTPUT_STANDALONE === "1" ? "standalone" : undefined,
 	images: {
 		remotePatterns: [assetRemotePattern],
 	},

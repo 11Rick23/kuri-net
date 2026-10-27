@@ -1,0 +1,15 @@
+**
+!package.json
+!bun.lock
+!tsconfig.json
+!next.config.ts
+!postcss.config.mjs
+!src/
+!src/**
+!public/
+!public/**
+!drizzle/
+!drizzle/**
+**/.env*
+**/*.pem
+**/*.key
