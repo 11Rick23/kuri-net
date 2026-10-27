@@ -156,14 +156,17 @@ GitHub Actions で Docker イメージをビルドし、GitHub Container Registr
 
 ### GitHub Actions
 
-[CI](.github/workflows/ci.yml) は、PR・`dev`・`main` の更新と手動実行に対応します。
+[CI](.github/workflows/ci.yml) は、PR の作成・更新、`main` への push、手動実行に対応します。PR はマージ先と統合した結果を検証します。`dev` などへの push 単独では CI を実行せず、PR 更新との重複を避けます。PR がないブランチでは通常チェックも実行されません。
 
-- format・lint・型・ユニットテスト・本番ビルドを検証します。
-- 検証成功後、GitHub ホストのランナーで `linux/amd64` 向け Docker イメージをビルドします。
-- 一時的な PostgreSQL を使い、コンテナ起動、DB マイグレーション、主要ページと静的ファイルの応答、マイグレーション再実行を確認します。
-- `main` の push・手動実行では、起動確認に成功したイメージを GHCR へ公開します。PR と `dev` では公開しません。
+| 実行契機 | 通常チェック | 本番ビルド | Dockerイメージの作成・公開 |
+| --- | --- | --- | --- |
+| PR の作成・更新 | format・lint・型・ユニットテスト | 単独ビルドで検証 | 実行しない |
+| `main` への push | format・lint・型・ユニットテスト | Docker 内で実行 | 実行する |
+| 手動実行 | format・lint・型・ユニットテスト | 単独ビルドで検証 | 実行しない |
 
-公開前に、リポジトリの **Settings → Secrets and variables → Actions → Variables** へ `NEXT_PUBLIC_ASSET_BASE_URL` を登録してください。本番のアセット配信 URL を指定します。未設定の場合、`main` のイメージ公開ジョブは失敗します。PR・`dev` の検証では、未設定時に `https://example.com` を使用します。
+`main` では通常チェックの成功後、GitHub ホストのランナーで `linux/amd64` 向け Docker イメージをビルドします。一時的な PostgreSQL を使い、コンテナ起動、DB マイグレーション、主要ページと静的ファイルの応答、マイグレーション再実行を確認し、成功したイメージだけを GHCR へ公開します。Docker 内で本番ビルドを行うため、その直前の単独ビルドは省略します。
+
+公開前に、リポジトリの **Settings → Secrets and variables → Actions → Variables** へ `NEXT_PUBLIC_ASSET_BASE_URL` を登録してください。本番のアセット配信 URL を指定します。未設定の場合、`main` のイメージ公開ジョブは失敗します。PR・手動実行の単独ビルドでは検証用の `https://example.com` を使用します。
 
 イメージ名はリポジトリ名を小文字にしたもので、このリポジトリでは次の2つのタグを公開します。
 
