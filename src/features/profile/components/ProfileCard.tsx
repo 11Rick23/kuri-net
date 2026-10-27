@@ -3,6 +3,7 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import {
 	profileEmail,
 	profileGitHub,
+	profileIdentity,
 	profileLogo,
 } from "@/features/profile/data/profileData";
 import styles from "../Profile.module.css";
@@ -16,9 +17,9 @@ export default function ProfileCard() {
 				<div className={cardStyles.identity}>
 					<div>
 						<h1 id="profile-heading" className={cardStyles.name}>
-							kuri-kuri
+							{profileIdentity.handle}
 						</h1>
-						<p className={cardStyles.alias}>a.k.a. 11Rick23</p>
+						<p className={cardStyles.alias}>a.k.a. {profileIdentity.alias}</p>
 					</div>
 					<div className={cardStyles.logo}>
 						<Image
@@ -38,7 +39,9 @@ export default function ProfileCard() {
 							draggable={false}
 						/>
 					</div>
-					<p className={cardStyles.affiliation}>慶應義塾大学 環境情報学部</p>
+					<p className={cardStyles.affiliation}>
+						{profileIdentity.affiliation}
+					</p>
 				</div>
 				<dl className={cardStyles.contacts}>
 					<div>

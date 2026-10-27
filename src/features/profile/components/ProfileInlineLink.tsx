@@ -7,12 +7,10 @@ export default function ProfileInlineLink({
 	href,
 	label,
 	children,
-	onNavigate,
 }: {
 	href: string;
 	label: string;
 	children: ReactNode;
-	onNavigate?: () => void;
 }) {
 	const external = href.startsWith("https://");
 	const content = (
@@ -38,7 +36,6 @@ export default function ProfileInlineLink({
 	) : (
 		<Link
 			href={href}
-			onNavigate={onNavigate}
 			className={styles.inlineLink}
 			aria-label={`${label}（サイト内のページへ移動）`}
 			title="サイト内のページへ移動"
