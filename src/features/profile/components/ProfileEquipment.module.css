@@ -1,0 +1,177 @@
+.equipment {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 16px;
+	margin-top: 72px;
+}
+
+.box {
+	min-width: 0;
+	border: 1px solid var(--site-line);
+	border-radius: var(--site-radius-panel);
+	padding: 20px;
+}
+
+.box h3 {
+	margin-bottom: 14px;
+	color: var(--site-muted);
+	font-family: var(--font-display);
+	font-size: 12px;
+	font-weight: 500;
+	letter-spacing: 0.08em;
+}
+
+.list {
+	list-style: none;
+}
+
+.item[data-group-start="true"] {
+	margin-top: 8px;
+}
+
+.row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	width: fit-content;
+	max-width: 100%;
+	min-height: 28px;
+	padding-block: 3px;
+	color: var(--site-muted);
+	font-size: 14px;
+	line-height: 1.5;
+	text-align: start;
+	overflow-wrap: anywhere;
+	transition: color var(--site-duration-fast) ease;
+}
+
+button.row,
+a.row {
+	cursor: pointer;
+}
+
+button.row:hover,
+a.row:hover {
+	color: var(--site-ink);
+}
+
+button.row:hover span,
+a.row:hover span {
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.icon {
+	flex-shrink: 0;
+	width: 15px;
+	height: 15px;
+}
+
+.deviceDetails {
+	position: fixed;
+	inset: 0;
+	width: min(320px, calc(100vw - 32px));
+	height: fit-content;
+	max-height: calc(100dvh - 32px);
+	margin: auto;
+	border: 1px solid var(--site-control-line);
+	border-radius: var(--site-radius-panel);
+	padding: 16px;
+	overflow: auto;
+	background: var(--site-canvas);
+	color: var(--site-ink);
+}
+
+.detailsHeader {
+	display: flex;
+	align-items: start;
+	justify-content: space-between;
+	gap: 12px;
+	margin-bottom: 12px;
+}
+
+.detailsHeader h4 {
+	padding-top: 2px;
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 1.5;
+}
+
+.closeButton {
+	display: grid;
+	flex-shrink: 0;
+	place-items: center;
+	width: 24px;
+	height: 24px;
+	color: var(--site-muted);
+	cursor: pointer;
+}
+
+.closeButton:hover {
+	color: var(--site-ink);
+}
+
+.closeButton svg {
+	width: 16px;
+	height: 16px;
+}
+
+.deviceDetails dl {
+	display: grid;
+	gap: 10px;
+}
+
+.deviceDetails dt {
+	margin-bottom: 2px;
+	color: var(--site-muted);
+	font-size: 11px;
+	line-height: 1.5;
+}
+
+.deviceDetails dd {
+	font-size: 13px;
+	line-height: 1.6;
+	overflow-wrap: anywhere;
+}
+
+@supports (position-area: bottom) {
+	.deviceDetails {
+		inset: auto;
+		position-area: bottom span-right;
+		position-try-fallbacks:
+			flip-inline,
+			flip-block,
+			flip-block flip-inline;
+		margin: 8px 0;
+	}
+}
+
+@media (max-width: 599px) {
+	.equipment {
+		grid-template-columns: minmax(0, 1fr);
+		margin-top: 48px;
+	}
+}
+
+@media (pointer: coarse) {
+	.row {
+		min-height: 32px;
+	}
+
+	.closeButton {
+		width: 32px;
+		height: 32px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.row {
+		transition: none;
+	}
+}
+
+@media print {
+	.deviceDetails {
+		display: none;
+	}
+}

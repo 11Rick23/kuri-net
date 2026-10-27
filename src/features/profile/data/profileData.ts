@@ -25,42 +25,189 @@ export const profileGreeting = {
 	after: "と申します。",
 };
 
-export const profileBirthday = { year: 2005, month: 11, day: 23 };
+export type ProfileEquipmentIcon =
+	| "desktop"
+	| "laptop"
+	| "phone"
+	| "watch"
+	| "earbuds"
+	| "headset"
+	| "gamepad"
+	| "browser"
+	| "mail"
+	| "tasks"
+	| "launcher"
+	| "code"
+	| "chat"
+	| "terminal"
+	| "lock"
+	| "shield";
 
-export type ProfileFact = {
-	id: "birthday" | "age" | "gender" | "bloodType" | "height";
-	label: string;
-	value: string;
+export type ProfileDevice = {
+	id: string;
+	name: string;
+	icon: ProfileEquipmentIcon;
+	group: "computers" | "mobile" | "audio" | "gaming";
+	details?: { label: string; value: string }[];
 };
 
-export function createProfileFacts(age: number): ProfileFact[] {
-	const { year, month, day } = profileBirthday;
-	const birthday = [year, month, day]
-		.map((part) => String(part).padStart(2, "0"))
-		.join(".");
-
-	return [
-		{ id: "birthday", label: "誕生日", value: birthday },
-		{ id: "age", label: "年齢", value: `${age}歳` },
-		{ id: "gender", label: "性別", value: "男性" },
-		{ id: "bloodType", label: "血液型", value: "A型" },
-		{ id: "height", label: "身長", value: "178cm" },
-	];
-}
+export const profileDevices: ProfileDevice[] = [
+	{
+		id: "mac-studio",
+		name: "Mac Studio",
+		icon: "desktop",
+		group: "computers",
+		details: [
+			{ label: "チップ", value: "Apple M1 Max" },
+			{ label: "メモリ", value: "32GB ユニファイドメモリ" },
+		],
+	},
+	{
+		id: "macbook-air",
+		name: "MacBook Air",
+		icon: "laptop",
+		group: "computers",
+		details: [
+			{ label: "チップ", value: "Apple M2" },
+			{ label: "メモリ", value: "16GB ユニファイドメモリ" },
+			{ label: "ディスプレイ", value: "13.6インチ Liquid Retina" },
+		],
+	},
+	{
+		id: "windows-pc",
+		name: "自作Windows PC",
+		icon: "desktop",
+		group: "computers",
+		details: [
+			{ label: "CPU", value: "AMD Ryzen 7 5700X（8コア / 16スレッド）" },
+			{ label: "GPU", value: "NVIDIA GeForce RTX 4060 Ti" },
+			{ label: "メモリ", value: "32GB" },
+		],
+	},
+	{
+		id: "iphone",
+		name: "iPhone 15 Pro",
+		icon: "phone",
+		group: "mobile",
+		details: [
+			{ label: "チップ", value: "A17 Pro" },
+			{ label: "ディスプレイ", value: "6.1インチ Super Retina XDR" },
+		],
+	},
+	{
+		id: "apple-watch",
+		name: "Apple Watch Ultra 3",
+		icon: "watch",
+		group: "mobile",
+		details: [
+			{ label: "ケース", value: "49mm チタニウム" },
+			{ label: "チップ", value: "S10" },
+		],
+	},
+	{
+		id: "sony-earbuds",
+		name: "Sony WF-1000XM6",
+		icon: "earbuds",
+		group: "audio",
+		details: [
+			{ label: "タイプ", value: "完全ワイヤレスイヤホン" },
+			{ label: "機能", value: "ノイズキャンセリング" },
+		],
+	},
+	{
+		id: "astro-a50",
+		name: "ASTRO A50",
+		icon: "headset",
+		group: "audio",
+		details: [
+			{ label: "ブランド", value: "Logicool G / ASTRO" },
+			{ label: "タイプ", value: "ワイヤレスゲーミングヘッドセット" },
+		],
+	},
+	{
+		id: "nintendo-switch",
+		name: "Nintendo Switch",
+		icon: "gamepad",
+		group: "gaming",
+		details: [
+			{ label: "シリーズ", value: "Nintendo Switch（初代）" },
+			{ label: "プレイモード", value: "TV・テーブル・携帯モード" },
+		],
+	},
+];
 
 export type ProfileApplication = {
-	id: "github" | "discord" | "vscode" | "1password" | "raycast" | "spark";
+	id: string;
 	name: string;
 	href: string;
+	icon: ProfileEquipmentIcon;
+	group: "everyday" | "development" | "security";
 };
 
 export const profileApplications: ProfileApplication[] = [
-	{ id: "github", name: "GitHub", href: profileGitHub.href },
-	{ id: "discord", name: "Discord", href: "https://discord.com/" },
-	{ id: "vscode", name: "VS Code", href: "https://code.visualstudio.com/" },
-	{ id: "1password", name: "1Password", href: "https://1password.com/" },
-	{ id: "raycast", name: "Raycast", href: "https://www.raycast.com/" },
-	{ id: "spark", name: "Spark", href: "https://sparkmailapp.com/" },
+	{
+		id: "phi",
+		name: "Phi Browser",
+		href: "https://phibrowser.com/",
+		icon: "browser",
+		group: "everyday",
+	},
+	{
+		id: "spark",
+		name: "Spark Mail",
+		href: "https://sparkmailapp.com/",
+		icon: "mail",
+		group: "everyday",
+	},
+	{
+		id: "todoist",
+		name: "Todoist",
+		href: "https://www.todoist.com/",
+		icon: "tasks",
+		group: "everyday",
+	},
+	{
+		id: "tinycast",
+		name: "Tinycast",
+		href: "https://tinycast.dev/",
+		icon: "launcher",
+		group: "everyday",
+	},
+	{
+		id: "vscode",
+		name: "Visual Studio Code",
+		href: "https://code.visualstudio.com/",
+		icon: "code",
+		group: "development",
+	},
+	{
+		id: "chatgpt",
+		name: "ChatGPT",
+		href: "https://chatgpt.com/",
+		icon: "chat",
+		group: "development",
+	},
+	{
+		id: "codex",
+		name: "Codex",
+		href: "https://openai.com/codex/",
+		icon: "terminal",
+		group: "development",
+	},
+	{
+		id: "1password",
+		name: "1Password",
+		href: "https://1password.com/",
+		icon: "lock",
+		group: "security",
+	},
+	{
+		id: "adguard",
+		name: "AdGuard",
+		href: "https://adguard.com/",
+		icon: "shield",
+		group: "security",
+	},
 ];
 
 export type ProfileTextPart = string | { text: string; href: string };
@@ -332,7 +479,7 @@ export const profileTimeline: ProfileTimelinePeriod[] = [
 					],
 					[
 						"しかし、セキュリティとユーザビリティを両立させた認証手段である「パスキー」について学んだことをきっかけに、「ユーザビリティ」に強い関心を持つようになりました",
-						"現在はユーザビリティやUI・UX、セキュリティなどの学習を続けながら、卒業論文に向けたテーマ探しを行なっています。"
+						"現在はユーザビリティやUI・UX、セキュリティなどの学習を続けながら、卒業論文に向けたテーマ探しを行なっています。",
 					],
 				],
 			},

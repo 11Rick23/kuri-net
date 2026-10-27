@@ -2,17 +2,10 @@
 	margin-top: 80px;
 }
 
-.heading h3 {
-	font-size: 22px;
-	font-weight: 500;
-	letter-spacing: 0.05em;
-}
-
 .timelineScroll {
 	overflow-x: auto;
 	overscroll-behavior-x: contain;
 	scroll-padding-inline: 12px;
-	margin-top: 28px;
 	padding-block: 8px 16px;
 	scrollbar-width: thin;
 	scrollbar-color: var(--site-control-line) transparent;
@@ -293,14 +286,6 @@
 @media (max-width: 767px) {
 	.timeline {
 		margin-top: 56px;
-	}
-
-	.heading h3 {
-		font-size: 21px;
-	}
-
-	.timelineScroll {
-		margin-top: 20px;
 	}
 
 	.periodHeading {

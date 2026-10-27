@@ -79,9 +79,9 @@ export default function ProfileTimeline({
 			className={styles.timeline}
 			aria-labelledby="profile-timeline-heading"
 		>
-			<header className={styles.heading}>
-				<h3 id="profile-timeline-heading">経歴</h3>
-			</header>
+			<h3 id="profile-timeline-heading" className="sr-only">
+				経歴
+			</h3>
 			<div className={styles.timelineScroll}>
 				<div
 					className={styles.track}
