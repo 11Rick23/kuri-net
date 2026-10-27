@@ -6,11 +6,7 @@ import styles from "./Tools.module.css";
 
 export default function ToolsIndexScreen() {
 	return (
-		<ToolsPageFrame
-			title="アプリ一覧"
-			description="ちょっとした便利なウェブアプリを提供しています。随時追加予定です。"
-			variant="index"
-		>
+		<ToolsPageFrame title="アプリ一覧" variant="index">
 			<Reveal className={styles.appList}>
 				{toolDefinitions.map((tool) => (
 					<HighlightLink
