@@ -57,6 +57,7 @@
 		color: var(--site-ink);
 		font-family: var(--font-body);
 		font-variant-numeric: tabular-nums;
+		text-autospace: normal;
 		-webkit-tap-highlight-color: color-mix(
 			in srgb,
 			var(--site-accent) 15%,
