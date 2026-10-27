@@ -6,7 +6,7 @@ import {
 	type SolverResult,
 } from "@/features/tools/minesweeper/model";
 
-/** Returns the average deduction cost on a 100–800 scale. */
+/** Returns the average deduction cost on a 100-800 scale. */
 export function calculateAverageDifficultyScore(steps: Deduction[]) {
 	if (steps.length === 0) return 0;
 	const averageRuleCost =
