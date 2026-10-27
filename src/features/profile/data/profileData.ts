@@ -462,7 +462,7 @@ export const profileTimeline: ProfileTimelinePeriod[] = [
 			},
 			{
 				id: "research",
-				date: "大学在学中 - Current",
+				date: "現在",
 				title: "ユーザビリティへの関心",
 				detail: [
 					[

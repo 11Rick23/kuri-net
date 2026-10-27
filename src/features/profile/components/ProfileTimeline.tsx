@@ -38,7 +38,7 @@ export default function ProfileTimeline({
 }: {
 	periods: ProfileTimelinePeriod[];
 }) {
-	const [selectedId, setSelectedId] = useState(periods[0]?.id);
+	const [selectedId, setSelectedId] = useState(periods.at(-1)?.id);
 	const tabs = useRef(new Map<string, HTMLButtonElement>());
 	const selected =
 		periods.find((period) => period.id === selectedId) ?? periods[0];

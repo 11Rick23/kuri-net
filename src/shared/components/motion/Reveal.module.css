@@ -20,3 +20,11 @@
 		transition: none;
 	}
 }
+
+@media print {
+	.reveal[data-reveal] {
+		opacity: 1;
+		transform: none;
+		transition: none;
+	}
+}
