@@ -1,12 +1,13 @@
 "use client";
 
-import { type KeyboardEvent, useRef, useState } from "react";
+import { type KeyboardEvent, useRef } from "react";
 import type {
 	ProfileTimelineDate,
 	ProfileTimelinePeriod,
 } from "../data/profileData";
 import styles from "./ProfileTimeline.module.css";
 import ProfileTimelineEventCard from "./ProfileTimelineEventCard";
+import useProfileTimelineTransition from "./useProfileTimelineTransition";
 
 function formatDateLabel(date: ProfileTimelineDate | "Current") {
 	return date === "Current"
@@ -38,11 +39,15 @@ export default function ProfileTimeline({
 }: {
 	periods: ProfileTimelinePeriod[];
 }) {
-	const [selectedId, setSelectedId] = useState(periods.at(-1)?.id);
+	const { selectedId, selectPeriod, panels, transitionDirection } =
+		useProfileTimelineTransition(periods);
 	const tabs = useRef(new Map<string, HTMLButtonElement>());
 	const selected =
 		periods.find((period) => period.id === selectedId) ?? periods[0];
 	if (!selected) return null;
+	const selectedIndex = periods.findIndex(
+		(period) => period.id === selected.id,
+	);
 
 	const navigate = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
 		let nextIndex: number;
@@ -65,7 +70,7 @@ export default function ProfileTimeline({
 		event.preventDefault();
 		const next = periods[nextIndex];
 		if (!next) return;
-		setSelectedId(next.id);
+		selectPeriod(next.id);
 		tabs.current.get(next.id)?.focus({ preventScroll: true });
 		tabs.current.get(next.id)?.scrollIntoView({
 			block: "nearest",
@@ -77,6 +82,7 @@ export default function ProfileTimeline({
 	return (
 		<section
 			className={styles.timeline}
+			data-direction={transitionDirection === 1 ? "forward" : "backward"}
 			aria-labelledby="profile-timeline-heading"
 		>
 			<h3 id="profile-timeline-heading" className="sr-only">
@@ -104,7 +110,14 @@ export default function ProfileTimeline({
 								aria-label={`${period.start.year}年 ${period.age}歳`}
 								tabIndex={period.id === selected.id ? 0 : -1}
 								className={styles.dateButton}
-								onClick={() => setSelectedId(period.id)}
+								data-position={
+									index < selectedIndex
+										? "past"
+										: index > selectedIndex
+											? "future"
+											: "current"
+								}
+								onClick={() => selectPeriod(period.id)}
 								onKeyDown={(event) => navigate(event, index)}
 							>
 								<span className={styles.year}>{period.start.year}</span>
@@ -117,6 +130,10 @@ export default function ProfileTimeline({
 			{periods.map((period) => (
 				<div
 					key={period.id}
+					ref={(element) => {
+						if (element) panels.current.set(period.id, element);
+						else panels.current.delete(period.id);
+					}}
 					id={`profile-panel-${period.id}`}
 					role="tabpanel"
 					aria-labelledby={`profile-tab-${period.id}`}

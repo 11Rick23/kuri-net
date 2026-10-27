@@ -1,5 +1,14 @@
 .timeline {
+	--timeline-enter-origin: left;
+	--timeline-leave-origin: right;
+	--timeline-text-shift: 2px;
 	margin-top: 80px;
+}
+
+.timeline[data-direction="backward"] {
+	--timeline-enter-origin: right;
+	--timeline-leave-origin: left;
+	--timeline-text-shift: -2px;
 }
 
 .timelineScroll {
@@ -43,7 +52,11 @@
 }
 
 .dateButton {
+	--hover-enter-origin: var(--timeline-enter-origin);
+	--hover-leave-origin: var(--timeline-leave-origin);
+	--year-shift: var(--timeline-text-shift);
 	position: relative;
+	isolation: isolate;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -52,24 +65,68 @@
 	height: 88px;
 	border: 1px solid var(--site-control-line);
 	border-radius: 50%;
+	overflow: hidden;
 	background: var(--site-canvas);
 	color: var(--site-ink);
 	cursor: pointer;
 	scroll-margin-inline: 8px;
 	transition:
-		background-color var(--site-duration-fast) ease,
-		color var(--site-duration-fast) ease;
+		border-color var(--site-duration-fast) ease,
+		color var(--site-duration-fast) ease,
+		transform var(--site-duration-fast) var(--site-ease);
 }
 
-.dateButton:hover {
-	border-color: var(--site-ink);
+.dateButton::before,
+.dateButton::after {
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	content: "";
+	transform: scaleX(0);
+	transform-origin: var(--timeline-leave-origin);
+	transition: transform var(--site-duration-state) var(--site-ease);
+}
+
+.dateButton::before {
+	z-index: -1;
+	background: var(--site-ink);
+}
+
+.dateButton::after {
+	z-index: -2;
 	background: var(--site-surface-muted);
+	transform-origin: var(--hover-leave-origin);
+}
+
+.dateButton[data-position="past"] {
+	--hover-enter-origin: right;
+	--hover-leave-origin: left;
+	--year-shift: -2px;
+}
+
+.dateButton[data-position="future"] {
+	--hover-enter-origin: left;
+	--hover-leave-origin: right;
+	--year-shift: 2px;
 }
 
 .dateButton[aria-selected="true"] {
 	border-color: var(--site-ink);
-	background: var(--site-ink);
 	color: var(--site-canvas);
+}
+
+.dateButton[aria-selected="true"]::before {
+	transform: scaleX(1);
+	transform-origin: var(--timeline-enter-origin);
+}
+
+.dateButton:focus-visible::after {
+	transform: scaleX(1);
+	transform-origin: var(--hover-enter-origin);
+}
+
+.dateButton:active {
+	transform: scale(0.97);
 }
 
 .dateButton:focus-visible {
@@ -82,6 +139,26 @@
 	font-size: 26px;
 	font-weight: 500;
 	line-height: 1.2;
+	transition: transform var(--site-duration-fast) var(--site-ease);
+}
+
+.dateButton:focus-visible .year {
+	transform: translateX(var(--year-shift));
+}
+
+@media (hover: hover) {
+	.dateButton:hover {
+		border-color: var(--site-ink);
+	}
+
+	.dateButton:hover::after {
+		transform: scaleX(1);
+		transform-origin: var(--hover-enter-origin);
+	}
+
+	.dateButton:hover .year {
+		transform: translateX(var(--year-shift));
+	}
 }
 
 .age {
@@ -325,7 +402,18 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.dateButton {
+	.dateButton,
+	.dateButton::before,
+	.dateButton::after {
+		transition: none;
+	}
+
+	.dateButton:active {
+		transform: none;
+	}
+
+	.dateButton:is(:hover, :focus-visible) .year {
+		transform: none;
 		transition: none;
 	}
 }
