@@ -41,7 +41,7 @@
 		"@types/pg": "^8.20.4",
 		"@types/react": "^19.2.14",
 		"@types/react-dom": "^19.2.3",
-		"drizzle-kit": "^0.31.10",
+		"drizzle-kit": "^0.31.11",
 		"tailwindcss": "^4.2.2",
 		"tsx": "^4.21.0",
 		"typescript": "^6.0.2"
