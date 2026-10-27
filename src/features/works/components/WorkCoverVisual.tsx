@@ -10,12 +10,25 @@ export default function WorkCoverVisual({
 	work: WorkEntry;
 	variant: "card" | "detail";
 }) {
-	if (!work.coverImageAssetKey || !work.coverAlt) return null;
+	if (!work.coverImageAssetKey) {
+		const titleSize = Math.min(16, 200 / Array.from(work.title).length);
+
+		return (
+			<div className={styles.typographyCover} aria-hidden="true">
+				<span
+					className={styles.coverTitle}
+					style={{ fontSize: `min(5rem, ${titleSize}cqi)` }}
+				>
+					{work.title}
+				</span>
+			</div>
+		);
+	}
 
 	return (
 		<Image
 			src={resolveAssetUrl(work.coverImageAssetKey)}
-			alt={work.coverAlt}
+			alt={work.coverAlt ?? work.title}
 			fill
 			sizes={
 				variant === "detail"

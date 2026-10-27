@@ -13,7 +13,6 @@ export default function WorkCard({
 	work: WorkEntry;
 	onOpen: (work: WorkEntry) => void;
 }) {
-	const hasCover = Boolean(work.coverImageAssetKey && work.coverAlt);
 	const runAfterHighlight = useHighlightAction();
 
 	return (
@@ -23,15 +22,11 @@ export default function WorkCard({
 				runAfterHighlight(event.currentTarget, () => onOpen(work))
 			}
 			data-click-highlight
-			className={[styles.card, !hasCover && styles.withoutCover]
-				.filter(Boolean)
-				.join(" ")}
+			className={styles.card}
 		>
-			{hasCover && (
-				<div className={styles.cardCover}>
-					<WorkCoverVisual work={work} variant="card" />
-				</div>
-			)}
+			<div className={styles.cardCover}>
+				<WorkCoverVisual work={work} variant="card" />
+			</div>
 
 			<div className={styles.cardBody}>
 				<div className={styles.cardHeading}>

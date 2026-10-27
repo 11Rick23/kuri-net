@@ -11,9 +11,6 @@ export default function WorksScreen() {
 				<Reveal>
 					<section className={styles.introduction}>
 						<h1 className="page-heading">制作実績</h1>
-						<p className="page-intro">
-							個人開発とチーム開発で取り組んだプロジェクトをまとめています。カードを開くと、担当範囲や使用技術、制作の背景を確認できます。
-						</p>
 					</section>
 				</Reveal>
 				<WorksGrid works={worksData} />

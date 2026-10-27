@@ -68,11 +68,9 @@ export default function WorkDetailModal({ work }: { work: WorkEntry }) {
 				<h2 className={styles.detailTitle}>{work.title}</h2>
 				<p className={styles.detailSummary}>{work.summary}</p>
 			</header>
-			{work.coverImageAssetKey && work.coverAlt && (
-				<div className={styles.detailCover}>
-					<WorkCoverVisual work={work} variant="detail" />
-				</div>
-			)}
+			<div className={styles.detailCover}>
+				<WorkCoverVisual work={work} variant="detail" />
+			</div>
 
 			<div className={styles.detailBody}>
 				{metaItems.length > 0 && (

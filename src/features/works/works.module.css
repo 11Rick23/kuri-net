@@ -54,6 +54,7 @@
 
 .cardCover {
 	position: relative;
+	container-type: inline-size;
 	aspect-ratio: 16 / 10;
 	overflow: hidden;
 	border: 1px solid var(--site-line);
@@ -62,6 +63,30 @@
 
 .coverImage {
 	object-fit: contain;
+}
+
+.typographyCover {
+	display: flex;
+	width: 100%;
+	height: 100%;
+	align-items: center;
+	padding: 8%;
+	background: var(--site-surface-muted);
+	color: var(--site-ink);
+}
+
+.coverTitle {
+	display: block;
+	width: 100%;
+	border-left: 4px solid var(--site-accent);
+	padding-left: 6%;
+	font-family: var(--font-display), var(--font-body), sans-serif;
+	font-weight: 700;
+	line-height: 1.4;
+	letter-spacing: -0.025em;
+	line-break: strict;
+	overflow-wrap: anywhere;
+	text-wrap: balance;
 }
 
 .cardBody {
@@ -154,21 +179,6 @@
 	transition: transform var(--site-duration-state) var(--site-ease);
 }
 
-.withoutCover .cardBody {
-	grid-column: 1 / -1;
-	display: grid;
-	grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-	column-gap: clamp(28px, 4vw, 64px);
-}
-
-.withoutCover .cardHeading {
-	grid-row: 1 / 3;
-}
-
-.withoutCover .stack {
-	align-self: start;
-}
-
 .detail {
 	width: min(calc(100vw - 34px), 56rem);
 	max-height: 88dvh;
@@ -204,6 +214,7 @@
 
 .detailCover {
 	position: relative;
+	container-type: inline-size;
 	aspect-ratio: 16 / 9;
 	margin-inline: clamp(24px, 4vw, 48px);
 	overflow: hidden;
@@ -350,10 +361,6 @@
 
 	.card::before {
 		inset-inline: -10px;
-	}
-
-	.withoutCover .cardBody {
-		display: flex;
 	}
 
 	.cardFooter {
