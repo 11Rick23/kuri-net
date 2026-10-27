@@ -6,8 +6,8 @@ kuri-net は、プロフィール・制作物紹介とブラウザ向けツー�
 
 | ツール | バージョン | 用途 |
 | --- | --- | --- |
-| Bun | 1.3.11 | 依存関係管理、スクリプト、ユニットテスト |
-| Node.js | 25.2.1 | Next.js・Playwright 互換実行環境 |
+| Bun | 1.4.4 | 依存関係管理、スクリプト、ユニットテスト |
+| Node.js | 25.9.0 | Next.js・Playwright 互換実行環境 |
 | mise | latest | ツール管理、タスクランナー |
 | PostgreSQL | 要用意 | 認証・メモ帳データの永続化 |
 | Chrome | E2E 実行時 | パスキー E2E テスト |
@@ -152,11 +152,58 @@ mise run db:migrate
 
 ## デプロイ
 
-Drizzle の SQL マイグレーションは `drizzle` に保存されます。Dokploy と Nixpacks では、起動前にマイグレーションを適用します。
+GitHub Actions で Docker イメージをビルドし、GitHub Container Registry（GHCR）へ公開します。Dokploy は公開済みイメージを取得して起動するため、VPS 上でのビルドは不要です。
+
+### GitHub Actions
+
+[CI](.github/workflows/ci.yml) は、PR・`dev`・`main` の更新と手動実行に対応します。
+
+- format・lint・型・ユニットテスト・本番ビルドを検証します。
+- 検証成功後、GitHub ホストのランナーで `linux/amd64` 向け Docker イメージをビルドします。
+- 一時的な PostgreSQL を使い、コンテナ起動、DB マイグレーション、主要ページと静的ファイルの応答、マイグレーション再実行を確認します。
+- `main` の push・手動実行では、起動確認に成功したイメージを GHCR へ公開します。PR と `dev` では公開しません。
+
+公開前に、リポジトリの **Settings → Secrets and variables → Actions → Variables** へ `NEXT_PUBLIC_ASSET_BASE_URL` を登録してください。本番のアセット配信 URL を指定します。未設定の場合、`main` のイメージ公開ジョブは失敗します。PR・`dev` の検証では、未設定時に `https://example.com` を使用します。
+
+イメージ名はリポジトリ名を小文字にしたもので、このリポジトリでは次の2つのタグを公開します。
 
 ```text
-NIXPACKS_START_CMD="bun run db:migrate && bun run start"
+ghcr.io/11rick23/kuri-net:main
+ghcr.io/11rick23/kuri-net:sha-<コミットの完全なSHA>
 ```
+
+公開にはジョブの `GITHUB_TOKEN` と `packages: write` 権限を使います。追加の公開用トークンは不要です。GHCR のパッケージは初回公開時に非公開で作成されます。
+
+### Dokploy の切り替え
+
+1. `main` の CI が成功し、GHCR にイメージが公開されたことを確認します。
+2. 既存の application の Provider を **Docker** に変更します。Nixpacks や GitHub を使った VPS 上のビルドは使用しません。
+3. Docker Image に、上記の `main` タグまたはデプロイ対象の `sha-…` タグを指定します。稼働バージョンを固定する場合は SHA のタグを使用します。
+4. 非公開イメージの取得には、Registry URL `ghcr.io`、GitHub ユーザー名、`read:packages` 権限の personal access token（classic）を Dokploy に登録します。
+5. 実行時の環境変数に `DATABASE_URL`、`BETTER_AUTH_SECRET`、`BETTER_AUTH_URL` を設定します。`NEXT_PUBLIC_ASSET_BASE_URL` はビルド時と同じ値に揃えます。
+6. ドメイン設定の転送先をポート `3000` にし、Deploy を実行します。起動コマンドはイメージの既定値を使用します。
+
+イメージ公開から Dokploy への自動デプロイは行いません。新しいイメージへ更新するときは、公開完了後に Dokploy で対象タグを指定して Deploy を実行してください。
+
+### イメージの内容
+
+[Dockerfile](Dockerfile) は依存関係・ビルド・実行のステージを分けています。Docker ビルド時のみ `NEXT_OUTPUT_STANDALONE=1` で Next.js の standalone 出力を有効にし、実行イメージにはサーバー、静的ファイル、お知らせ Markdown、DB マイグレーションを含めます。通常の `mise run build` / `mise run start` の使い方は変わりません。
+
+起動時は Bun でマイグレーションを適用し、成功した場合だけ Node.js でサーバーを起動します。SQL とマイグレーション履歴は既存の `drizzle` を使用します。アプリの再起動時にも同じ未適用判定が働きます。
+
+ビルド時の DB・認証設定には検証値を使用し、本番 DB への接続やマイグレーションは行いません。本番の DB 接続情報・認証シークレットを build args に渡す必要はありません。[.dockerignore](.dockerignore) は必要なソースだけを許可し、ローカルの環境設定や秘密ファイルをビルドコンテキストに含めません。
+
+`NEXT_PUBLIC_ASSET_BASE_URL` はビルド結果へ埋め込まれます。変更時は GitHub の Variable を更新し、イメージを再ビルドしてください。
+
+ローカルでイメージをビルドする場合も、公開アセット URL を指定します。
+
+```bash
+docker build \
+  --build-arg NEXT_PUBLIC_ASSET_BASE_URL=https://assets.example.com \
+  --tag kuri-net:local .
+```
+
+起動確認には使い捨ての PostgreSQL を使用してください。コンテナ起動時に DB マイグレーションが実行されます。
 
 ## デザインの調整
 
