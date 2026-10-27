@@ -1,0 +1,5 @@
+[env]
+DATABASE_URL = "postgresql://postgres:postgres@127.0.0.1:5432/kuri_net"
+NEXT_PUBLIC_ASSET_BASE_URL = "https://assets.example.com"
+BETTER_AUTH_SECRET = "replace-with-a-random-secret-at-least-32-characters"
+BETTER_AUTH_URL = "http://localhost:3000"

@@ -1,11 +1,11 @@
 "use client";
 
-import { nanoid } from "nanoid";
 import type React from "react";
 import {
 	createContext,
 	useCallback,
 	useContext,
+	useEffect,
 	useMemo,
 	useRef,
 	useState,
@@ -33,6 +33,17 @@ export function useToast() {
 export function ToastProvider({ children }: { children: React.ReactNode }) {
 	const [items, setItems] = useState<ToastItem[]>([]);
 	const timers = useRef(new Map<string, TimerInfo>());
+
+	useEffect(() => {
+		const activeTimers = timers.current;
+
+		return () => {
+			for (const timer of activeTimers.values()) {
+				window.clearTimeout(timer.timeoutId);
+			}
+			activeTimers.clear();
+		};
+	}, []);
 
 	const clearTimer = useCallback((id: string) => {
 		const timer = timers.current.get(id);
@@ -74,7 +85,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 	// トーストを作成
 	const toast = useCallback(
 		(message: React.ReactNode, options?: ToastOptions) => {
-			const id = options?.id ?? nanoid();
+			const id = options?.id ?? crypto.randomUUID();
 			const type = options?.type ?? "info";
 			const durationMs = options?.durationMs ?? 5000;
 

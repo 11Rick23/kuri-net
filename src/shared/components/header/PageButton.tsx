@@ -2,15 +2,18 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import styles from "./Header.module.css";
 
 export default function PageButton({
 	url,
 	display,
 	match = "exact",
+	onClick,
 }: {
 	url: string;
 	display: string;
 	match?: "exact" | "prefix";
+	onClick?: () => void;
 }) {
 	const pathname = usePathname();
 	const isActive =
@@ -21,15 +24,11 @@ export default function PageButton({
 	return (
 		<Link
 			href={url}
-			type="button"
+			onClick={onClick}
 			aria-label={`${display}ページへ`}
-			className={`
-                flex items-center justify-center
-                rounded-md px-2 py-1 cursor-pointer
-                ${isActive ? "bg-ctp-surface0" : "bg-transparent"}
-                text-xs font-bold text-ctp-text
-                hover:bg-ctp-surface0
-            `}
+			aria-current={isActive ? "page" : undefined}
+			className={styles.pageLink}
+			data-click-highlight
 		>
 			{display}
 		</Link>

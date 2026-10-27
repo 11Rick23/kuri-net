@@ -1,0 +1,42 @@
+.link {
+	position: relative;
+	isolation: isolate;
+	transition: color var(--site-duration-state) var(--site-ease);
+}
+
+.link::before {
+	position: absolute;
+	z-index: -1;
+	content: "";
+	inset: -2px -4px;
+	background: var(--site-inverse);
+	transform: scaleX(0);
+	transform-origin: left;
+	transition: transform var(--site-duration-state) var(--site-ease);
+}
+
+.link[data-highlight-blinking],
+.link:focus-visible,
+.link:active {
+	color: var(--site-on-inverse);
+}
+
+.link:focus-visible::before,
+.link:active::before {
+	transform: scaleX(1);
+}
+
+.link[data-highlight-blinking]::before {
+	transform: scaleX(1);
+	transition: none;
+}
+
+@media (hover: hover) {
+	.link:hover {
+		color: var(--site-on-inverse);
+	}
+
+	.link:hover::before {
+		transform: scaleX(1);
+	}
+}

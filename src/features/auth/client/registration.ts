@@ -1,30 +1,26 @@
 "use client";
 
-import { startRegistration } from "@simplewebauthn/browser";
+import { authClient } from "@/features/auth/client/authClient";
+import { createRegistration } from "@/features/auth/client/registrationCore";
 import {
-	generateRegistrationData,
-	verifyRegistrationData,
-} from "@/features/auth/server/registration";
+	cleanupIncompleteRegistration,
+	completePasskeyRegistration,
+	updateRegistrationDisplayName,
+} from "@/features/auth/server/actions";
 import type { Result } from "@/shared/types/result";
 
+const registration = createRegistration({
+	signInAnonymously: () => authClient.signIn.anonymous(),
+	updateDisplayName: updateRegistrationDisplayName,
+	addPasskey: (displayName) =>
+		authClient.passkey.addPasskey({ name: displayName }),
+	completeRegistration: completePasskeyRegistration,
+	cleanupRegistration: cleanupIncompleteRegistration,
+	signOut: () => authClient.signOut(),
+});
+
 export default async function register(
-	userName: string,
+	displayName: string,
 ): Promise<Result<string, string>> {
-	try {
-		// チャレンジとユーザーIDを取得
-		const options = await generateRegistrationData(userName);
-
-		// パスキーの作成を開始
-		const response = await startRegistration({ optionsJSON: options });
-
-		// パスキーを検証
-		await verifyRegistrationData(response);
-
-		return { ok: true, value: "登録に成功しました。" };
-	} catch (error) {
-		if (error instanceof Error && error.name === "NotAllowedError") {
-			return { ok: false, error: "登録がキャンセルされました" };
-		}
-		return { ok: false, error: "登録中にエラーが発生しました" };
-	}
+	return registration(displayName);
 }

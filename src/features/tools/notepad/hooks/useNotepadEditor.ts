@@ -2,6 +2,10 @@
 
 import { createElement, useCallback, useEffect, useRef, useState } from "react";
 import PasteConfirmModal from "@/features/tools/notepad/components/PasteConfirmModal";
+import {
+	drainSaveQueue,
+	getStateAfterQueueDrained,
+} from "@/features/tools/notepad/domain/saveQueue";
 import { saveCurrentUserNotepad } from "@/features/tools/notepad/server/notepad";
 import { useModal } from "@/shared/components/modal/ModalProvider";
 import { useToast } from "@/shared/components/toast/ToastProvider";
@@ -28,6 +32,7 @@ export function useNotepadEditor({
 	const queuedContentRef = useRef<string | null>(null);
 	const inFlightRef = useRef(false);
 	const debounceTimerRef = useRef<number | null>(null);
+	const isMountedRef = useRef(true);
 
 	const clearDebounceTimer = useCallback(() => {
 		if (debounceTimerRef.current !== null) {
@@ -36,62 +41,108 @@ export function useNotepadEditor({
 		}
 	}, []);
 
+	const showSaveError = useCallback(
+		(message: string, saveState: Extract<SaveState, "error"> = "error") => {
+			if (!isMountedRef.current) {
+				return;
+			}
+
+			setSaveState(saveState);
+			toast(message, {
+				id: "notepad-save-error",
+				type: "error",
+				durationMs: 6000,
+			});
+		},
+		[toast],
+	);
+
 	const flushQueuedSave = useCallback(async () => {
-		if (inFlightRef.current) {
+		if (inFlightRef.current || !isMountedRef.current) {
 			return;
 		}
 
-		while (queuedContentRef.current !== null) {
-			const nextContent = queuedContentRef.current;
-			queuedContentRef.current = null;
+		inFlightRef.current = true;
+		let outcome: Awaited<ReturnType<typeof drainSaveQueue>>;
 
-			if (nextContent === lastSavedContentRef.current) {
-				continue;
-			}
-
-			inFlightRef.current = true;
-			setSaveState("saving");
-
-			try {
-				const result = await saveCurrentUserNotepad(nextContent);
-				lastSavedContentRef.current = nextContent;
-				setLastSavedAt(result.updatedAt);
-			} catch {
-				setSaveState("error");
-				toast(
-					"メモの保存に失敗しました。しばらくしてから再度お試しください。",
-					{
-						id: "notepad-save-error",
-						type: "error",
-						durationMs: 6000,
-					},
-				);
-			} finally {
-				inFlightRef.current = false;
-			}
+		try {
+			outcome = await drainSaveQueue({
+				getQueuedContent: () =>
+					isMountedRef.current ? queuedContentRef.current : null,
+				setQueuedContent: (nextContent) => {
+					queuedContentRef.current = nextContent;
+				},
+				getCurrentContent: () => contentRef.current,
+				getLastSavedContent: () => lastSavedContentRef.current,
+				setLastSavedContent: (nextContent) => {
+					lastSavedContentRef.current = nextContent;
+				},
+				save: saveCurrentUserNotepad,
+				onSaveStart: () => {
+					if (isMountedRef.current) {
+						setSaveState("saving");
+					}
+				},
+				onSaveSuccess: (result) => {
+					if (isMountedRef.current) {
+						setLastSavedAt(result.updatedAt);
+					}
+				},
+			});
+		} finally {
+			inFlightRef.current = false;
 		}
 
-		if (contentRef.current === lastSavedContentRef.current) {
-			setSaveState("saved");
+		if (!isMountedRef.current) {
 			return;
 		}
 
-		setSaveState("pending");
-	}, [toast]);
+		if (outcome.type === "invalid") {
+			showSaveError(outcome.error);
+			return;
+		}
+
+		if (outcome.type === "failed") {
+			showSaveError(
+				"メモの保存に失敗しました。しばらくしてから再度お試しください。",
+			);
+			return;
+		}
+
+		setSaveState(
+			getStateAfterQueueDrained(
+				contentRef.current,
+				lastSavedContentRef.current,
+			),
+		);
+	}, [showSaveError]);
 
 	useEffect(() => {
 		contentRef.current = content;
 
 		if (content === lastSavedContentRef.current) {
 			clearDebounceTimer();
-			if (!inFlightRef.current) {
-				setSaveState("saved");
+
+			if (inFlightRef.current) {
+				queuedContentRef.current = content;
+				setSaveState("saving");
+				return;
 			}
+
+			queuedContentRef.current = null;
+			setSaveState("saved");
 			return;
 		}
 
-		setSaveState(inFlightRef.current ? "saving" : "pending");
 		clearDebounceTimer();
+
+		if (inFlightRef.current) {
+			queuedContentRef.current = content;
+			setSaveState("saving");
+			return;
+		}
+
+		setSaveState("pending");
 		debounceTimerRef.current = window.setTimeout(() => {
 			queuedContentRef.current = contentRef.current;
 			void flushQueuedSave();
@@ -101,12 +152,26 @@ export function useNotepadEditor({
 	}, [content, clearDebounceTimer, flushQueuedSave]);
 
 	useEffect(() => {
+		isMountedRef.current = true;
+		const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+			if (contentRef.current === lastSavedContentRef.current) {
+				return;
+			}
+
+			event.preventDefault();
+		};
+
+		window.addEventListener("beforeunload", handleBeforeUnload);
+
 		return () => {
+			isMountedRef.current = false;
 			clearDebounceTimer();
+			queuedContentRef.current = null;
+			window.removeEventListener("beforeunload", handleBeforeUnload);
 		};
 	}, [clearDebounceTimer]);
 
-	const handleBlur = () => {
+	const handleBlur = useCallback(() => {
 		clearDebounceTimer();
 
 		if (contentRef.current === lastSavedContentRef.current) {
@@ -115,11 +180,23 @@ export function useNotepadEditor({
 
 		queuedContentRef.current = contentRef.current;
 		void flushQueuedSave();
-	};
+	}, [clearDebounceTimer, flushQueuedSave]);
 
-	const handleContentChange = (nextContent: string) => {
+	const handleContentChange = useCallback((nextContent: string) => {
+		contentRef.current = nextContent;
+
+		if (inFlightRef.current) {
+			queuedContentRef.current = nextContent;
+		}
+
 		setContent(nextContent);
-	};
+	}, []);
+
+	const retrySave = useCallback(() => {
+		clearDebounceTimer();
+		queuedContentRef.current = contentRef.current;
+		void flushQueuedSave();
+	}, [clearDebounceTimer, flushQueuedSave]);
 
 	const handleCopy = async () => {
 		try {
@@ -139,7 +216,7 @@ export function useNotepadEditor({
 	const pasteFromClipboard = async () => {
 		try {
 			const text = await navigator.clipboard.readText();
-			setContent(text);
+			handleContentChange(text);
 			textareaRef.current?.focus();
 			toast("クリップボードの内容を貼り付けました。", {
 				type: "success",
@@ -162,6 +239,7 @@ export function useNotepadEditor({
 		openModal(
 			createElement(PasteConfirmModal, { onConfirm: pasteFromClipboard }),
 			{
+				ariaLabel: "メモ内容の置き換え確認",
 				closeOnBackdrop: true,
 				paddingSize: 6,
 			},
@@ -175,6 +253,7 @@ export function useNotepadEditor({
 		textareaRef,
 		handleBlur,
 		handleContentChange,
+		retrySave,
 		handleCopy,
 		handlePaste,
 	};

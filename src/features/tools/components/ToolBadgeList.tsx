@@ -27,7 +27,7 @@ export default function ToolBadgeList({
 						ariaLabel={template.ariaLabel}
 						triggerToneClassName={template.triggerToneClassName}
 						contentToneClassName={template.contentToneClassName}
-						triggerClassName="h-9 w-9"
+						triggerClassName="h-11 w-11"
 						wrapperClassName="items-start sm:items-end"
 					>
 						{badge.description}

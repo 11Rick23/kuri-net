@@ -1,37 +1,27 @@
-import Link from "next/link";
 import ToolsPageFrame from "@/features/tools/components/ToolsPageFrame";
 import { toolDefinitions } from "@/features/tools/toolDefinitions";
+import HighlightLink from "@/shared/components/motion/HighlightLink";
+import Reveal from "@/shared/components/motion/Reveal";
+import styles from "./Tools.module.css";
 
 export default function ToolsIndexScreen() {
 	return (
-		<ToolsPageFrame
-			title="ツール一覧"
-			description="ちょっとした便利ツールを提供しています。随時追加予定です。"
-		>
-			<div className="grid gap-4 md:grid-cols-2">
+		<ToolsPageFrame title="アプリ一覧" variant="index">
+			<Reveal className={styles.appList}>
 				{toolDefinitions.map((tool) => (
-					<Link
+					<HighlightLink
 						key={tool.id}
 						href={tool.href}
-						className="group rounded-lg border border-ctp-surface1 bg-ctp-base p-6 transition hover:border-ctp-blue/40 hover:bg-ctp-mantle"
+						className={styles.appRow}
 					>
-						<div className="flex h-full flex-col gap-4">
-							<div className="space-y-2">
-								<h2 className="text-2xl font-bold text-ctp-text">
-									{tool.title}
-								</h2>
-								<p className="text-sm leading-7 text-ctp-subtext1">
-									{tool.description}
-								</p>
-							</div>
-
-							<div className="mt-auto pt-2 text-sm font-semibold text-ctp-blue transition group-hover:translate-x-1">
-								ツールを開く →
-							</div>
+						<div className={styles.appCopy}>
+							<h2>{tool.title}</h2>
+							<p>{tool.description}</p>
 						</div>
-					</Link>
+						<div className={styles.appAction}>アプリを開く →</div>
+					</HighlightLink>
 				))}
-			</div>
+			</Reveal>
 		</ToolsPageFrame>
 	);
 }

@@ -22,7 +22,12 @@ export default function InfoModal() {
 	return (
 		<IconButton
 			ariaLabel="使い方を開く"
-			onClick={() => openModal(<InfoModalContent />, { paddingSize: 4 })}
+			onClick={() =>
+				openModal(<InfoModalContent />, {
+					ariaLabel: "PDF結合の使い方",
+					paddingSize: 4,
+				})
+			}
 			size="md"
 			tone="subtle"
 			className="absolute top-2 right-2 p-1"

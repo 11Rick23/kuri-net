@@ -1,0 +1,161 @@
+.equipment {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 16px;
+	margin-top: 72px;
+}
+
+.box {
+	min-width: 0;
+	border: 1px solid var(--site-line);
+	border-radius: var(--site-radius-panel);
+	padding: 20px;
+}
+
+.box h3 {
+	margin-bottom: 14px;
+	color: var(--site-muted);
+	font-family: var(--font-display);
+	font-size: 12px;
+	font-weight: 500;
+	letter-spacing: 0.08em;
+}
+
+.list {
+	list-style: none;
+}
+
+.item[data-group-start="true"] {
+	margin-top: 8px;
+}
+
+.row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	width: fit-content;
+	max-width: 100%;
+	min-height: 28px;
+	padding-block: 3px;
+	color: var(--site-muted);
+	font-size: 14px;
+	line-height: 1.5;
+	text-align: start;
+	overflow-wrap: anywhere;
+	transition: color var(--site-duration-fast) ease;
+}
+
+button.row,
+a.row {
+	cursor: pointer;
+}
+
+button.row:hover span,
+a.row:hover span {
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.icon {
+	flex-shrink: 0;
+	width: 15px;
+	height: 15px;
+}
+
+.deviceButton {
+	transition: color var(--site-duration-state) var(--site-ease);
+}
+
+.item:has(> .deviceDetails:popover-open) > .deviceButton {
+	color: var(--site-on-inverse);
+}
+
+.item:has(> .deviceDetails:popover-open) > .deviceButton::before {
+	transform: scaleX(1);
+}
+
+.deviceDetails {
+	position: fixed;
+	inset: 0;
+	width: max-content;
+	max-width: min(320px, calc(100vw - 32px));
+	height: fit-content;
+	max-height: calc(100dvh - 32px);
+	margin: auto;
+	border: 1px solid var(--site-control-line);
+	border-radius: var(--site-radius-panel);
+	padding: 12px 14px;
+	overflow: auto;
+	background: var(--site-canvas);
+	color: var(--site-ink);
+	clip-path: inset(0 100% 0 0);
+	pointer-events: none;
+	transition:
+		clip-path var(--site-duration-state) var(--site-ease),
+		display var(--site-duration-state) allow-discrete,
+		overlay var(--site-duration-state) allow-discrete;
+}
+
+.deviceDetails:popover-open {
+	clip-path: inset(0);
+	pointer-events: auto;
+}
+
+@starting-style {
+	.deviceDetails:popover-open {
+		clip-path: inset(0 100% 0 0);
+	}
+}
+
+.deviceDetails dl {
+	display: grid;
+	gap: 4px;
+}
+
+.deviceDetails dd {
+	font-size: 13px;
+	line-height: 1.6;
+	overflow-wrap: anywhere;
+}
+
+@supports (position-area: right) {
+	.deviceDetails {
+		inset: auto;
+		position-area: right;
+		position-try-fallbacks:
+			flip-inline,
+			flip-block,
+			flip-block flip-inline,
+			bottom span-right,
+			bottom span-left,
+			top span-right,
+			top span-left;
+		margin: 8px 12px;
+	}
+}
+
+@media (max-width: 599px) {
+	.equipment {
+		grid-template-columns: minmax(0, 1fr);
+		margin-top: 48px;
+	}
+}
+
+@media (pointer: coarse) {
+	.row {
+		min-height: 32px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.row,
+	.deviceDetails {
+		transition: none;
+	}
+}
+
+@media print {
+	.deviceDetails {
+		display: none;
+	}
+}

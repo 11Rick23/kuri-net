@@ -1,44 +1,15 @@
 import ProfileCard from "@/features/profile/components/ProfileCard";
-import {
-	ProfileSection,
-	RichText,
-	TextCard,
-	TopicGrid,
-} from "@/features/profile/components/ProfileSection";
-import {
-	activities,
-	interests,
-	profileParagraphs,
-} from "@/features/profile/data/profileContent";
+import ProfileStory from "@/features/profile/components/ProfileStory";
 import PageContainer from "@/shared/components/layout/PageContainer";
+import styles from "./Profile.module.css";
 
 export default function ProfileScreen() {
 	return (
-		<main className="min-h-screen px-4 pt-24 pb-16 sm:px-6">
-			<PageContainer className="gap-12">
+		<main className={`page-shell ${styles.screen}`}>
+			<PageContainer className={styles.page}>
 				<ProfileCard />
-
-				<ProfileSection title="私について">
-					<TextCard>
-						{profileParagraphs.map((paragraph, index) => (
-							<p
-								key={paragraph.id}
-								className={index === 0 ? undefined : "mt-4"}
-							>
-								<RichText content={paragraph.content} />
-							</p>
-						))}
-					</TextCard>
-				</ProfileSection>
-
-				<ProfileSection title="興味分野">
-					<TopicGrid topics={interests} />
-				</ProfileSection>
-
-				<ProfileSection title="活動・趣味">
-					<TopicGrid topics={activities} />
-				</ProfileSection>
 			</PageContainer>
+			<ProfileStory />
 		</main>
 	);
 }

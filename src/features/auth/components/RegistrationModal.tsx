@@ -1,25 +1,40 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaCheck } from "react-icons/fa";
 import register from "@/features/auth/client/registration";
+import { validateDisplayName } from "@/features/auth/shared/displayName";
 import { useModal } from "@/shared/components/modal/ModalProvider";
 
 export default function RegistrationModalContent() {
 	const [agreed, setAgreed] = useState(false);
-	const [username, setUsername] = useState("");
+	const [displayName, setDisplayName] = useState("");
+	const [isRegistering, setIsRegistering] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
 	const { closeModal } = useModal();
+	const router = useRouter();
+	const displayNameIsValid = validateDisplayName(displayName).ok;
 
 	async function onRegisterButtonPress() {
 		setErrorMessage("");
+		setIsRegistering(true);
 
-		const res = await register(username);
+		try {
+			const result = await register(displayName);
 
-		if (res.ok) {
-			closeModal();
-		} else {
-			setErrorMessage(res.error);
+			if (result.ok) {
+				closeModal();
+				router.refresh();
+			} else {
+				setErrorMessage(result.error);
+			}
+		} catch {
+			setErrorMessage(
+				"アカウント登録に失敗しました。しばらくしてから再度お試しください。",
+			);
+		} finally {
+			setIsRegistering(false);
 		}
 	}
 
@@ -33,7 +48,7 @@ export default function RegistrationModalContent() {
 				<p
 					className="
                 text-sm my-4 p-4 rounded-md
-                bg-app-warning/15 text-ctp-subtext1
+                bg-app-warning/15 text-ctp-text
                 border-2 border-app-warning"
 				>
 					本サービスではパスキーによる認証のみを提供しております。
@@ -60,21 +75,29 @@ export default function RegistrationModalContent() {
                         w-4 h-4 rounded-sm border
                         border-ctp-overlay0
                         peer-checked:bg-ctp-blue
-                        peer-checked:border-ctp-blue-300"
+						peer-checked:border-ctp-blue
+						peer-focus-visible:ring-2
+						peer-focus-visible:ring-app-accent
+						peer-focus-visible:ring-offset-2
+						peer-focus-visible:ring-offset-ctp-surface0"
 					>
 						{agreed && <FaCheck className="text-[10px] text-ctp-crust" />}
 					</span>
 					<span>上記注意事項を読み、同意します</span>
 				</label>
 
+				<label htmlFor="display-name" className="mt-7 text-sm font-medium">
+					表示名
+				</label>
 				<input
-					id="username"
+					id="display-name"
 					type="text"
-					value={username}
-					onChange={(e) => setUsername(e.target.value)}
-					placeholder="パスキーの名称"
+					value={displayName}
+					onChange={(e) => setDisplayName(e.target.value)}
+					placeholder="表示名を入力"
+					maxLength={200}
 					className="
-                        w-full max-w-50 my-7 px-3 py-2
+							w-full max-w-72 mt-2 mb-7 px-3 py-2
                         border border-ctp-overlay0 rounded-md text-center
                         font-bold placeholder:font-medium
                         placeholder:text-xs placeholder:text-ctp-text/80
@@ -83,7 +106,7 @@ export default function RegistrationModalContent() {
 
 				<button
 					type="button"
-					disabled={!agreed}
+					disabled={!agreed || !displayNameIsValid || isRegistering}
 					onClick={async () => {
 						await onRegisterButtonPress();
 					}}
@@ -91,12 +114,12 @@ export default function RegistrationModalContent() {
                         rounded-md
                         px-5 py-2 font-medium
 						${
-							agreed
+							agreed && displayNameIsValid && !isRegistering
 								? "cursor-pointer bg-ctp-blue text-ctp-crust hover:opacity-90"
 								: "cursor-not-allowed bg-ctp-surface1 text-ctp-text/50"
 						}`}
 				>
-					登録
+					{isRegistering ? "登録中…" : "登録"}
 				</button>
 
 				{errorMessage && (

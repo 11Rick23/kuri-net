@@ -1,0 +1,4 @@
+interface:
+  display_name: "Kuri-net Runtime"
+  short_description: "kuri-net Bun and mise development workflow"
+  default_prompt: "Use $kuri-net-runtime-guideline when running or changing kuri-net Bun, mise, database, or verification tasks."

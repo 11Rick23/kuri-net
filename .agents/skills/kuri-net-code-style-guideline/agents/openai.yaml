@@ -1,0 +1,4 @@
+interface:
+  display_name: "Kuri-net Code Style"
+  short_description: "kuri-net TypeScript and React conventions"
+  default_prompt: "Use $kuri-net-code-style-guideline when changing kuri-net TypeScript, React, or Biome-checked code."

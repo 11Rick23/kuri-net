@@ -15,6 +15,20 @@
 			"when": 1775289194600,
 			"tag": "0001_small_notepad",
 			"breakpoints": true
+		},
+		{
+			"idx": 2,
+			"version": "7",
+			"when": 1784264695870,
+			"tag": "0002_real_marvel_apes",
+			"breakpoints": true
+		},
+		{
+			"idx": 3,
+			"version": "7",
+			"when": 1784267887327,
+			"tag": "0003_default_display_name",
+			"breakpoints": true
 		}
 	]
 }

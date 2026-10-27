@@ -2,6 +2,7 @@
 
 import CopyButton from "@/features/tools/notepad/components/CopyButton";
 import PasteButton from "@/features/tools/notepad/components/PasteButton";
+import { countUnicodeCodePoints } from "@/features/tools/notepad/domain/content";
 import type { SaveState } from "@/features/tools/notepad/hooks/useNotepadEditor";
 import { useNotepadEditor } from "@/features/tools/notepad/hooks/useNotepadEditor";
 import {
@@ -30,6 +31,7 @@ export default function NotepadEditor({
 		textareaRef,
 		handleBlur,
 		handleContentChange,
+		retrySave,
 		handleCopy,
 		handlePaste,
 	} = useNotepadEditor({
@@ -38,17 +40,15 @@ export default function NotepadEditor({
 	});
 
 	const lineCount = content.length === 0 ? 0 : content.split("\n").length;
+	const characterCount = countUnicodeCodePoints(content);
 
 	return (
-		<section
-			aria-label="メモ編集"
-			className="flex flex-col gap-4 rounded-lg border border-ctp-surface1 bg-ctp-base p-4 sm:p-5"
-		>
+		<section aria-label="メモ編集" className="flex flex-col gap-5">
 			<div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
 				<div>
 					<div
 						aria-live="polite"
-						className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-ctp-surface1 bg-ctp-mantle px-3 py-2"
+						className="inline-flex min-h-11 items-center gap-2 py-2"
 					>
 						<span
 							aria-hidden
@@ -59,6 +59,15 @@ export default function NotepadEditor({
 						>
 							{getSaveStatusMessage(saveState, lastSavedAt)}
 						</p>
+						{saveState === "error" && (
+							<button
+								type="button"
+								onClick={retrySave}
+								className="rounded-md px-2 py-1 text-xs font-semibold text-ctp-red underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ctp-blue"
+							>
+								再試行
+							</button>
+						)}
 					</div>
 				</div>
 				<div className="flex flex-wrap gap-2 sm:justify-end">
@@ -67,7 +76,7 @@ export default function NotepadEditor({
 				</div>
 			</div>
 
-			<div className="overflow-hidden rounded-lg border border-ctp-surface1 bg-ctp-mantle">
+			<div className="overflow-hidden rounded-md border border-ctp-overlay0 bg-ctp-base">
 				<div className="flex items-center justify-between gap-3 border-b border-ctp-surface1 px-4 py-3">
 					<label
 						className="text-sm font-semibold text-ctp-text"
@@ -76,7 +85,7 @@ export default function NotepadEditor({
 						メモ本文
 					</label>
 					<p className="shrink-0 text-xs font-semibold text-ctp-subtext0">
-						{content.length}文字 / {lineCount}行
+						{characterCount}文字 / {lineCount}行
 					</p>
 				</div>
 				<textarea

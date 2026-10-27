@@ -3,9 +3,17 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type React from "react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { FaBars, FaXmark } from "react-icons/fa6";
 import { toolDefinitions } from "@/features/tools/toolDefinitions";
+import {
+	decideDialogKeyboardAction,
+	lockBodyScroll,
+	resolveFocusReturnTarget,
+} from "@/shared/components/modal/dialogAccessibility";
+import styles from "../Tools.module.css";
+
+const menuID = "tools-navigation-menu";
 
 function NavLink({
 	href,
@@ -24,18 +32,12 @@ function NavLink({
 		<Link
 			href={href}
 			onClick={onClick}
-			className={[
-				"block rounded-lg border px-4 py-3 transition",
-				active
-					? "border-ctp-blue bg-ctp-blue/10"
-					: "border-ctp-surface1 bg-ctp-mantle hover:border-ctp-overlay0",
-			].join(" ")}
+			aria-current={active ? "page" : undefined}
+			className={styles.navLink}
 		>
-			<div className="space-y-1">
-				<p className="font-semibold text-ctp-text">{label}</p>
-				{description && (
-					<p className="text-sm leading-6 text-ctp-subtext1">{description}</p>
-				)}
+			<div>
+				<p className={styles.navLabel}>{label}</p>
+				{description && <p className={styles.navDescription}>{description}</p>}
 			</div>
 		</Link>
 	);
@@ -47,64 +49,155 @@ export default function ToolsShell({
 	children: React.ReactNode;
 }) {
 	const pathname = usePathname();
+	const menuButtonRef = useRef<HTMLButtonElement | null>(null);
+	const menuRef = useRef<HTMLElement | null>(null);
+	const previouslyFocusedElementRef = useRef<HTMLElement | null>(null);
 	const [open, setOpen] = useState(false);
+
+	const closeMenu = useCallback(() => {
+		setOpen(false);
+	}, []);
 
 	useEffect(() => {
 		if (pathname) {
-			setOpen(false);
+			closeMenu();
 		}
-	}, [pathname]);
+	}, [pathname, closeMenu]);
+
+	useEffect(() => {
+		if (!open) return;
+
+		const unlockBodyScroll = lockBodyScroll(document.body.style);
+
+		const focusFrame = window.requestAnimationFrame(() => {
+			menuRef.current
+				?.querySelector<HTMLButtonElement>("[data-menu-close]")
+				?.focus();
+		});
+
+		const onKeyDown = (event: KeyboardEvent) => {
+			const menu = menuRef.current;
+			if (!menu) return;
+
+			const focusableElements = Array.from(
+				menu.querySelectorAll<HTMLElement>(
+					"a[href], button:not([disabled]), [tabindex]:not([tabindex='-1'])",
+				),
+			);
+			const firstElement = focusableElements[0];
+			const lastElement = focusableElements.at(-1);
+			const activeElement = document.activeElement;
+			const activePosition =
+				activeElement === firstElement && firstElement === lastElement
+					? "only"
+					: activeElement === menu
+						? "container"
+						: activeElement === firstElement
+							? "first"
+							: activeElement === lastElement
+								? "last"
+								: menu.contains(activeElement)
+									? "inside"
+									: "outside";
+			const action = decideDialogKeyboardAction({
+				key: event.key,
+				shiftKey: event.shiftKey,
+				closeOnEscape: true,
+				focusableCount: focusableElements.length,
+				activePosition,
+			});
+
+			if (action === "none") return;
+
+			event.preventDefault();
+			if (action === "close") {
+				closeMenu();
+			} else if (action === "focus-container") {
+				menu.focus();
+			} else if (action === "focus-first") {
+				firstElement?.focus();
+			} else {
+				lastElement?.focus();
+			}
+		};
+
+		document.addEventListener("keydown", onKeyDown);
+
+		return () => {
+			window.cancelAnimationFrame(focusFrame);
+			document.removeEventListener("keydown", onKeyDown);
+			unlockBodyScroll();
+
+			const previouslyFocusedElement = previouslyFocusedElementRef.current;
+			previouslyFocusedElementRef.current = null;
+			window.requestAnimationFrame(() => {
+				resolveFocusReturnTarget(
+					previouslyFocusedElement,
+					() => menuButtonRef.current,
+				)?.focus();
+			});
+		};
+	}, [open, closeMenu]);
 
 	return (
-		<div className="min-h-screen">
+		<div className={styles.shell}>
 			<button
+				ref={menuButtonRef}
 				type="button"
-				aria-label={open ? "サイドメニューを閉じる" : "サイドメニューを開く"}
+				aria-label="サイドメニューを開く"
+				aria-controls={menuID}
 				aria-expanded={open}
-				onClick={() => setOpen((prev) => !prev)}
-				className="
-				fixed top-4 left-4 z-90 inline-flex h-11 w-11
-				items-center justify-center rounded-full
-				border border-ctp-surface1
-				bg-ctp-base/95
-				text-ctp-text
-				backdrop-blur-md transition
-				hover:bg-ctp-surface0 hover:cursor-pointer"
+				aria-hidden={open}
+				inert={open}
+				onClick={() => {
+					if (document.activeElement instanceof HTMLElement) {
+						previouslyFocusedElementRef.current = document.activeElement;
+					}
+					setOpen(true);
+				}}
+				className={[
+					styles.menuButton,
+					open ? styles.menuButtonHidden : "",
+				].join(" ")}
 			>
-				{open ? <FaXmark size={18} /> : <FaBars size={18} />}
+				<FaBars size={18} aria-hidden="true" />
 			</button>
 
 			{open && (
-				<button
-					type="button"
-					aria-label="サイドメニューを閉じる"
-					onClick={() => setOpen(false)}
-					className="fixed inset-0 z-75 bg-ctp-crust/60 backdrop-blur-[1px]"
+				<div
+					aria-hidden="true"
+					onClick={closeMenu}
+					className={styles.backdrop}
 				/>
 			)}
 
 			<aside
-				className={[
-					"fixed inset-y-0 left-0 z-80 w-[min(20rem,86vw)] border-r border-ctp-surface1 bg-ctp-base px-4 pb-6 pt-20 transition-transform duration-200",
-					open ? "translate-x-0" : "-translate-x-full",
-				].join(" ")}
+				ref={menuRef}
+				tabIndex={-1}
+				id={menuID}
+				role="dialog"
+				aria-label="アプリメニュー"
+				aria-modal={open ? true : undefined}
+				aria-hidden={!open}
+				inert={!open}
+				className={[styles.drawer, open ? styles.drawerOpen : ""].join(" ")}
 			>
-				<div className="space-y-2 px-1 pb-4">
-					<h2 className="text-2xl font-bold text-ctp-text">ツールメニュー</h2>
-					<p className="text-sm leading-6 text-ctp-subtext1">
-						ここから各ツールへ移動できます。
-					</p>
+				<button
+					data-menu-close
+					type="button"
+					aria-label="サイドメニューを閉じる"
+					onClick={closeMenu}
+					className={styles.closeButton}
+				>
+					<FaXmark size={18} aria-hidden="true" />
+				</button>
+
+				<div className={styles.drawerHeader}>
+					<h2>アプリメニュー</h2>
+					<p>ここから各アプリへ移動できます。</p>
 				</div>
 
-				<nav className="space-y-3">
-					{/* ツール一覧はナビゲーションバーに表示しなくていいかな */}
-					{/* <NavLink
-						href="/tools"
-						label="ツール一覧"
-						description="使えるツールを一覧で確認できます。"
-						active={pathname === "/tools"}
-						onClick={() => setOpen(false)}
-					/> */}
+				<nav className={styles.drawerNav}>
 					{toolDefinitions.map((tool) => (
 						<NavLink
 							key={tool.id}
@@ -112,13 +205,13 @@ export default function ToolsShell({
 							label={tool.title}
 							description={tool.description}
 							active={pathname === tool.href}
-							onClick={() => setOpen(false)}
+							onClick={closeMenu}
 						/>
 					))}
 				</nav>
 			</aside>
 
-			<div className="pt-20">{children}</div>
+			{children}
 		</div>
 	);
 }

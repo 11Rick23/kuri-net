@@ -1,0 +1,4 @@
+interface:
+  display_name: "Kuri-net Skill Maintenance"
+  short_description: "Maintain kuri-net shared skills and undefined conventions"
+  default_prompt: "Use $kuri-net-skill-maintenance to update kuri-net shared skills and define a convention where the project has no established rule."

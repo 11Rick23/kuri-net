@@ -1,0 +1,4 @@
+interface:
+  display_name: "Kuri-net UI"
+  short_description: "kuri-net UI and accessibility conventions"
+  default_prompt: "Use $kuri-net-ui-guideline when changing kuri-net layout, components, colors, or interaction design."

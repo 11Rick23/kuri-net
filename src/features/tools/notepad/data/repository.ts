@@ -1,6 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db } from "@/database";
 import { notepads } from "@/database/schema";
+import { validateNotepadContent } from "@/features/tools/notepad/domain/content";
 import { InvalidInputError } from "@/shared/errors/base";
 import { DatabaseError } from "@/shared/errors/database";
 import type { Notepad } from "@/types/database";
@@ -35,8 +36,10 @@ export async function saveNotepad(
 		throw new InvalidInputError("指定されたユーザーIDが無効です。");
 	}
 
-	if (typeof content !== "string") {
-		throw new InvalidInputError("指定されたメモ内容が無効です。");
+	const validated = validateNotepadContent(content);
+
+	if (!validated.ok) {
+		throw new InvalidInputError(validated.error);
 	}
 
 	try {
@@ -44,12 +47,12 @@ export async function saveNotepad(
 			.insert(notepads)
 			.values({
 				userID,
-				content,
+				content: validated.value,
 			})
 			.onConflictDoUpdate({
 				target: notepads.userID,
 				set: {
-					content,
+					content: validated.value,
 					updatedAt: new Date(),
 				},
 			})

@@ -18,7 +18,7 @@ export default function ColorModeButton() {
 	);
 
 	if (!mounted) {
-		return <div className="h-5 w-5 rounded-full bg-ctp-surface1" />;
+		return <div className="h-11 w-11" />;
 	}
 
 	const isDark = resolvedTheme === "dark";

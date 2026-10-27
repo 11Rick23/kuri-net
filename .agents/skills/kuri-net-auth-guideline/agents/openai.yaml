@@ -1,0 +1,4 @@
+interface:
+  display_name: "Kuri-net Authentication"
+  short_description: "kuri-net authentication and authorization rules"
+  default_prompt: "Use $kuri-net-auth-guideline when changing kuri-net authentication, sessions, passkeys, or protected actions."
