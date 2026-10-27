@@ -1,11 +1,22 @@
 import type { Metadata } from "next";
-import { M_PLUS_1 } from "next/font/google";
+import { Jost, Zen_Kaku_Gothic_New } from "next/font/google";
 import "./globals.css";
+import HomeIntro from "@/features/home/HomeIntro";
 import Header from "@/shared/components/header/Header";
+import PageTransition from "@/shared/components/motion/PageTransition";
 import Providers from "./providers";
 
-const mPlus1 = M_PLUS_1({
+const jost = Jost({
 	subsets: ["latin"],
+	variable: "--font-jost",
+	display: "swap",
+});
+
+const zenKaku = Zen_Kaku_Gothic_New({
+	weight: ["400", "500", "700"],
+	subsets: ["latin"],
+	variable: "--font-zen",
+	display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -23,7 +34,9 @@ export const metadata: Metadata = {
 		type: "website",
 		images: [
 			{
-				url: "/favicon/kuri-net-peach-light.webp",
+				url: "/logo.png",
+				width: 512,
+				height: 512,
 				alt: "kuri-net",
 			},
 		],
@@ -31,14 +44,14 @@ export const metadata: Metadata = {
 	icons: {
 		icon: [
 			{
-				url: "/favicon/kuri-net-peach-light.webp",
-				type: "image/webp",
-				media: "(prefers-color-scheme: light)",
+				url: "/favicon.ico",
+				type: "image/x-icon",
+				sizes: "16x16 32x32 48x48",
 			},
 			{
-				url: "/favicon/kuri-net-peach-dark.webp",
-				type: "image/webp",
-				media: "(prefers-color-scheme: dark)",
+				url: "/logo.svg",
+				type: "image/svg+xml",
+				sizes: "any",
 			},
 		],
 	},
@@ -48,11 +61,14 @@ export default function RootLayout({
 	children,
 }: Readonly<{ children: React.ReactNode }>) {
 	return (
-		<html lang="ja" data-scroll-behavior="smooth" suppressHydrationWarning>
+		<html
+			lang="ja"
+			className={`${jost.variable} ${zenKaku.variable}`}
+			data-scroll-behavior="smooth"
+			suppressHydrationWarning
+		>
 			<head />
-			<body
-				className={`${mPlus1.className} antialiased transition-colors duration-150`}
-			>
+			<body className="antialiased">
 				<a
 					href="#main-content"
 					className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-80 focus:rounded-md focus:border focus:border-ctp-blue focus:bg-ctp-base focus:px-3 focus:py-2 focus:text-sm focus:font-semibold focus:text-ctp-text"
@@ -60,8 +76,10 @@ export default function RootLayout({
 					本文へ移動
 				</a>
 				<Providers>
-					<Header />
-					<div id="main-content">{children}</div>
+					<HomeIntro>
+						<Header />
+						<PageTransition>{children}</PageTransition>
+					</HomeIntro>
 				</Providers>
 			</body>
 		</html>

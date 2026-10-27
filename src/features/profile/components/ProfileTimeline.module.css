@@ -1,0 +1,429 @@
+.timeline {
+	--timeline-enter-origin: left;
+	--timeline-leave-origin: right;
+	--timeline-text-shift: 2px;
+	margin-top: 80px;
+}
+
+.timeline[data-direction="backward"] {
+	--timeline-enter-origin: right;
+	--timeline-leave-origin: left;
+	--timeline-text-shift: -2px;
+}
+
+.timelineScroll {
+	overflow-x: auto;
+	overscroll-behavior-x: contain;
+	scroll-padding-inline: 12px;
+	padding-block: 8px 16px;
+	scrollbar-width: thin;
+	scrollbar-color: var(--site-control-line) transparent;
+}
+
+.track {
+	display: grid;
+	grid-template-columns: repeat(5, minmax(0, 1fr));
+	min-width: 600px;
+	padding-inline: 8px;
+}
+
+.stop {
+	position: relative;
+	display: flex;
+	justify-content: center;
+}
+
+.stop::before {
+	position: absolute;
+	top: 44px;
+	right: 0;
+	left: 0;
+	height: 1px;
+	background: var(--site-control-line);
+	content: "";
+}
+
+.stop:first-child::before {
+	left: 50%;
+}
+
+.stop:last-child::before {
+	right: 50%;
+}
+
+.dateButton {
+	--hover-enter-origin: var(--timeline-enter-origin);
+	--hover-leave-origin: var(--timeline-leave-origin);
+	--year-shift: var(--timeline-text-shift);
+	position: relative;
+	isolation: isolate;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 88px;
+	height: 88px;
+	border: 1px solid var(--site-control-line);
+	border-radius: 50%;
+	overflow: hidden;
+	background: var(--site-canvas);
+	color: var(--site-ink);
+	cursor: pointer;
+	scroll-margin-inline: 8px;
+	transition:
+		border-color var(--site-duration-fast) ease,
+		color var(--site-duration-fast) ease,
+		transform var(--site-duration-fast) var(--site-ease);
+}
+
+.dateButton::before,
+.dateButton::after {
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	content: "";
+	transform: scaleX(0);
+	transform-origin: var(--timeline-leave-origin);
+	transition: transform var(--site-duration-state) var(--site-ease);
+}
+
+.dateButton::before {
+	z-index: -1;
+	background: var(--site-ink);
+}
+
+.dateButton::after {
+	z-index: -2;
+	background: var(--site-surface-muted);
+	transform-origin: var(--hover-leave-origin);
+}
+
+.dateButton[data-position="past"] {
+	--hover-enter-origin: right;
+	--hover-leave-origin: left;
+	--year-shift: -2px;
+}
+
+.dateButton[data-position="future"] {
+	--hover-enter-origin: left;
+	--hover-leave-origin: right;
+	--year-shift: 2px;
+}
+
+.dateButton[aria-selected="true"] {
+	border-color: var(--site-ink);
+	color: var(--site-canvas);
+}
+
+.dateButton[aria-selected="true"]::before {
+	transform: scaleX(1);
+	transform-origin: var(--timeline-enter-origin);
+}
+
+.dateButton:focus-visible::after {
+	transform: scaleX(1);
+	transform-origin: var(--hover-enter-origin);
+}
+
+.dateButton:active {
+	transform: scale(0.97);
+}
+
+.dateButton:focus-visible {
+	outline: 2px solid var(--site-ink);
+	outline-offset: 5px;
+}
+
+.year {
+	font-family: var(--font-display);
+	font-size: 26px;
+	font-weight: 500;
+	line-height: 1.2;
+	transition: transform var(--site-duration-fast) var(--site-ease);
+}
+
+.dateButton:focus-visible .year {
+	transform: translateX(var(--year-shift));
+}
+
+@media (hover: hover) {
+	.dateButton:hover {
+		border-color: var(--site-ink);
+	}
+
+	.dateButton:hover::after {
+		transform: scaleX(1);
+		transform-origin: var(--hover-enter-origin);
+	}
+
+	.dateButton:hover .year {
+		transform: translateX(var(--year-shift));
+	}
+}
+
+.age {
+	margin-top: 4px;
+	font-size: 13px;
+}
+
+.panel {
+	margin-top: 20px;
+}
+
+.panel[hidden] {
+	display: none;
+}
+
+.periodHeading {
+	position: relative;
+	z-index: 1;
+	border: 1px solid #3c4049;
+	border-radius: var(--site-radius-panel);
+	padding: 22px 28px;
+	background: #151619;
+	color: #f4f4f6;
+}
+
+.range {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) clamp(24px, 3vw, 40px) minmax(0, 1fr);
+	align-items: center;
+	gap: clamp(10px, 2vw, 24px);
+	font-family: var(--font-display);
+	font-weight: 500;
+	letter-spacing: -0.025em;
+	line-height: 1.2;
+}
+
+.rangeDate {
+	display: flex;
+	align-items: baseline;
+	justify-self: end;
+	white-space: nowrap;
+}
+
+.rangeDate:last-child {
+	justify-self: start;
+}
+
+.rangeCurrent {
+	font-size: clamp(24px, 3.5vw, 40px);
+}
+
+.rangeYear {
+	font-size: clamp(30px, 4.5vw, 48px);
+}
+
+.rangeMonth {
+	font-size: clamp(18px, 2.4vw, 25px);
+	color: #c4c7ce;
+}
+
+.rangeSeparator {
+	width: 100%;
+	height: 2px;
+	background: #c4c7ce;
+}
+
+.events {
+	padding-top: 28px;
+	list-style: none;
+}
+
+.event {
+	--event-rail: 48px;
+	position: relative;
+	display: grid;
+	grid-template-columns: 96px minmax(0, 1fr);
+	gap: 20px;
+	padding-bottom: 24px;
+}
+
+.event::before {
+	position: absolute;
+	top: -28px;
+	bottom: 0;
+	left: var(--event-rail);
+	width: 1px;
+	background: var(--site-line);
+	content: "";
+}
+
+.event:last-child {
+	padding-bottom: 0;
+}
+
+.event:last-child::before {
+	bottom: calc(100% - 36px);
+}
+
+.eventDate {
+	position: relative;
+	align-self: start;
+	justify-self: center;
+	margin-top: 20px;
+	padding-block: 4px;
+	background: var(--site-canvas);
+	color: var(--site-muted);
+	font-size: 13px;
+	line-height: 1.6;
+	text-align: center;
+	white-space: pre;
+}
+
+.eventDate > span {
+	display: inline-block;
+}
+
+.eventCard {
+	--event-paper: var(--site-surface-muted);
+	min-width: 0;
+	border: 1px solid var(--site-line);
+	border-radius: var(--site-radius-panel);
+	padding: 24px 28px;
+	background: var(--event-paper);
+}
+
+.eventCard h5 {
+	font-size: 21px;
+	font-weight: 500;
+	line-height: 1.6;
+}
+
+.copyLayout {
+	position: relative;
+	margin-top: 16px;
+}
+
+.eventCopy,
+.eventText {
+	color: var(--site-ink);
+	font-size: 15px;
+	line-height: 2;
+	overflow-wrap: anywhere;
+}
+
+.eventCopy[data-collapsed="true"] {
+	overflow: hidden;
+}
+
+.eventText p + p {
+	margin-top: 14px;
+}
+
+.expandFade,
+.collapseButton {
+	display: flex;
+	align-items: flex-end;
+	justify-content: center;
+	width: 100%;
+	min-height: 44px;
+	border-radius: var(--site-radius-control);
+	padding: 10px;
+	color: var(--site-ink);
+	cursor: pointer;
+}
+
+.expandFade {
+	position: absolute;
+	inset: auto 0 0;
+	height: 92px;
+	background: linear-gradient(transparent, var(--event-paper) 75%);
+}
+
+.collapseButton {
+	margin-top: 12px;
+}
+
+.expandFade svg,
+.collapseButton svg {
+	width: 22px;
+	height: 22px;
+}
+
+.expandFade:hover svg,
+.collapseButton:hover svg {
+	stroke-width: 2.5;
+}
+
+.expandFade:focus-visible,
+.collapseButton:focus-visible {
+	outline: 2px solid var(--site-ink);
+	outline-offset: -2px;
+}
+
+@media (max-width: 767px) {
+	.timeline {
+		margin-top: 56px;
+	}
+
+	.periodHeading {
+		padding: 20px 14px;
+	}
+
+	.event {
+		--event-rail: 36px;
+		grid-template-columns: 72px minmax(0, 1fr);
+		gap: 12px;
+		padding-bottom: 20px;
+	}
+
+	.eventDate {
+		font-size: 12px;
+	}
+
+	.eventCard {
+		padding: 20px 18px;
+	}
+
+	.eventCard h5 {
+		font-size: 18px;
+	}
+
+	.eventCopy,
+	.eventText {
+		font-size: 14px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.dateButton,
+	.dateButton::before,
+	.dateButton::after {
+		transition: none;
+	}
+
+	.dateButton:active {
+		transform: none;
+	}
+
+	.dateButton:is(:hover, :focus-visible) .year {
+		transform: none;
+		transition: none;
+	}
+}
+
+@media print {
+	.timelineScroll,
+	.expandFade,
+	.collapseButton {
+		display: none;
+	}
+
+	@layer base {
+		.panel[hidden] {
+			/* biome-ignore lint/complexity/noImportantStyles: Tailwindのbase層にあるhiddenの指定を印刷時だけ上書きする。 */
+			display: block !important;
+		}
+	}
+
+	.panel {
+		break-inside: avoid;
+	}
+
+	.eventCopy[data-collapsed="true"] {
+		/* biome-ignore lint/complexity/noImportantStyles: 印刷では画面上の省略状態より全文表示を優先する。 */
+		max-height: none !important;
+		overflow: visible;
+	}
+}

@@ -1,0 +1,24 @@
+.handwriting {
+	display: block;
+	width: 6.21em;
+	max-width: 100%;
+	height: auto;
+	overflow: visible;
+}
+
+.lettering {
+	font-family: var(--font-body);
+	font-size: 100px;
+	font-weight: 500;
+	letter-spacing: 3.5px;
+}
+
+.handwriting[data-writing] .completeMask {
+	display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.handwriting[data-writing] .completeMask {
+		display: block;
+	}
+}

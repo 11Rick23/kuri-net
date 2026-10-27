@@ -36,7 +36,7 @@ const paddingClassName: Record<number, string> = {
 	0: "p-0",
 	4: "p-4",
 	6: "p-6",
-	12: "p-12",
+	12: "px-6 pb-8 pt-16 sm:p-12",
 };
 
 const focusableSelector = [
@@ -195,7 +195,7 @@ export function ModalProvider({ children }: { children: ReactNode }) {
 							aria-modal="true"
 							tabIndex={-1}
 							className={[
-								"relative overflow-auto rounded-lg border border-ctp-overlay0 bg-ctp-surface0 text-ctp-text",
+								"relative max-h-[calc(100dvh-2rem)] max-w-full overflow-auto rounded-lg border border-ctp-overlay0 bg-ctp-base text-ctp-text",
 								paddingClassName[state.options.paddingSize] ?? "p-12",
 							].join(" ")}
 						>

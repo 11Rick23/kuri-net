@@ -11,6 +11,7 @@ import {
 	lockBodyScroll,
 	resolveFocusReturnTarget,
 } from "@/shared/components/modal/dialogAccessibility";
+import styles from "../Tools.module.css";
 
 const menuID = "tools-navigation-menu";
 
@@ -32,18 +33,11 @@ function NavLink({
 			href={href}
 			onClick={onClick}
 			aria-current={active ? "page" : undefined}
-			className={[
-				"block rounded-lg border px-4 py-3 transition",
-				active
-					? "border-ctp-blue bg-ctp-blue/10"
-					: "border-ctp-surface1 bg-ctp-mantle hover:border-ctp-overlay0",
-			].join(" ")}
+			className={styles.navLink}
 		>
-			<div className="space-y-1">
-				<p className="font-semibold text-ctp-text">{label}</p>
-				{description && (
-					<p className="text-sm leading-6 text-ctp-subtext1">{description}</p>
-				)}
+			<div>
+				<p className={styles.navLabel}>{label}</p>
+				{description && <p className={styles.navDescription}>{description}</p>}
 			</div>
 		</Link>
 	);
@@ -146,7 +140,7 @@ export default function ToolsShell({
 	}, [open, closeMenu]);
 
 	return (
-		<div className="min-h-screen">
+		<div className={styles.shell}>
 			<button
 				ref={menuButtonRef}
 				type="button"
@@ -162,18 +156,18 @@ export default function ToolsShell({
 					setOpen(true);
 				}}
 				className={[
-					"fixed top-4 left-4 z-90 inline-flex h-11 w-11 items-center justify-center rounded-full border border-ctp-surface1 bg-ctp-base/95 text-ctp-text backdrop-blur-md transition hover:cursor-pointer hover:bg-ctp-surface0",
-					open ? "pointer-events-none opacity-0" : "opacity-100",
+					styles.menuButton,
+					open ? styles.menuButtonHidden : "",
 				].join(" ")}
 			>
-				<FaBars size={18} />
+				<FaBars size={18} aria-hidden="true" />
 			</button>
 
 			{open && (
 				<div
 					aria-hidden="true"
 					onClick={closeMenu}
-					className="fixed inset-0 z-75 bg-ctp-crust/60 backdrop-blur-[1px]"
+					className={styles.backdrop}
 				/>
 			)}
 
@@ -186,29 +180,24 @@ export default function ToolsShell({
 				aria-modal={open ? true : undefined}
 				aria-hidden={!open}
 				inert={!open}
-				className={[
-					"fixed inset-y-0 left-0 z-80 w-[min(20rem,86vw)] border-r border-ctp-surface1 bg-ctp-base px-4 pb-6 pt-20 transition-transform duration-200",
-					open ? "translate-x-0" : "-translate-x-full",
-				].join(" ")}
+				className={[styles.drawer, open ? styles.drawerOpen : ""].join(" ")}
 			>
 				<button
 					data-menu-close
 					type="button"
 					aria-label="サイドメニューを閉じる"
 					onClick={closeMenu}
-					className="absolute top-4 left-4 z-10 inline-flex h-11 w-11 items-center justify-center rounded-full border border-ctp-surface1 bg-ctp-base/95 text-ctp-text transition hover:cursor-pointer hover:bg-ctp-surface0"
+					className={styles.closeButton}
 				>
-					<FaXmark size={18} />
+					<FaXmark size={18} aria-hidden="true" />
 				</button>
 
-				<div className="space-y-2 px-1 pb-4">
-					<h2 className="text-2xl font-bold text-ctp-text">アプリメニュー</h2>
-					<p className="text-sm leading-6 text-ctp-subtext1">
-						ここから各アプリへ移動できます。
-					</p>
+				<div className={styles.drawerHeader}>
+					<h2>アプリメニュー</h2>
+					<p>ここから各アプリへ移動できます。</p>
 				</div>
 
-				<nav className="space-y-3">
+				<nav className={styles.drawerNav}>
 					{toolDefinitions.map((tool) => (
 						<NavLink
 							key={tool.id}
@@ -222,7 +211,7 @@ export default function ToolsShell({
 				</nav>
 			</aside>
 
-			<div className="pt-20">{children}</div>
+			{children}
 		</div>
 	);
 }

@@ -89,7 +89,7 @@ export function FileList({
 
 	if (files.length === 0) {
 		return (
-			<div className="rounded-lg border border-ctp-surface1 bg-ctp-mantle px-5 py-6 text-center">
+			<div className="px-1 py-4 text-center">
 				<p className="text-sm font-semibold text-ctp-text">
 					まだPDFが選択されていません
 				</p>

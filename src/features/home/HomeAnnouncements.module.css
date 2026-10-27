@@ -1,0 +1,136 @@
+.panel {
+	position: relative;
+	width: min(100%, 32rem);
+	height: 200px;
+	margin-top: 36px;
+	padding: 24px;
+	border: 1px solid var(--site-line);
+	border-radius: var(--site-radius-panel);
+	background: var(--site-surface);
+	color: var(--site-ink);
+	overflow-wrap: anywhere;
+}
+
+.heading {
+	margin-bottom: 12px;
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 1.5;
+}
+
+.entryHeading {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 4px 12px;
+}
+
+.date {
+	color: var(--site-muted);
+	font-size: 12px;
+	font-variant-numeric: tabular-nums;
+	line-height: 1.5;
+	white-space: nowrap;
+}
+
+.title {
+	font-size: 16px;
+	font-weight: 500;
+	line-height: 1.7;
+}
+
+.body,
+.empty {
+	margin-top: 10px;
+	color: var(--site-muted);
+	font-size: 14px;
+	line-height: 1.9;
+	white-space: pre-line;
+}
+
+.panel > .entry .entryHeading {
+	flex-wrap: nowrap;
+}
+
+.panel > .entry .title {
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.panel > .entry .date {
+	flex-shrink: 0;
+}
+
+.panel > .entry .body {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 3;
+	overflow: hidden;
+}
+
+.archive {
+	position: absolute;
+	right: 16px;
+	bottom: 12px;
+	z-index: 1;
+}
+
+.archiveButton {
+	display: flex;
+	align-items: flex-end;
+	min-height: 44px;
+	padding-inline: 8px;
+	color: var(--site-muted);
+	cursor: pointer;
+	font-size: 13px;
+	line-height: 1.5;
+	text-decoration: underline;
+	text-decoration-color: var(--site-control-line);
+	text-underline-offset: 4px;
+}
+
+.archiveLabel {
+	background: var(--site-surface);
+}
+
+.archiveButton:hover,
+.archiveButton:focus-visible {
+	color: var(--site-ink);
+}
+
+.archiveDialog {
+	width: min(36rem, calc(100vw - 2rem - 2px));
+	padding: 48px 24px 24px;
+	overflow-wrap: anywhere;
+}
+
+.archiveTitle {
+	margin-bottom: 24px;
+	font-size: 20px;
+	font-weight: 500;
+	line-height: 1.5;
+}
+
+.pastEntries {
+	display: grid;
+	gap: 20px;
+}
+
+.pastEntries .entry + .entry {
+	padding-top: 20px;
+	border-top: 1px solid var(--site-line);
+}
+
+@media (max-width: 860px) {
+	.panel {
+		margin-top: 24px;
+	}
+}
+
+@media (max-width: 399px) {
+	.panel {
+		padding: 20px;
+	}
+}

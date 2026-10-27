@@ -11,7 +11,10 @@ export default function PageContainer({
 }: PageContainerProps) {
 	return (
 		<div
-			className={["mx-auto flex w-full max-w-5xl flex-col", className]
+			className={[
+				"mx-auto flex w-full max-w-(--site-content-width) flex-col",
+				className,
+			]
 				.filter(Boolean)
 				.join(" ")}
 		>

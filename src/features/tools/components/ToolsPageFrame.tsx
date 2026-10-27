@@ -2,11 +2,13 @@ import type React from "react";
 import type { ToolBadgeDefinition } from "@/features/tools/badgeTemplates";
 import ToolBadgeList from "@/features/tools/components/ToolBadgeList";
 import PageContainer from "@/shared/components/layout/PageContainer";
+import styles from "../Tools.module.css";
 
 type ToolsPageFrameProps = {
 	title: string;
 	description?: React.ReactNode;
 	badges?: ToolBadgeDefinition[];
+	variant?: "index" | "app";
 	children: React.ReactNode;
 };
 
@@ -14,24 +16,25 @@ export default function ToolsPageFrame({
 	title,
 	description,
 	badges = [],
+	variant = "app",
 	children,
 }: ToolsPageFrameProps) {
 	return (
-		<main className="min-h-[calc(100vh-5rem)] px-4 py-6 sm:px-6">
-			<PageContainer className="gap-8">
-				<div className="flex flex-col gap-4 px-1 sm:flex-row sm:items-start sm:justify-between">
-					<div className="min-w-0 flex-1 space-y-3">
-						<h1 className="text-4xl font-bold tracking-tight text-ctp-text">
+		<main className={styles.frame}>
+			<PageContainer className={styles.frameContent}>
+				<div className={styles.frameHeader}>
+					<div className={styles.frameCopy}>
+						<h1
+							className={variant === "index" ? "page-heading" : styles.appTitle}
+						>
 							{title}
 						</h1>
 						{description && (
-							<div className="max-w-3xl text-base leading-7 text-ctp-subtext1">
-								{description}
-							</div>
+							<div className={styles.frameDescription}>{description}</div>
 						)}
 					</div>
 					{badges.length > 0 && (
-						<div className="shrink-0 pt-0.5">
+						<div className={styles.frameBadges}>
 							<ToolBadgeList badges={badges} />
 						</div>
 					)}

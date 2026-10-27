@@ -43,15 +43,12 @@ export default function NotepadEditor({
 	const characterCount = countUnicodeCodePoints(content);
 
 	return (
-		<section
-			aria-label="メモ編集"
-			className="flex flex-col gap-4 rounded-lg border border-ctp-surface1 bg-ctp-base p-4 sm:p-5"
-		>
+		<section aria-label="メモ編集" className="flex flex-col gap-5">
 			<div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
 				<div>
 					<div
 						aria-live="polite"
-						className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-ctp-surface1 bg-ctp-mantle px-3 py-2"
+						className="inline-flex min-h-11 items-center gap-2 py-2"
 					>
 						<span
 							aria-hidden
@@ -79,7 +76,7 @@ export default function NotepadEditor({
 				</div>
 			</div>
 
-			<div className="overflow-hidden rounded-lg border border-ctp-surface1 bg-ctp-mantle">
+			<div className="overflow-hidden rounded-md border border-ctp-overlay0 bg-ctp-base">
 				<div className="flex items-center justify-between gap-3 border-b border-ctp-surface1 px-4 py-3">
 					<label
 						className="text-sm font-semibold text-ctp-text"
