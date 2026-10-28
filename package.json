@@ -44,6 +44,6 @@
 		"drizzle-kit": "^0.31.11",
 		"tailwindcss": "^4.2.2",
 		"tsx": "^4.21.1",
-		"typescript": "^6.0.2"
+		"typescript": "^6.0.3"
 	}
 }
