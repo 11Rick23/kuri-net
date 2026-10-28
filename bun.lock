@@ -30,7 +30,7 @@
         "@types/react-dom": "^19.2.7",
         "drizzle-kit": "^0.31.11",
         "tailwindcss": "^4.2.4",
-        "tsx": "^4.21.1",
+        "tsx": "^4.23.15",
         "typescript": "^6.0.3",
       },
     },
