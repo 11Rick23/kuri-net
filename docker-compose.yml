@@ -1,0 +1,33 @@
+services:
+  app:
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_ASSET_BASE_URL: ${NEXT_PUBLIC_ASSET_BASE_URL:-https://example.com}
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      DATABASE_URL: postgresql://kuri_net:${POSTGRES_PASSWORD:?POSTGRES_PASSWORDを設定してください}@database:5432/kuri_net
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:?BETTER_AUTH_SECRETを設定してください}
+      BETTER_AUTH_URL: http://localhost:3000
+      NEXT_PUBLIC_ASSET_BASE_URL: ${NEXT_PUBLIC_ASSET_BASE_URL:-https://example.com}
+      AI_DETECTOR_PUBLIC_ORIGIN: http://localhost:3000
+    depends_on:
+      database:
+        condition: service_healthy
+  database:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: kuri_net
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORDを設定してください}
+      POSTGRES_DB: kuri_net
+    volumes:
+      - experiment-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kuri_net -d kuri_net"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  experiment-postgres:

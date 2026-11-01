@@ -8,19 +8,25 @@ export default function ToolsIndexScreen() {
 	return (
 		<ToolsPageFrame title="アプリ一覧" variant="index">
 			<Reveal className={styles.appList}>
-				{toolDefinitions.map((tool) => (
-					<HighlightLink
-						key={tool.id}
-						href={tool.href}
-						className={styles.appRow}
-					>
-						<div className={styles.appCopy}>
-							<h2>{tool.title}</h2>
-							<p>{tool.description}</p>
-						</div>
-						<div className={styles.appAction}>アプリを開く →</div>
-					</HighlightLink>
-				))}
+				{toolDefinitions.map((tool) => {
+					const AppLink = tool.navigation === "document" ? "a" : HighlightLink;
+					return (
+						<AppLink
+							key={tool.id}
+							href={tool.href}
+							className={styles.appRow}
+							data-document-navigation={
+								tool.navigation === "document" || undefined
+							}
+						>
+							<div className={styles.appCopy}>
+								<h2>{tool.title}</h2>
+								<p>{tool.description}</p>
+							</div>
+							<div className={styles.appAction}>アプリを開く →</div>
+						</AppLink>
+					);
+				})}
 			</Reveal>
 		</ToolsPageFrame>
 	);
