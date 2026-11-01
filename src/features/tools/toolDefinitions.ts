@@ -8,9 +8,20 @@ export type ToolDefinition = {
 	description: string;
 	requiresAuth: boolean;
 	badges: ToolBadgeDefinition[];
+	navigation?: "document";
 };
 
 export const toolDefinitions: ToolDefinition[] = [
+	{
+		id: "ai-detector",
+		slug: "ai-detector",
+		href: "/apps/ai-detector",
+		title: "AIエージェント判定",
+		description: "HTTP署名を検証して、ChatGPTからのアクセスかを確認します。",
+		requiresAuth: false,
+		badges: [],
+		navigation: "document",
+	},
 	{
 		id: "minesweeper",
 		slug: "minesweeper",

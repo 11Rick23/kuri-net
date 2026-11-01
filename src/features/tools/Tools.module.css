@@ -101,18 +101,25 @@
 	white-space: nowrap;
 }
 
+.appRow[data-document-navigation]:hover,
 .appRow:focus-visible {
 	color: var(--site-on-inverse);
 	outline: 2px solid var(--site-accent);
 	outline-offset: 5px;
 }
 
+.appRow[data-document-navigation]:hover::before,
 .appRow:focus-visible::before {
 	transform: scaleX(1);
 }
 
+.appRow[data-document-navigation]:hover .appCopy p,
 .appRow:focus-visible .appCopy p {
 	color: var(--site-on-inverse-muted);
+}
+
+.appRow[data-document-navigation]:active .appCopy {
+	transform: translateX(4px);
 }
 
 .appRow[data-highlight-blinking] {

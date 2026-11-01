@@ -3,3 +3,5 @@ DATABASE_URL = "postgresql://postgres:postgres@127.0.0.1:5432/kuri_net"
 NEXT_PUBLIC_ASSET_BASE_URL = "https://assets.example.com"
 BETTER_AUTH_SECRET = "replace-with-a-random-secret-at-least-32-characters"
 BETTER_AUTH_URL = "http://localhost:3000"
+# AI判定用の公開originを別途指定する場合だけ設定する（通常はBETTER_AUTH_URLを使用）。
+# AI_DETECTOR_PUBLIC_ORIGIN = "http://localhost:3000"

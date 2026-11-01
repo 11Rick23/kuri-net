@@ -36,6 +36,7 @@ cp mise.local.toml.example mise.local.toml
 | `NEXT_PUBLIC_ASSET_BASE_URL` | Works 画像・動画を配信する公開 URL |
 | `BETTER_AUTH_SECRET` | Better Auth の署名用シークレット |
 | `BETTER_AUTH_URL` | アプリの公開 URL。ローカル既定値は `http://localhost:3000` |
+| `AI_DETECTOR_PUBLIC_ORIGIN` | 任意。AI判定の署名検証に使う公開origin。省略時は `BETTER_AUTH_URL`。HTTPS必須（ループバックはHTTP可） |
 
 ### 3. DB マイグレーションを適用
 
@@ -120,6 +121,9 @@ mise exec -- bun test ./tests/unit/features/tools/minesweeper/board.test.ts
 - 認証済みユーザー向けメモ帳
 - クライアント内で処理する PDF 結合
 - 論理解法を保証するマインスイーパー
+- HTTP署名を検証するAIエージェント判定
+
+Appsの「AIエージェント判定」（`/apps/ai-detector`）では、RFC 9421のHTTP署名を検証してHTMLを出し分けます。署名なしを人間と断定しません。仕様、独立したローカル署名テスト、Docker Compose、HTTPSでの実証手順は [実験ガイド](docs/experiments/ai-detector.md) を参照してください。本番ルートはOpenAIの固定公開鍵ディレクトリだけを信頼します。
 
 ### お知らせの更新
 

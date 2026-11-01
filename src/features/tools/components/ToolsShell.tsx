@@ -21,15 +21,18 @@ function NavLink({
 	description,
 	active,
 	onClick,
+	documentNavigation,
 }: {
 	href: string;
 	label: string;
 	description?: string;
 	active: boolean;
 	onClick: () => void;
+	documentNavigation?: boolean;
 }) {
+	const NavigationLink = documentNavigation ? "a" : Link;
 	return (
-		<Link
+		<NavigationLink
 			href={href}
 			onClick={onClick}
 			aria-current={active ? "page" : undefined}
@@ -39,7 +42,7 @@ function NavLink({
 				<p className={styles.navLabel}>{label}</p>
 				{description && <p className={styles.navDescription}>{description}</p>}
 			</div>
-		</Link>
+		</NavigationLink>
 	);
 }
 
@@ -206,6 +209,7 @@ export default function ToolsShell({
 							description={tool.description}
 							active={pathname === tool.href}
 							onClick={closeMenu}
+							documentNavigation={tool.navigation === "document"}
 						/>
 					))}
 				</nav>
